@@ -117,15 +117,18 @@ Several frequently-used words could now be replaced with their abbrevations:
 · rewrite list.sum() / list.join() with the new SplitArgs function  
 · deal with out-of-range indices in str.slice()  
 · add slice supports for table.h/vjoin()  
-· ${_me}  
+· ✓? `${_me}` `${_me.prop}` Autofill  
+· Autofill not respecting symbols  
+· Autofill for func properties  
 · table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)  
 · ✓ distance=>d(x1, y1, ..., x2, y2, ...) accepts 2n args and returns the n-th dimensional distance  
-· ✓ projh(x1, y1, θ1, x2, y2), projd(x1, y1, θ1, x2, y2)
+· ✓ projh(x1, y1, θ1, x2, y2), projd(x1, y1, θ1, x2, y2)  
 · ✓ angle/θ(x1, y1, x2, y2)  relangle/relθ(x1, y1, θ1, x2, y2)  
-· func:pick() respects negative arguments   
-· func:repeat(times, joiner = ""):str  for len(str) > 1.  
+· ✓ func:pick() respects negative arguments   
+· ✓ func:repeat(times, joiner = ""):str  for len(str) > 1.  
 · Table action: generate from string (expr = colJoiner + rowJoiner + str)  
 · Table action: seperate the expr with its first character then insert after the given row / col index  
 · Sort the current list actions order  
 · check the definition for "" as an arg  
 · `${_ffxiventity[name].jobcn1}` `${_ffxiventity[name].jobcn2}` `${_ffxiventity[name].jobjp}`  
+· Accurate ET  
