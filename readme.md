@@ -119,18 +119,19 @@ Several frequently-used words could now be replaced with their abbrevations:
 · ✓ add slice supports for table.h/vjoin()  
 · ✓? `${_me}` `${_me.prop}` Autofill  
 · Autofill not respecting symbols  
-· Autofill for func properties, list props, table props and new job props
+· Autofill for func properties, list props, table props and new job props  
 · ✓ table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)  
 · ✓ distance=>d(x1, y1, ..., x2, y2, ...) accepts 2n args and returns the n-th dimensional distance  
 · ✓ projh(x1, y1, θ1, x2, y2), projd(x1, y1, θ1, x2, y2)  
 · ✓ angle/θ(x1, y1, x2, y2)  relangle/relθ(x1, y1, θ1, x2, y2)  
 · ✓ func:pick() respects negative arguments   
 · ✓ func:repeat(times, joiner = ""):str  for len(str) > 1.  
-· Table action: generate from string (expr = colJoiner + rowJoiner + str)  
-· Table action: seperate the expr with its first character then insert after the given row / col index  
-· ✓ Table action: transpose (replaced by the new vjoin() + generate)
-· Sort the current list actions order  
+· ✓ Table action: generate from string (expr = colJoiner + rowJoiner + str)  
+· ✓ Table action: seperate the expr with its first character then insert after the given row / col index  
+· ✓ Table action: transpose (replaced by the new vjoin() + generate)  
+· ✓ Sort the current actions  
 · check the definition for "" as an arg  
-· ✓ job properties
-· Accurate ET 
-· Unify exceptions text
+· ✓ job properties  
+· Accurate ET   
+· ✓ Unify exceptions text  
+· ✓ Bug fix: split action not respecting persistent option   
