@@ -135,3 +135,4 @@ Several frequently-used words could now be replaced with their abbrevations:
 · Accurate ET   
 · ✓ Unify exceptions text  
 · ✓ Bug fix: split action not respecting persistent option   
+· Real CSV output (treatment of commas, etc.)
