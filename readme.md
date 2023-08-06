@@ -117,10 +117,10 @@ Several frequently-used words could now be replaced with their abbrevations:
 · ✓ rewrite list.sum() / list.join() with the new SplitArgs function  
 · ✓ deal with out-of-range indices in str.slice()  
 · ✓ add slice supports for table.h/vjoin()  
-· ✓? `${_me}` `${_me.prop}` Autofill  
-· Autofill not respecting symbols  
-· Autofill for func properties, list props, table props and new job props  
-· ✓ table.join(colJoiner, rowJoiner, colstart, colend, colstep, rowstart, rowend, rowstep)  
+· ✓ `${_me}` `${_me.prop}` Autofill  
+· ✓ Autofill not respecting symbols  
+· ✓ Autofill for func properties, list props, table props and job props  
+· ✓ table.join(colJoiner, rowJoiner, colslices, rowslices)  
 · ✓ distance=>d(x1, y1, ..., x2, y2, ...) accepts 2n args and returns the n-th dimensional distance  
 · ✓ projh(x1, y1, θ1, x2, y2), projd(x1, y1, θ1, x2, y2)  
 · ✓ angle/θ(x1, y1, x2, y2)  relangle/relθ(x1, y1, θ1, x2, y2)  
@@ -132,7 +132,7 @@ Several frequently-used words could now be replaced with their abbrevations:
 · ✓ Sort the current actions  
 · check the definition for "" as an arg  
 · ✓ job properties  
-· Accurate ET   
+· ✓ Accurate ET   
 · ✓ Unify exceptions text  
 · ✓ Bug fix: split action not respecting persistent option   
-· Real CSV output (treatment of commas, etc.)
+· ✓ Real CSV output (treatment of commas, etc.)  
