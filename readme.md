@@ -133,8 +133,8 @@ Several frequently-used words could now be replaced with their abbrevations:
 · ✓ Unify exceptions text  
 · ✓ Bug fix: split action not respecting persistent option   
 · ✓ Real CSV output (treatment of commas, etc.)  
-· List action: setall   
+· ✓ List action: setall   
 · ✓ Table action: setall  
-· `${_index}` `${_col}` `${_row}`
+· ✓ `${_index}` `${_col}` `${_row}` `${_this}`
 · I18n (new / previous parts)  
 · examine the definition for "" as an arg  
