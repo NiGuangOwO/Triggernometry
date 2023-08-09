@@ -112,8 +112,6 @@ Several frequently-used words could now be replaced with their abbrevations:
 `${func:indexof(...):str}`, `${func:laseindexof(...):str}` could be short as `${func:i(...):str}`, `${func:li(...):str}`;  
 
 ## To-do List
-· I18n (added part)  
-· Previous translations  
 · ✓ rewrite list.sum() / list.join() with the new SplitArgs function  
 · ✓ deal with out-of-range indices in str.slice()  
 · ✓ add slice supports for table.h/vjoin()  
@@ -130,9 +128,13 @@ Several frequently-used words could now be replaced with their abbrevations:
 · ✓ Table action: seperate the expr with its first character then insert after the given row / col index  
 · ✓ Table action: transpose (replaced by the new vjoin() + generate)  
 · ✓ Sort the current actions  
-· check the definition for "" as an arg  
 · ✓ job properties  
 · ✓ Accurate ET   
 · ✓ Unify exceptions text  
 · ✓ Bug fix: split action not respecting persistent option   
 · ✓ Real CSV output (treatment of commas, etc.)  
+· List action: setall   
+· ✓ Table action: setall  
+· `${_index}` `${_col}` `${_row}`
+· I18n (new / previous parts)  
+· examine the definition for "" as an arg  
