@@ -135,7 +135,7 @@ Several frequently-used words could now be replaced with their abbrevations:
 · ✓ Real CSV output (treatment of commas, etc.)  
 · ✓ List action: setall   
 · ✓ Table action: setall  
-· ✓ `${_index}` `${_col}` `${_row}` `${_this}`
-· ✓ Cancel all trigger actions from folder
-· I18n (new / previous parts)  
+· ✓ `${_index}` `${_col}` `${_row}` `${_this}`  
+· ✓ Cancel all trigger actions from folder  
+· I18n (new / previous parts)    
 · examine the definition for "" as an arg  
