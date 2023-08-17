@@ -11,7 +11,7 @@ There were several bugs in the parsing logic about minus signs:
 1. The original code only examines the previous character to determine if a `+`/`-` is a positive/negative sign or a plus/minus sign. This ignores the signs before a space, so expressions like `func(1, -1)` or `1 - -1` were wrongly parsed. (Related: [#87](https://github.com/paissaheavyindustries/Triggernometry/issues/87))  
 2. When the function `BasicArithmeticalExpression()` is applying a minus sign to a number, there was only a condition for positive values, and non-positive values were not treated. This caused expressions like `-(-1)` parsed into `-1`. (Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316))  
 3. The original code treats the minus sign as a special sign, which gives it a hidden priorty than any other operations. This caused wrong calculation order in some of the calculations, like `-2^2 = 4` (in most of the modern languages, the answer is -4).
-4. The original code could not treat the `-` in `-sin(0)` as a minus sign. This caused a program error in expressions like `0 = -sin(0)`. The code would try to apply a minus operation between `=` and `sin(0)`. (Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316))  
+4. The original code could not treat the `-` in `-func(args)` as a minus sign. This caused a program error in expressions like `0 = -sin(0)`. The code would try to apply a minus operation between `=` and `sin(0)`. (Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316))  
 
 The whole logic about +/- signs was rewritten to a much simpler version and the bugs were fixed.
 ### Fixed a condition check typo when parsing parenthesis.  
