@@ -8,10 +8,11 @@ https://github.com/paissaheavyindustries/Triggernometry
 ## MathParser
 ### Fixed the MathParser bugs about parsing minus signs: 
 There were several bugs in the parsing logic about minus signs: 
-1. The original code only examines the previous character to determine if a `+`/`-` is a positive/negative sign or a plus/minus sign. This ignores the signs before a space, so expressions like `func(1, -1)` or `1 - -1` were wrongly parsed.  
-2. When the function `BasicArithmeticalExpression()` is applying a minus sign to a number, there was only a condition for positive values, and non-positive values were not treated. This caused expressions like `-(-1)` parsed into `-1`.
+1. The original code only examines the previous character to determine if a `+`/`-` is a positive/negative sign or a plus/minus sign. This ignores the signs before a space, so expressions like `func(1, -1)` or `1 - -1` were wrongly parsed. (Related: [#87](https://github.com/paissaheavyindustries/Triggernometry/issues/87))  
+2. When the function `BasicArithmeticalExpression()` is applying a minus sign to a number, there was only a condition for positive values, and non-positive values were not treated. This caused expressions like `-(-1)` parsed into `-1`. (Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316))  
 3. The original code treats the minus sign as a special sign, which gives it a hidden priorty than any other operations. This caused wrong calculation order in some of the calculations, like `-2^2 = 4` (in most of the modern languages, the answer is -4).
-4. The original code could not treat the `-` in `-sin(0)` as a minus sign. This caused a program error in expressions like `0 = -sin(0)`. The code would try to apply a minus operation between `=` and `sin(0)`.
+4. The original code could not treat the `-` in `-sin(0)` as a minus sign. This caused a program error in expressions like `0 = -sin(0)`. The code would try to apply a minus operation between `=` and `sin(0)`. (Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316))  
+
 The whole logic about +/- signs was rewritten to a much simpler version and the bugs were fixed.
 ### Fixed a condition check typo when parsing parenthesis.  
 `char.IsDigit(...) || char.IsLetter(...)` was typed as `char.IsDigit(...) || char.IsDigit(...)`, which ignored the letter check when adding `*` before `(`.  
@@ -67,7 +68,7 @@ Increased the height and width of the autocomplete form.
 |`projectdistance()`<br />`projectheight()`|![proj](https://github.com/MnFeN/Triggernometry/assets/85232361/87d24efc-0d67-4d26-946a-81e91d3ba4c2)<br />Useful when doing calculations about linear AOE.|`projd(0,0, pi/6, -2,0)` = `-1`<br />`projh(0,0, pi/6, -2,0)` = `1.732...`|
 |`angle(x1, y1, x2, y2)`|= `atan2(x2-x1, y2-y1)`|`angle(100, 100, 120, 100)` = `1.57...`|
 |`relangle(θ1, θ2)`|Considering `θ1` as rel north, the direction of `θ2`. Normalized to `[-π, π)`.|`relangle(0, -pi/2)` = `1.732...`|
-|`roundir(θ, ±n)`<br />`roundir(θ, ±n, digits)`<br />`roundvec(x, y, ±n)`<br />`roundvec(x, y, ±n, digits)`|Match the given direction (radian in `roundir`; dx/dy offsets in `roundvec`) to the direction in a circle divided into `\|n\|` segments, and returns the index of the direction.<br />Could combine with `func:pick(index)` and easily output any direction as a string from a radian / coordinate without complicated `arctan2` and `mod` calculations.<br />The sign of `n` indicates 2 division modes: north is the segment point or the border of 2 segments, as shown below.<br />![image](https://github.com/paissaheavyindustries/Triggernometry/assets/85232361/b7ab1f13-c5ba-4609-b588-b066d5d9d4e1)|`roundir(-1.57,4)` = `1` (West)<br />`roundvec(8,-6,-4)` = `3` (NE)|
+|`roundir(θ, ±n)`<br />`roundir(θ, ±n, digits = 0)`<br />`roundvec(x, y, ±n)`<br />`roundvec(x, y, ±n, digits = 0)`|Match the given direction (radian in `roundir`; dx/dy offsets in `roundvec`) to the direction in a circle divided into `\|n\|` segments, and returns the index of the direction.<br />The sign of `n` indicates 2 division modes: north is the segment point or the border of 2 segments, as shown below.<br />`digits` represents the number of decimal places for rounding; a negative value means no rounding.<br />![image](https://github.com/paissaheavyindustries/Triggernometry/assets/85232361/b7ab1f13-c5ba-4609-b588-b066d5d9d4e1)<br />Could combine with `func:pick(index)` and easily output any direction as a string from a radian / coordinate without complicated `arctan2` and `mod` calculations.|`roundir(-1.57,4)` = `1` (West)<br />`roundvec(8,-6,-4)` = `3` (NE)|
 
 ### Numeric String Functions:
 |Expression|Description|Examples|
@@ -214,6 +215,10 @@ Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/iss
 The original regex for string function could not parse `func:length:3*(1+2)` correctly, which considers `length:3*` as the function name and `1+2` as the argument.  
 The regex was editted to solve this issue; it could now also match the whole expression in one step instead of parsing the `funcval` by searching the index of `:` later.  
 (also some other small edits to the regexes)  
+### Added support for linebreaks in expressions
+Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
+A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
+This character could also be used in expressions directly in Triggernometry.
 ### Improved Exception Messages
 The exceptions in context.cs were unified, _e.g._ all argcount errors were combined with a function name placeholder.  
 Also added more precise information like which expression caused error.  
