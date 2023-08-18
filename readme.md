@@ -109,7 +109,7 @@ This part uses the following **`tvar:test`** to demonstrate:
 
 |Expression|Description|Examples|
 |:---|:---|:---|
-|`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl`: <br />Returns the value located by the column and row headers.|`${tvardl:test[41][13]}` = `43`|
+|`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl:` <br />Returns the value located by the column and row headers.|`${tvardl:test[41][13]}` = `43`|
 |`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Horizontally connects the table with the joiners.|`${tvar:test.hjoin(",",",",1:2,3:4)}`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|
 |`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|
 |`hlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`${tvardl:test.hlookup(13,3)}` = `1`<br />`${tvardl:test.hlookup(13,3,2:)}` = `0`|
