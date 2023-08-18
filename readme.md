@@ -84,7 +84,7 @@ Increased the height and width of the autocomplete form.
 |`pick(index, separator = ",")`|Separates the given string by the given separator.<br />Returns substring with the index counting from 0.<br />Also supports negative values.  |`func:pick(3):north,west,south,east`<br /> = `east`<br />`func:pick(-1,", "):1, 22, 3, 44, 5`<br /> = `5`|
 |`replace(oldStr, newStr = "", isLooped = 0)`|Replace one string to another string in the given string.|`func:replace(" "):1 2 3`<br />= `123`<br />`func:replace(aa,a):aaaaaa`<br />= `aaa`<br />`func:replace(aa,a,1):aaaaaa`<br />= `a`|
 |`repeat(times, joiner = "")`|Repeat the string with the given times.|`func:repeat(3):a` = `aaa`<br />`func:repeat(3, +):1` = `1+1+1`|
-|`nextETms(XX:XX.xx)`<br />`nextETms(minutes)`|Returns the time (ms) left to the next given Eorzean time.|`nextETms(1:00)`<br />= `nextETms(60)`<br />= `175000`<br />(when current ET is `0:00`)|
+|`nextETms`|Returns the time (ms) left to the next given Eorzean time.|`func:nextETms:1:00`<br />= `func:nextETms:01:00.00`<br />=`func:nextETms:60`<br />= `175000`<br />(when current ET is `0:00`)|
 |`padleft`<br />`padright`<br />`trim`<br />`trimleft`<br />`trimright`  |These functions now also accepts character arguments given as the character itself instead of only by its charcode.  <br />`0`-`9` would be considered as characters instead of charcodes since nobody would use those ASCII 0-9 control characters in these functions. <br />Numbers ≥ 10 are considered as charcodes.<br />No need for those 5-digit charcodes of CJK-region characters. (even full-width spaces) |`func:trim(48, 2, a):abcd0320`<br />= `bcd03`<br />`func:padleft(0,8):1ABCD`<br />= `0001ABCD`|
 
 ### List Variables:
