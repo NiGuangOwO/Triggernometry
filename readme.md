@@ -211,7 +211,7 @@ The actions, list actions and table actions were sorted to be more reasonable.
 
 ## Others
 ### Fixed the bug about string functions with no arguments:
-Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/issues/92)
+Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/issues/92)  
 The original regex for string function could not parse `func:length:3*(1+2)` correctly, which considers `length:3*` as the function name and `1+2` as the argument.  
 The regex was editted to solve this issue; it could now also match the whole expression in one step instead of parsing the `funcval` by searching the index of `:` later.  
 (also some other small edits to the regexes)  
