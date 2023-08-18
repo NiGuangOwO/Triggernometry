@@ -40,7 +40,7 @@ Slices expressions are used in several new features (should use "" or '' to cove
 
 ## Autofill
 Fixed the bug that sometimes autofill is not hidden (like after entering `tvar:` and still showing `tvarrl`);  
-Sorted and added several types of autofill, including list/table properties and _const keys;  
+Sorted and added several types of autofill, including list/table properties (also tried to get the list of var names and const keys but did not work, hope it could be fixed);  
 The code will now find the previous unclosed `{` to give more precise autofill results;  
 Increased the height and width of the autocomplete form.  
 
@@ -74,7 +74,7 @@ Increased the height and width of the autocomplete form.
 |Expression|Description|Examples|
 |:---|:---|:---|
 |`parsedmg(hex)`|Parse the given hexstr damage/healing value in the `0x15`/`0x16` ACT loglines to the corresponding decimal value. <br />Rule: padleft the hexstr with `0` to 8 digits like `XXXXYYZZ`, then convert `ZZXXXX` to decimal.|`parsedmg(A00000)` = `160`|
-|`pitch(note, semitones = 0)`|returns the pitch (Hz) of the given note + semitones offset.|`pitch(A4)` <br />= `pitch(G#4, 1)` <br />= `pitch(Bb4, -1)` <br />= `pitch(A5, -12)` <br />= `440`|
+|`freq(note, semitones = 0)`|returns the freq (Hz) of the given note + semitones offset.|`freq(A4)` <br />= `freq(G#4, 1)` <br />= `freq(Bb4, -1)` <br />= `freq(A5, -12)` <br />= `440`|
 
 ### String Functions:
 |Expression|Description|Examples|
@@ -117,6 +117,7 @@ This part uses the following **`tvar:test`** to demonstrate:
 
 ### Job Properties:
 `${_job[jobid].prop}`: returns the property of the given jobid. 
+`${_job[XXX].prop}`: returns the property of the given job (3-letter abbrev). 
 Properties: 
 ```
     role; (same as _ffxiventity)
@@ -125,7 +126,7 @@ Properties:
     jobCN1; jobCN2; jobEN3; jobJP1 (abbrevations of different lengths)
 ```
 These properties are also added to `_ffxiventity` and `_ffxivparty`.
-_e.g._ `${_job[1].isT}` = `1`; `${_ffxiventity[Player Paladin].jobEN}` = `Paladin`
+_e.g._ `${_job[1].isT}` = `1`; `${_ffxiventity[Paladin Player].jobEN}` = `Paladin`
 
 ## Abbrevations for improving user experience:
 |Full|Abbrev.|
@@ -148,6 +149,8 @@ _e.g._ `${_job[1].isT}` = `1`; `${_ffxiventity[Player Paladin].jobEN}` = `Paladi
 |`relangle()` |`relθ()`|
 |`sumslice()` |`sum()`|
 |`joinslice()` |`join()`|
+|`width` |`w`|
+|`height` |`h`|
 |`hlookup()` |`hl()`|
 |`vlookup()` |`vl()`|
 
