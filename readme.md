@@ -221,9 +221,9 @@ The regex was editted to solve this issue; it could now also match the whole exp
 ### Added support for linebreaks in expressions
 Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
 A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
-This character could also be used in expressions directly in Triggernometry.
+This character could also be used in expressions directly in Triggernometry, _e.g._ `${func:repeat(5, ⏎):text}`
 ### Improved Exception Messages
-The exceptions in context.cs were unified, _e.g._ all argcount errors were combined with a function name placeholder.  
+The exceptions in context.cs were unified, _e.g._ all argcount errors were combined by adding a function name placeholder to distinguish them.  
 Also added more precise information like which expression caused error.  
 ### Improved CSV Export
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)
