@@ -128,6 +128,11 @@ Properties:
 These properties are also added to `_ffxiventity` and `_ffxivparty`.
 _e.g._ `${_job[1].isT}` = `1`; `${_ffxiventity[Paladin Player].jobEN}` = `Paladin`
 
+### Entity Properties:
+Several entity properties were added to `${_ffxiventity}` and `${_ffxivparty}`:
+`bnpcid`, `bnpcnameid`, `ownerid`, `type`,  
+`castid`, `casttime`, `maxcasttime`, `iscasting`  
+
 ## Abbrevations for improving user experience:
 |Full|Abbrev.|
 |:---:|:---:|
@@ -153,6 +158,7 @@ _e.g._ `${_job[1].isT}` = `1`; `${_ffxiventity[Paladin Player].jobEN}` = `Paladi
 |`height` |`h`|
 |`hlookup()` |`hl()`|
 |`vlookup()` |`vl()`|
+|`.heading` |`.h`|
 
 ## Actions
 ### Fixed a bug in the list method `Insert`:
@@ -209,7 +215,7 @@ _e.g._ Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expressi
 ### Added the folder action "Cancel the Actions of All Triggers In Folder"
 Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)
 
-### Sorted Actions
+### Sorted Actions List
 The actions, list actions and table actions were sorted to be more reasonable.
 
 ## Others
@@ -218,13 +224,20 @@ Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/iss
 The original regex for string function could not parse `func:length:3*(1+2)` correctly, which considers `length:3*` as the function name and `1+2` as the argument.  
 The regex was editted to solve this issue; it could now also match the whole expression in one step instead of parsing the `funcval` by searching the index of `:` later.  
 (also some other small edits to the regexes)  
+### Fixed the bug about action checkboxes not showing on Hi-Res screen:
+Related issue: [#91](https://github.com/paissaheavyindustries/Triggernometry/issues/91)   
+Adjusted the initial column width to screenwidth / 50 instead of a fixed value. Also allowed changing the column width.  
 ### Added support for linebreaks in expressions
 Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
 A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
 This character could also be used in expressions directly in Triggernometry, _e.g._ `${func:repeat(5, ⏎):text}`
+### Full translation documents:
+Hundreds of translations were missing since 1.1.6.0.  
+Most of the new keys are now added to the template and the CN/JP translation files. (The FI/FR files were too outdated and the order was messed up)  
+Also added full CN translations.  
 ### Improved Exception Messages
 The exceptions in context.cs were unified, _e.g._ all argcount errors were combined by adding a function name placeholder to distinguish them.  
-Also added more precise information like which expression caused error.  
+Also added more validity checkes and more precise information like which expression caused error.  
 ### Improved CSV Export
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)
 
