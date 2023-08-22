@@ -263,4 +263,5 @@ Added support for table variables containing commas and double quotes. (Previous
 ## To-do List
 - [x] I18n (new / previous parts)
 - [ ] `isTM`, `isHR`
-- [ ] DictVar
+- [ ] Dictionary
+- [ ] Debug: resizing of the columns in the variable viewer
