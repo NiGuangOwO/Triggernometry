@@ -261,4 +261,6 @@ Also added more validity checkes and more precise information like which express
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)
 
 ## To-do List
-- [ ] I18n (new / previous parts)    
+- [x] I18n (new / previous parts)
+- [ ] `isTM`, `isHR`
+- [ ] DictVar
