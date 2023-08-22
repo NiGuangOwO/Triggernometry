@@ -24,7 +24,16 @@ The original `SplitArgument` function resulted in incorrect `args` list when enc
 The editted code now utilizes regular expressions to accurately extract all parameters located between the string's beginning, end, and commas.   
 Unquoted expressions are trimmed; empty or unquoted whitespaces returns an empty list.  
 _e.g._ (1,2,  3  ,"  4  ",   "5"  , "'", ', ', ) is now parsed into a list with the arguments:   
-`1` `2` `3` `  4  ` `5` `'` `, ` `(empty)​`.  
+`1` `2` `3` `  4  ` `5` `'` `, ` `(empty)​`.    
+Arguments should not contain `)` `{` `}`, so the following escape rules are applied:
+```
+    `{` should be escaped with full-width `｛` or `__LB__`;
+    `}` should be escaped with full-width `｝` or `__RB__`;
+    `｛` `｝` should be escaped with `__FLB__` `__FRB__`;
+    `(` can be escaped with full-width `（` or `__LP__`;
+    `}` should be escaped with full-width `）` or `__RP__`;
+    `（` `）` should be escaped with `__FLP__` `__FRP__`;
+```
 
 ## Indices and Slices
 ### Negative Indices
@@ -82,6 +91,11 @@ Increased the height and width of the autocomplete form.
 |`parsedmg`|Same as numeric function. No arguments accepted.|`func:parsedmg:A00000`<br />= `160`|
 |`slice(slices = "::")`|Accepts a slices expression as an argument.<br />Returns the slice of the string.|`func:slice(-3):01234` = `2`<br />`func:slice(1:4):01234` = `123`<br />`func:slice(::-1):01234` = `43210`<br />`func:slice("1,3:"):01234` = `134`|
 |`pick(index, separator = ",")`|Separates the given string by the given separator.<br />Returns substring with the index counting from 0.<br />Also supports negative values.  |`func:pick(3):north,west,south,east`<br /> = `east`<br />`func:pick(-1,", "):1, 22, 3, 44, 5`<br /> = `5`|
+|`contain(str)`<br />`startwith(str)`<br />`endwith(str)`<br />`equal(str)`|Returns `1` or `0`.|`func:contain(23):1234` = `1` <br />`func:endwith(23):1234` = `0`<br />`func:equal(23):1234` = `0`|
+|`ifcontain(str, t, f)`<br />`ifstartwith(str, t, f)`<br />`ifendwith(str, t, f)`<br />`ifequal(str, t, f)`|Similar to `if()`.|`func:ifcontain(23, a, b):1234` = `a` <br />`func:ifendwith(23, a, b):1234` = `b`<br />`func:ifequal(23, a, b):1234` = `b`|
+|`match(str):regex`|Returns `1` or `0`.<br />Note that `regex` should not contain `{` `}`.<br />`{` should be escaped with full-width `｛` or `__LB__`;<br />`}` should be escaped with full-width `｝` or `__RB__`;<br />`｛` `｝` should be escaped with `__FLB__` `__FRB__`.<br />Same regex rule for the next 2 functions.|`func:match(404D):404[B-D]` = `1`<br />`func:match(4000A3BF):4.｛7｝` = `1`|
+|`capture(str, group):regex`|Returns the captured string `$groupindex` or `${groupname}`. <br />Returns the whole matched string if `groupindex` = `0`. <br />Returns empty string if `groupname` is not found.<br />Same regex rules as previously mentioned.|`func:capture(Player NameGilgamesh, server):.+ .+(?<server>[A-Z].+)`<br />= `Gilgamesh`|
+|`ifmatch(str, t, f):regex`|Similar to `if()`.|`func:match(404D, a, b):404[B-D]` = `a`|
 |`replace(oldStr, newStr = "", isLooped = 0)`|Replace one string to another string in the given string.|`func:replace(" "):1 2 3`<br />= `123`<br />`func:replace(aa,a):aaaaaa`<br />= `aaa`<br />`func:replace(aa,a,1):aaaaaa`<br />= `a`|
 |`repeat(times, joiner = "")`|Repeat the string with the given times.|`func:repeat(3):a` = `aaa`<br />`func:repeat(3, +):1` = `1+1+1`|
 |`nextETms`|Returns the time (ms) left to the next given Eorzean time.|`func:nextETms:1:00`<br />= `func:nextETms:01:00.00`<br />=`func:nextETms:60`<br />= `175000`<br />(when current ET is `0:00`)|
@@ -98,6 +112,7 @@ This part uses the following **`lvar:test`** to demonstrate:
 |`count(str, slices = "::")`|Returns the repeated times of the string in (the slices of) the list.|`${lvar:test.count(3)}` = `1`<br />`${lvar:test.count(a)}` = `0`|
 |`join(joiner = ",", slices = "::"`)|Connects (the slices of) the list with the joiner.|`${lvar:test.join}`<br />= `1,2,3,4,5,6,7,8,9`<br />`${lvar:test.join(" ",5::-1)}`<br />= `5 4 3 2 1`|
 |`randjoin(joiner = ",", slices = "::"`|Similar to join(), but the selected elements are shuffled before connected.|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|
+|`ifcontain(str, trueExpe, falseExpr)`|Similar as `if()`.|`${lvar:test.ifcontain(3, found, missing)}` <br />= `found` <br />`${lvar:test.ifcontain(a, found, missing)}` <br />= `missing`|
 
 ### Table Variables:
 This part uses the following **`tvar:test`** to demonstrate:  
