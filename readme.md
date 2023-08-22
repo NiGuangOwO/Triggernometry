@@ -131,17 +131,21 @@ This part uses the following **`tvar:test`** to demonstrate:
 |`vlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given column index and returns the row index.<br />Returns 0 if not found.|`${tvar:test.vlookup(13,1)}` = `3`|
 
 ### Job Properties:
-`${_job[jobid].prop}`: returns the property of the given jobid. 
-`${_job[XXX].prop}`: returns the property of the given job (3-letter abbrev). 
+`${_job[XXX].prop}`: returns the property of the given job.
 Properties: 
 ```
-    role; (same as _ffxiventity)
-    isT; isH; isTH; isD; isM; isR; isC; isG; isCG; (0 or 1)  
+    role; job; jobid (same as _ffxiventity)
+    isT; isH; isTH; isD; isM; isR; isTM; isHR; isC; isG; isCG; (0 or 1)  
     jobCN; jobDE; jobEN; jobFR; jobJP; jobKR; (full names in different languages)  
-    jobCN1; jobCN2; jobEN3; jobJP1 (abbrevations of different lengths)
+    jobCN1; jobCN2; jobEN3 (= job); jobJP1 (abbrevations of different lengths)
 ```
+`jobXX`, `jobXXn`, `jobid` could be used as the key `XXX` in `${_job[XXX].prop}`.
 These properties are also added to `_ffxiventity` and `_ffxivparty`.
-_e.g._ `${_job[1].isT}` = `1`; `${_ffxiventity[Paladin Player].jobEN}` = `Paladin`
+_e.g._ 
+`${_job[Gladiator].jobid}` = `1`;   
+`${_job[1].jobFR}` = `Gladiateur`;   
+`${_job[GLA].jobCN1}` = `剑`;   
+`${_ffxiventity[Gladiator Player].isTM}` = `1`  
 
 ### Entity Properties:
 Several entity properties were added to `${_ffxiventity}` and `${_ffxivparty}`:
