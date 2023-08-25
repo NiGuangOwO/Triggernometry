@@ -12,7 +12,9 @@ https://github.com/paissaheavyindustries/Triggernometry
 5. Dictionary: added related expressions, methods, actions, and XML serilization. (Variable state viewer and editor were not added yet)
 6. Functions: added more functions, methods, and expressions for strings, lists, and tables.
 7. Entities: introduced a lookup expression for jobids, names in different languages, and abbreviations; added several FFXIV-parsed entity properties.
-8. Sorting: Allowed customized multiple-key sorting of lists and tables.
+8. Build variables: build list / table variables flexibly from expressions in one step.
+9. Sorting: allowed customized multiple-key sorting of lists and tables.
+10. Other minor changes
 
 ## MathParser
 ### Fixed the MathParser bugs about parsing minus signs: 
