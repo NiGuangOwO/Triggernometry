@@ -4,6 +4,15 @@ Check the main repo for Triggernometry documentations:
 https://github.com/paissaheavyindustries/Triggernometry
 
 # What's New
+## Overview 
+1. Mathparser: multiple bug fixes about parsing expressions
+2. Arguments: more precise argument splitting; escaping placeholders in arguments; etc.
+3. Indices: negative indices for backward counting; slice argument to represent a series of indices
+4. Autofill: more precise and comprehensive autofill list.  
+5. Dictionary: added related expressions, methods, actions, and XML serilization. (Variable state viewer and editor were not added yet)
+6. Functions: added more functions, methods, and expressions for strings, lists, and tables.
+7. Entities: introduced a lookup expression for jobids, names in different languages, and abbreviations; added several FFXIV-parsed entity properties.
+8. Sorting: Allowed customized multiple-key sorting of lists and tables.
 
 ## MathParser
 ### Fixed the MathParser bugs about parsing minus signs: 
@@ -53,15 +62,19 @@ Sorted and added several types of autofill, including list/table properties (als
 The code will now find the previous unclosed `{` to give more precise autofill results;  
 Increased the height and width of the autocomplete form.  
 
+## Dictionary Variable
+...  
+
 ## Expressions and Functions
 ### Special Variables:
 |Expression|Description|
 |:---|:---|
 |`_ETprecise`|Gives the precise minutes in the eorzean day.<br />The accurate version of `_ffxivtime` (`_ET`).|
-|`_index`|Only available in the list action SetAll and SortByKey. <br />Represents the current index.|
+|`_index`|Only available in the list action SetAll / SortByKey and dict action SetAll. <br />Represents the current index.|
 |`_col`|Only available in the table action SetAll and SortCols. <br />Represents the current column index.|
 |`_row`|Only available in the table action SetAll and SortRows. <br />Represents the current row index.|
 |`_this`|Only available in the action SetAll (list/table) and SortByKey (list). <br />Represents the value in the current grid.|
+|`_key` <br />`_val`|Only available in the dict action SetAll. <br />Represents the current key/value.|
 
 ### Numeric Constants:
 |Expression|Description|
@@ -191,6 +204,11 @@ It caused the program trying to set the value at the given `index` into the list
 ### Fixed a bug in the list method `Split`:  
 The original code did not respect the persistent options of the source / target variables.   
 
+### Updated `PopFirst` / `PopLast` action for list variables:  
+`PopFirst` was rewritten to accept an optional argument `index` (also support negative values).
+The name in the code was unchanged due to XML compatability issues.
+`PopLast` was redirected to `PopFirst` with index = `-1`. 
+
 ### Added `Build` action for list/table variables:  
 Build a list variable using the first 1 character of the expression as the separator, and the remained part as the given string. For table variable, using the first 2 characters as the col / row separator.    
 Easily generates a list/table directly from a given string in a single action.  
@@ -246,22 +264,33 @@ The regex was editted to solve this issue; it could now also match the whole exp
 ### Fixed the bug about action checkboxes not showing on Hi-Res screen:
 Related issue: [#91](https://github.com/paissaheavyindustries/Triggernometry/issues/91)   
 Adjusted the initial column width to screenwidth / 50 instead of a fixed value. Also allowed changing the column width.  
+### Fixed the MessageBox bug which let it sometimes hide behind the window:
+Now the message boxes will show above the current active window.
+### Fixed the bug that some columns could not be adjusted in variable state viewer:
+Some columns were set to `Fill`. This selection would forbid the adjustment of its column width if it is not the last column.
 ### Added support for linebreaks in expressions
 Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
 A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
 This character could also be used in expressions directly in Triggernometry, _e.g._ `${func:repeat(5, ⏎):text}`
 ### Full translation documents:
 Hundreds of translations were missing since 1.1.6.0.  
-Most of the new keys are now added to the template and the CN/JP translation files. (The FI/FR files were too outdated and the order was messed up)  
+Most of the new keys are now added to the template and the CN/JP translation files.  
+(The FI/FR files were too outdated and the order was messed up)  
 Also added full CN translations.  
-### Improved Exception Messages
-The exceptions in context.cs were unified, _e.g._ all argcount errors were combined by adding a function name placeholder to distinguish them.  
-Also added more validity checkes and more precise information like which expression caused error.  
+### Improved description and log messages: 
+Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions and log messages;   
+Added more validity checkes and more precise information like which expression caused error in `Context.cs`.  
 ### Improved CSV Export
-Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)
+Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
+### Code Clean-up  
+Combined some repeated logics;  
+Fixed some typos;  
+Other minor adjustments  
 
 ## To-do List
 - [x] I18n (new / previous parts)
-- [ ] `isTM`, `isHR`
-- [ ] Dictionary
-- [ ] Debug: resizing of the columns in the variable viewer
+- [x] `isTM`, `isHR`
+- [x] Dictionary Variable
+- [ ] Dictionary Variable State Viewer and Editor
+- [x] Debug: resizing of the columns in the variable viewer
+- [ ] `indicesof()`
