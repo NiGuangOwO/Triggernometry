@@ -310,9 +310,6 @@ Fixed some typos;
 Other minor adjustments.   
 
 ## To-do List
-- [x] I18n (new / previous parts)
-- [x] `isTM`, `isHR`
 - [x] Dictionary Variable
 - [ ] Dictionary Variable State Viewer and Editor
-- [x] Debug: resizing of the columns in the variable viewer
 - [x] `indicesof()`
