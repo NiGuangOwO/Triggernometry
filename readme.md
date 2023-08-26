@@ -36,7 +36,7 @@ The editted code now utilizes regular expressions to accurately extract all para
 Unquoted expressions are trimmed; empty or unquoted whitespaces returns an empty list.  
 _e.g._ (1,2,  3  ,"  4  ",   "5"  , "'", ', ', ) is now parsed into a list with the arguments:   
 `1` `2` `3` `  4  ` `5` `'` `, ` `(empty)​`.    
-Arguments should not contain `)` `{` `}` because of the regex parsing, so the following escape rules are applied:
+Arguments should not contain `)` `{` `}` because of the parsing logic in expanding expressions, so the following escape rules are applied:
 
 + `{` should be escaped with full-width `｛` or `__LB__`;
 + `}` should be escaped with full-width `｝` or `__RB__`;
