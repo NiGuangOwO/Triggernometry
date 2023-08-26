@@ -65,7 +65,8 @@ The code will now find the previous unclosed `{` to give more precise autofill r
 Increased the height and width of the autocomplete form.  
 
 ## Dictionary Variable
-...  
+Completed the definition of the previously unused VariableDictionary type, and added corresponding expressions, methods, and actions.   
+Check below for details.
 
 ## Expressions and Functions
 ### Special Variables:
