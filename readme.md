@@ -14,7 +14,7 @@ https://github.com/paissaheavyindustries/Triggernometry
 7. Entities: introduced a lookup expression for jobids, names in different languages, and abbreviations; added several FFXIV-parsed entity properties.
 8. Build variables: several methods and actions which provides flexible ways to build or rebuild list / table variables in one step.
 9. Sorting: allowed customized multiple-key sorting of lists and tables.
-10. Other minor changes
+10. Other changes
 
 ## MathParser
 ### Fixed the MathParser bugs about parsing minus signs: 
@@ -268,6 +268,14 @@ Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/iss
 ### Sorted Actions List
 The actions, list actions and table actions were sorted to be more reasonable.
 
+## Description and Log Messages
+Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions and log messages;   
+Added a `[Sync]` symbol to the description if the action is unsetted the async option;  
+Added more validity checkes and more precise information like which expression caused error in `Context.cs`;  
+Added color options in the action description page to allow customized color styles in the descriptions;  (format: "Lavender", "230,230,250", "#e6e6fa")  
+Added a warning color when an action has non-zero delay and the description is overrided;  
+Adjusted the warning / error log message colors to be less saturated instead of pure red/yellow. 
+
 ## Others
 ### Fixed the bug about string functions with no arguments:
 Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/issues/92)  
@@ -289,14 +297,10 @@ This character could also be used in expressions directly in Triggernometry, _e.
 Hundreds of translations were missing since 1.1.6.0.  
 Most of the new keys are now added to the template and the CN/JP translation files.  
 (The FI/FR files were too outdated and the order was messed up)  
-Also added full CN translations.  
-### Improved description and log messages: 
-Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions and log messages;   
-Added a `[Sync]` symbol to the description if the action is unsetted the async option;
-Added more validity checkes and more precise information like which expression caused error in `Context.cs`.  
+Also added full CN translations.    
 ### Manually fire triggers respecting conditions
 Previously the triggers would ignore all contidion checks when it is manually fired, but sometimes we want it to respect all conditions.  
-So a `Fire (Allow Conditions)` button was added to the right-click menu.
+So a `Fire (Allow Conditions)` button was added to the right-click menu, and an option `Allow conditions for autofiring` was added to trigger settings.  
 ### Improved CSV Export
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
 ### Code Clean-up  
@@ -310,4 +314,4 @@ Other minor adjustments.
 - [x] Dictionary Variable
 - [ ] Dictionary Variable State Viewer and Editor
 - [x] Debug: resizing of the columns in the variable viewer
-- [ ] `indicesof()`
+- [x] `indicesof()`
