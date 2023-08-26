@@ -36,15 +36,15 @@ The editted code now utilizes regular expressions to accurately extract all para
 Unquoted expressions are trimmed; empty or unquoted whitespaces returns an empty list.  
 _e.g._ (1,2,  3  ,"  4  ",   "5"  , "'", ', ', ) is now parsed into a list with the arguments:   
 `1` `2` `3` `  4  ` `5` `'` `, ` `(empty)​`.    
-Arguments should not contain `)` `{` `}`, so the following escape rules are applied:
-```
-    `{` should be escaped with full-width `｛` or `__LB__`;
-    `}` should be escaped with full-width `｝` or `__RB__`;
-    `｛` `｝` should be escaped with `__FLB__` `__FRB__`;
-    `(` can be escaped with full-width `（` or `__LP__`;
-    `}` should be escaped with full-width `）` or `__RP__`;
-    `（` `）` should be escaped with `__FLP__` `__FRP__`;
-```
+Arguments should not contain `)` `{` `}` because of the regex parsing, so the following escape rules are applied:
+
++ `{` should be escaped with full-width `｛` or `__LB__`;
++ `}` should be escaped with full-width `｝` or `__RB__`;
++ `(` can be escaped with full-width `（` or `__LP__`;
++ `)` should be escaped with full-width `）` or `__RP__`;
++ `｛` `｝` should be escaped with `__FLB__` `__FRB__`;
++ `（` `）` should be escaped with `__FLP__` `__FRP__`;
+
 
 ## Indices and Slices
 ### Negative Indices
