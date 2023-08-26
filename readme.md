@@ -12,7 +12,7 @@ https://github.com/paissaheavyindustries/Triggernometry
 5. Dictionary: added related expressions, methods, actions, and XML serilization. (Variable state viewer and editor were not added yet)
 6. Functions: added more functions, methods, and expressions for strings, lists, and tables.
 7. Entities: introduced a lookup expression for jobids, names in different languages, and abbreviations; added several FFXIV-parsed entity properties.
-8. Build variables: build list / table variables flexibly from expressions in one step.
+8. Build variables: several methods and actions which provides flexible ways to build or rebuild list / table variables in one step.
 9. Sorting: allowed customized multiple-key sorting of lists and tables.
 10. Other minor changes
 
@@ -168,17 +168,20 @@ Several entity properties were added to `${_ffxiventity}` and `${_ffxivparty}`:
 `castid`, `casttime`, `maxcasttime`, `iscasting`  
 
 ## Abbrevations for improving user experience:
+The expressions are extremely long when dealing with complicated logics, which usually include several layers of `${numeric:}` and `${func:}`, `${lvar:}`, ...  
+So several abbrevations were added:  
 |Full|Abbrev.|
 |:---:|:---:|
 |`${numeric:...}` |`${n:...}`| 
 |`${string:...}` |`${s:...}`| 
 |`${func:...}` |`${f:...}`| 
+|`${e?var:...}` | `${ev:}` `${el:}` `${et:}` `${ed:}` |
+|`${(p)?var:...}` | `${(p)v:}` `${(p)l:}` `${(p)t:}` `${(p)d:}` |
 |`${_ffxiventity[...].prop}` |`${_entity[...].prop}`|
 |`${_ffxivparty[...].prop}` |`${_party[...].prop}`| 
 |`${_ffxivplayer}` |`${_me}`|
 |`${_ffxiventity[${_ffxivplayer}].prop}` |`${_me.prop}`|
 |`indexof()` |`i()`|
-|`lastindexof()` |`li()`|
 |`_ffxivtime` |`_ET`|
 |`pi` |`π`|
 |`distance()` |`d()`|
@@ -195,13 +198,16 @@ Several entity properties were added to `${_ffxiventity}` and `${_ffxivparty}`:
 |`.heading` |`.h`|
 
 ## Actions
-### Fixed a bug in the list method `Insert`:
-The original code inserted `null` as placeholders when the given index is longer than the length of the list (should use new `VariableScalar` instead).  
-The parser could not get these null values in expressions; it also caused the list could not be double-clicked to view in the variable viewer (showing error from ACT).   
+### Fixed a bug in the list method `Insert` and table variable `Resize`:
+The original code for list variable inserted `null` directly as placeholders when the given index is longer than the length of the list (should use new `VariableScalar` instead).  
+The parser could not get these null values in expressions; it also caused the list could not be double-clicked to view in the variable viewer (showing error from ACT).  
+Similarly, the code for table variable appended empty rows with each grid as `null`:   
+`vtr.Values.AddRange(new Variable[newWidth]);`  
+`Rows[i].Values.AddRange(new Variable[newWidth - Rows[i].Values.Count]);`  
 
 ### Fixed a bug in the list method `Set`:
 The original code inserted 1 less empty `VariableScalar` into the list as placeholders.    
-It caused the program trying to set the value at the given `index` into the list with the length `index - 1` and failed.  
+It caused the program trying to set the value at the given `index` into the list with the length `index - 1` and failed, resulted in an appended list just without the value to be set.  
 
 ### Fixed a bug in the list method `Split`:  
 The original code did not respect the persistent options of the source / target variables.   
@@ -244,12 +250,17 @@ _e.g._ Removing row index = `3` from the previous `lvar:test` gives:
 
 ### Added `SortByKeys` for lists, `SortRows` `SortCols` for tables:  
 Using the given expressions as the sorting keys to sort the list / rows / columns.  
+Useful when dealing with mechanisms related to multiple sorting, like TOP dynamis.
 Expression format: `n+:key1, n-:key2, s+:key3, ...`  
 `n`/`s`: numeric/string comparison  
 `+`/`-`: ascending/descending (`+` could be omitted)  
 `key`: should include `${_this}` / `${_index}` for lists, `${_row}` for row sorting, `${_col}` for column sorting.  
 If the raw expression contains commas, or starts or ends with spaces, it should be quoted like `"s+:key", ...` or `'s+:key', ...`.  
-_e.g._ Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_index}%3` gives `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.
+_e.g._ 
+`n+:${_this}` `n-:${_this}` `s+:${_this}` `s-:${_this}` are the same with the previous 4 sorting actions.  
+Sorting by `n-:${_index}` gives the reversed list.  
+Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_index}%3` gives `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
+
 
 ### Added the folder action "Cancel the Actions of All Triggers In Folder"
 Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)
@@ -281,13 +292,17 @@ Most of the new keys are now added to the template and the CN/JP translation fil
 Also added full CN translations.  
 ### Improved description and log messages: 
 Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions and log messages;   
+Added a `[Sync]` symbol to the description if the action is unsetted the async option;
 Added more validity checkes and more precise information like which expression caused error in `Context.cs`.  
+### Manually fire triggers respecting conditions
+Previously the triggers would ignore all contidion checks when it is manually fired, but sometimes we want it to respect all conditions.  
+So a `Fire (Allow Conditions)` button was added to the right-click menu.
 ### Improved CSV Export
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
 ### Code Clean-up  
 Combined some repeated logics;  
 Fixed some typos;  
-Other minor adjustments  
+Other minor adjustments.   
 
 ## To-do List
 - [x] I18n (new / previous parts)
