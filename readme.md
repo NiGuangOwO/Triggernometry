@@ -357,3 +357,8 @@ Other minor adjustments.
 - [ ] RemoveRegex for dict keys
 - [ ] Trigger descriptions on the bottom like: `[Condition] [Sequence] [Refire] [Cooldown] [SourceType] [Mutex] [Autofire]` ...
 - [ ] Add Action when selected a trigger (to its parent folder)
+- [ ] Loop description: delay
+- [ ] 表格动作描述：行列的翻译
+- [ ] customized sorting: change expression type enum
+- [ ] expLeft_TextChanged: plug
+- [ ] ActionViewer: Esc confirm
