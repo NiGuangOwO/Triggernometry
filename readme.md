@@ -60,9 +60,11 @@ Slices expressions are used in several new features (should use "" or '' to cove
 
 ## Autofill
 Fixed the bug that sometimes autofill is not hidden (like after entering `tvar:` and still showing `tvarrl`);  
-Sorted and added several types of autofill, including list/table properties (also added code to try to get the list of var names and const keys but did not work, hope it could be fixed);  
-The code will now find the previous unclosed `{` to give more precise autofill results;  
-Increased the height and width of the autocomplete form.  
+Added more types of autofill: list/table/dict methods; current variable/aura/const names; regex capture groups in the current trigger; dict keys and table lookup headers;   
+The code will now find the previous unclosed `{` to give more intelligent autofill results;  (e.g. $`{lvar:xxx${var:yyy}${index}.` will show list properties);  
+The autofill form will now show directly beneath the matched strings;  
+Fixed a bug that using enter key to select autofill results in multi-line mode will also input a linebreak;   
+Increased the height (5 → 10) and width (→ max length of results) of the autocomplete form.  
 
 ## Dictionary Variable
 Completed the definition of the previously unused VariableDictionary type, and added corresponding expressions, methods, and actions.   
@@ -109,6 +111,7 @@ Check below for details.
 |`pick(index, separator = ",")`|Separates the given string by the given separator.<br />Returns substring with the index counting from 0.<br />Also supports negative values.  |`func:pick(3):north,west,south,east`<br /> = `east`<br />`func:pick(-1,", "):1, 22, 3, 44, 5`<br /> = `5`|
 |`contain(str)`<br />`startwith(str)`<br />`endwith(str)`<br />`equal(str)`|Returns `1` or `0`.|`func:contain(23):1234` = `1` <br />`func:endwith(23):1234` = `0`<br />`func:equal(23):1234` = `0`|
 |`ifcontain(str, t, f)`<br />`ifstartwith(str, t, f)`<br />`ifendwith(str, t, f)`<br />`ifequal(str, t, f)`|Similar to `if()`.|`func:ifcontain(23, a, b):1234` = `a` <br />`func:ifendwith(23, a, b):1234` = `b`<br />`func:ifequal(23, a, b):1234` = `b`|
+|`indicesof(str, joiner = ",", slices = "")`|Search for all indices in the given slices of the string, and join the indices.|`func:indicesof(a):abcbabcba` = `0,4,8`<br />`func:indicesof(a, "-", ::-1):abcbabcba` = `8-4-0`|
 |`match(str):regex`|Returns `1` or `0`.<br />Note that `regex` should not contain `{` `}`.<br />`{` should be escaped with full-width `｛` or `__LB__`;<br />`}` should be escaped with full-width `｝` or `__RB__`;<br />`｛` `｝` should be escaped with `__FLB__` `__FRB__`.<br />Same regex rule for the next 2 functions.|`func:match(404D):404[B-D]` = `1`<br />`func:match(4000A3BF):4.｛7｝` = `1`|
 |`capture(str, group):regex`|Returns the captured string `$groupindex` or `${groupname}`. <br />Returns the whole matched string if `groupindex` = `0`. <br />Returns empty string if `groupname` is not found or `groupindex` is out of range.<br />Same regex rules as previously mentioned.|`func:capture(Player NameGilgamesh, server):.+ .+(?<server>[A-Z].+)`<br />= `Gilgamesh`|
 |`ifmatch(str, t, f):regex`|Similar to `if()`.|`func:match(404D, a, b):404[B-D]` = `a`|
@@ -118,9 +121,7 @@ Check below for details.
 |`padleft`<br />`padright`<br />`trim`<br />`trimleft`<br />`trimright`  |These functions now also accepts character arguments given as the character itself instead of only by its charcode.  <br />`0`-`9` would be considered as characters instead of charcodes since nobody would use those ASCII 0-9 control characters in these functions. <br />Numbers ≥ 10 are considered as charcodes.<br />No need for those 5-digit charcodes of CJK-region characters. (even full-width spaces) |`func:trim(48, 2, a):abcd0320`<br />= `bcd03`<br />`func:padleft(0,8):1ABCD`<br />= `0001ABCD`|
 
 ### List Variables:
-This part uses the following **`lvar:test`** to demonstrate:  
-|1|2|3|4|5|6|7|8|9|
-|---|---|---|---|---|---|---|---|---|
+This part uses **`lvar:test` = `1, 2, 3, 4, 5, 6, 7, 8, 9`** (this string is only a representation of the list) to demonstrate.  
 
 |Expression|Description|Examples|
 |:---|:---|:---|
@@ -128,7 +129,8 @@ This part uses the following **`lvar:test`** to demonstrate:
 |`count(str, slices = "::")`|Returns the repeated times of the string in (the slices of) the list.|`${lvar:test.count(3)}` = `1`<br />`${lvar:test.count(a)}` = `0`|
 |`join(joiner = ",", slices = "::"`)|Connects (the slices of) the list with the joiner.|`${lvar:test.join}`<br />= `1,2,3,4,5,6,7,8,9`<br />`${lvar:test.join(" ",5::-1)}`<br />= `5 4 3 2 1`|
 |`randjoin(joiner = ",", slices = "::"`|Similar to join(), but the selected elements are shuffled before connected.|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|
-|`ifcontain(str, trueExpe, falseExpr)`|Similar as `if()`.|`${lvar:test.ifcontain(3, found, missing)}` <br />= `found` <br />`${lvar:test.ifcontain(a, found, missing)}` <br />= `missing`|
+|`ifcontain(str, trueExpe, falseExpr)`|Similar as `if()`.|`...ifcontain(3, found, missing)` <br />= `found` <br />`..ifcontain(a, found, missing)` <br />= `missing`|
+|`indicesof(str, joiner = ",", slices = "")`|Search for all indices in the given slices of the list, and join the indices to a string. Similar to the string function.||
 
 ### Table Variables:
 This part uses the following **`tvar:test`** to demonstrate:  
@@ -141,10 +143,22 @@ This part uses the following **`tvar:test`** to demonstrate:
 |Expression|Description|Examples|
 |:---|:---|:---|
 |`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl:` <br />Returns the value located by the column and row headers.|`${tvardl:test[41][13]}` = `43`|
-|`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Horizontally connects the table with the joiners.|`${tvar:test.hjoin(",", ",", 1:3, 3:)}`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|
+|`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Horizontally connects the table with the joiners.|`...hjoin(",", ",", 1:3, 3:)`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|
 |`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|
-|`hlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`${tvar:test.hlookup(13,3)}` = `1`<br />`${tvar:test.hlookup(13,3,2:)}` = `0`|
-|`vlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given column index and returns the row index.<br />Returns 0 if not found.|`${tvar:test.vlookup(13,1)}` = `3`|
+|`hlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`...hlookup(13,3)` = `1`<br />`...hlookup(13,3,2:)` = `0`|
+|`vlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given column index and returns the row index.<br />Returns 0 if not found.|`...vlookup(13,1)` = `3`|
+
+### Dict Variables:
+This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only a representation of the dictionary) to demonstrate:  
+|Expression|Description|Examples|
+|:---|:---|:---|
+|`dvar:` `edvar:`<br />`pdvar:` `epdvar:`|e (existing) / p (persist). Same as other variables.| `${pdvar:dictname}`<br />`${dvar:dictname[key]}` |
+|`length` / `size`|The number of keys in the dict.| `dvar:test.length` = `3` |
+|`ekey(key)` / `evalue(value)`|Check if the key/value exists in the dict. (returns 0/1)| `dvar:test.ekey(a)` = `1`<br />`dvar:test.evalue(4)` = `0` |
+|`keyof(value)`|Reversed lookup by value. Returns the first found key or empty string if not found.| `dvar:test.keyof(1)` = `a`<br />`dvar:test.keyof(4)` = `` |
+|`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`join(kvjoiner = ":", pairjoiner = ",")`|Connects the keys/values/both with the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...join` = `a:1,b:2,c:3,d:4,e:3`|
+|`countvalue(value)`|Returns the count of the given value in the dict.|`...countvalue(3)` = `3`|
+|`${_dicts}`|Show all session and persist dictionaries with a string. Provides debug info when the variable editor is not updated to support dicts.||
 
 ### Job Properties:
 `${_job[XXX].prop}`: returns the property of the given job.
@@ -169,8 +183,8 @@ Several entity properties were added to `${_ffxiventity}` and `${_ffxivparty}`:
 `castid`, `casttime`, `maxcasttime`, `iscasting`  
 
 ## Abbrevations for improving user experience:
-The expressions are extremely long when dealing with complicated logics, which usually include several layers of `${numeric:}` and `${func:}`, `${lvar:}`, ...  
-So several abbrevations were added:  
+The expressions are extremely long when dealing with complicated logics, which usually include several layers of `${}`.    
+So several abbrevations were added to shorten those expressions:  
 |Full|Abbrev.|
 |:---:|:---:|
 |`${numeric:...}` |`${n:...}`| 
@@ -214,21 +228,34 @@ It caused the program trying to set the value at the given `index` into the list
 The original code did not respect the persistent options of the source / target variables.   
 
 ### Updated `PopFirst` / `PopLast` action for list variables:  
-`PopFirst` was rewritten to accept an optional argument `index` (also support negative values).
-The name in the code was unchanged due to XML compatability issues.
-`PopLast` was redirected to `PopFirst` with index = `-1`. 
+`PopFirst` was rewritten to accept an optional argument `index` (also support negative values).  
+The name `PopFirst` in the code was unchanged and `PopLast` was not deleted due to XML compatability issues, but the implementation of `PopLast` was redirected to `PopFirst` with index = `-1`.  
 
-### Added `Build` action for list/table variables:  
-Build a list variable using the first 1 character of the expression as the separator, and the remained part as the given string. For table variable, using the first 2 characters as the col / row separator.    
+### Added basic actions for dict variables:
+`Unset` `UnsetAll` `UnsetRegex`;   
+`Set`: set value to the key;   
+`Remove`: remove the given key if existed;  
+`Merge`: combine dictionaries and keep the repeated keys unchanged;  
+`MergeHard`: combine dictionaries and overwrite the repeated keys.  
+
+### Added `Build` action for list/table/dict variables:  
+Build a list variable using the first 1 character of the expression as the separator, and the remained part as the given string. For table variable, using the first 2 characters as the col / row separator; for dict variable, using the first 2 characters as the key-value separator and the pairs separator.   
 Easily generates a list/table directly from a given string in a single action.  
 Could also generate a list from the slice of another list or a row/column of a table in a single action, if combined with `list.join`, `table.hjoin`, `table.vjoin`.   
-_e.g._ The expressions `,1,2,3,4,5,6,7,8,9` and `,|11,21,31,41|12,22,32,42|13,23,33,43|14,24,34,44` can build the previous `lvar:test` and `tvar:test`.  
+_e.g._ The expressions `,1,2,3,4,5,6,7,8,9` and `,|11,21,31,41|12,22,32,42|13,23,33,43|14,24,34,44` can build the previous `lvar:test` and `tvar:test`; 
+`:,a:1,b:2,c:3` can build the dictionary `a: 1, b: 2, c: 3`.
 
-### Added `SetAll` action for list/table variables:  
-Set all elements in the list/table variable to the given value.  
-`${_this}`, `${_index}` can be used in list variables;   
+### Added `SetAll` action for list/table/dict variables:  
+A very flexible way to assign a list/table/dict variable.  
+The dynamic expressions below could be used when transversing the whole variable:
+List variables: `${_this}` `${_index}`
+Dict variables: `${_index}` (when a dict length is given) or `${_key}` `${value}`
 `${_this}`, `${_row}`, `${_col}` can be used in table variables.  
-_e.g._ Applying the SetAll action with the expressions `${_index}` on a list (length = 9) can give the previous `lvar:test`.  
+_e.g._ Applying the SetAll action with the expressions `${_index}` on a list (length = 9) can give the previous `lvar:test` (1-9);
+Then applying SetAll with the numeric expression `${_this}^2` on `lvar:test` can give `1, 4, 9, ..., 81`.
+Applying SetAll to a dictionary with the given length `5`, the key expression `${_index}` and value expression `${_index}^2` can give a dictionary `1:1, 2:4, 3:9, 4:16, 5:25`;
+Then applying the key expression `${_value}` and value expression `${_key}` results in `1:1, 4:2, 9:3, 16:4, 25:5`.
+
 
 ### Added `SetLine` / `InsertLine` action for table variables:  
 Similar to the `Build` action for list variables, the expression is splitted into a list by its first character.  
@@ -262,20 +289,21 @@ _e.g._
 Sorting by `n-:${_index}` gives the reversed list.  
 Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_index}%3` gives `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
 
-
 ### Added the folder action "Cancel the Actions of All Triggers In Folder"
 Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)
 
 ### Sorted Actions List
-The actions, list actions and table actions were sorted to be more reasonable.
+The actions, list actions and table actions were sorted in a more reasonable order.  
+Also replaced some opTypes hardcoded by integers to their corresponding enums. 
 
-## Description and Log Messages
-Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions and log messages;   
-Added a `[Sync]` symbol to the description if the action is unsetted the async option;  
-Added more validity checkes and more precise information like which expression caused error in `Context.cs`;  
-Added color options in the action description page to allow customized color styles in the descriptions;  (format: "Lavender", "230,230,250", "#e6e6fa")  
-Added a warning color when an action has non-zero delay and the description is overrided;  
-Adjusted the warning / error log message colors to be less saturated instead of pure red/yellow. 
+## Action Viewer
+Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions (and also log messages);   
+Added a `[Sync]` prefix to the description if the async option of an action is unchecked;  
+Added a warning color when an action has a non-zero delay and the description text is overridden (this usually happens as a mistake when copying end editing actions, and it is hard to debug);  
+Added color options in the action description page to allow customized bg/text colors in the descriptions;  (format: `Lavender`, `230,230,250`, `#e6e6fa`, `#eef`)  
+Added a `Color` ExpressionType enum to let the textbox show the input as its background color;  
+Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of multiple selected actions;  
+`Add action` now insert the action under the selected line instead of set it to the bottom.
 
 ## Others
 ### Fixed the bug about string functions with no arguments:
@@ -294,14 +322,17 @@ Some columns were set to `Fill`. This selection would forbid the adjustment of i
 Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
 A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
 This character could also be used in expressions directly in Triggernometry, _e.g._ `${func:repeat(5, ⏎):text}`
+### Log messages:
+Added more precise error information in the logs like which expression caused error when expanding expressions;  
+Adjusted the warning / error log message colors to be less saturated instead of pure red/yellow.  
 ### Full translation documents:
-Hundreds of translations were missing since 1.1.6.0.  
-Most of the new keys are now added to the template and the CN/JP translation files.  
-(The FI/FR files were too outdated and the order was messed up)  
-Also added full CN translations.    
+Hundreds of translations were missing since 1.1.6.0, and some existed ones had the wrong keys.  
+Those translation keys were added/fixed in the template and the CN/JP translation files.  
+(The FI/FR files were too outdated and the orders were messed up)  
+Also added and revised the full CN translations.    
 ### Manually fire triggers respecting conditions
 Previously the triggers would ignore all contidion checks when it is manually fired, but sometimes we want it to respect all conditions.  
-So a `Fire (Allow Conditions)` button was added to the right-click menu, and an option `Allow conditions for autofiring` was added to trigger settings.  
+So a `Fire (Allow Conditions)` button was added to the right-click menu, and an `Allow conditions for autofiring` option was added to trigger settings.  
 ### Improved CSV Export
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
 ### Code Clean-up  
@@ -310,6 +341,17 @@ Fixed some typos;
 Other minor adjustments.   
 
 ## To-do List
-- [x] Dictionary Variable
 - [ ] Dictionary Variable State Viewer and Editor
-- [x] `indicesof()`
+- [ ] Test action ignoring conditions
+- [ ] Undo move actions
+- [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form
+- [ ] Sum of selected neighbours of a grid in table
+- [ ] `countempty()`
+- [ ] `removeslice` for strings; rewrite for lists / tables
+- [ ] `p(var)rl`...
+- [ ] `coutvalue(value)`
+- [ ] Treatment for empty dict key
+- [ ] combobox row height
+- [ ] RemoveRegex for dict keys
+- [ ] Trigger descriptions on the bottom like: `[Condition] [Sequence] [Refire] [Cooldown] [SourceType] [Mutex] [Autofire]` ...
+- [ ] Add Action when selected a trigger (to its parent folder)
