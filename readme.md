@@ -63,7 +63,7 @@ Slices expressions are used in several new features (should use "" or '' to cove
 ## Autofill
 Fixed the bug that sometimes autofill is not hidden (like after entering `tvar:` and still showing `tvarrl`);  
 Added more types of autofill: list/table/dict methods; current variable/aura/const names; regex capture groups in the current trigger; dict keys and table lookup headers;   
-The code will now find the previous unclosed `{` to give more intelligent autofill results;  (e.g. $`{lvar:xxx${var:yyy}${index}.` will show list properties);  
+The code will now find the previous unclosed `{` to give more intelligent autofill results;  (e.g. `${lvar:xxx${var:yyy}${index}.` will show list properties);  
 The autofill form will now show directly beneath the matched strings;  
 Fixed a bug that using enter key to select autofill results in multi-line mode will also input a linebreak;   
 Increased the height (5 → 10) and width (→ max length of results) of the autocomplete form.  
@@ -155,7 +155,7 @@ This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only 
 |Expression|Description|Examples|
 |:---|:---|:---|
 |`dvar:` `edvar:`<br />`pdvar:` `epdvar:`|e (existing) / p (persist). Same as other variables.| `${pdvar:dictname}`<br />`${dvar:dictname[key]}` |
-|`length` / `size`|The number of keys in the dict.| `dvar:test.length` = `3` |
+|`length` / `size`|The number of keys in the dict.| `dvar:test.length` = `5` |
 |`ekey(key)` / `evalue(value)`|Check if the key/value exists in the dict. (returns 0/1)| `dvar:test.ekey(a)` = `1`<br />`dvar:test.evalue(4)` = `0` |
 |`keyof(value)`|Reversed lookup by value. Returns the first found key or empty string if not found.| `dvar:test.keyof(1)` = `a`<br />`dvar:test.keyof(4)` = `` |
 |`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`join(kvjoiner = ":", pairjoiner = ",")`|Connects the keys/values/both with the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...join` = `a:1,b:2,c:3,d:4,e:3`|
