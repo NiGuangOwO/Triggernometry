@@ -127,7 +127,7 @@ This part uses **`lvar:test` = `1, 2, 3, 4, 5, 6, 7, 8, 9`** (this string is onl
 
 |Expression|Description|Examples|
 |:---|:---|:---|
-|`sum(slices = "::")`|Returns the sum of (the slices of) the list. <br /> Only the values which could be parsed into `double` would be summed.|`${lvar:test.sum}` = `45`<br />`${lvar:test.sum(1:5)}` = `10`|
+|`sum(slices = "::")`|Returns the sum of (the slices of) the list. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `45`<br />`${lvar:test.sum(1:5)}` = `10`|
 |`count(str, slices = "::")`|Returns the repeated times of the string in (the slices of) the list.|`${lvar:test.count(3)}` = `1`<br />`${lvar:test.count(a)}` = `0`|
 |`join(joiner = ",", slices = "::"`)|Connects (the slices of) the list with the joiner.|`${lvar:test.join}`<br />= `1,2,3,4,5,6,7,8,9`<br />`${lvar:test.join(" ",5::-1)}`<br />= `5 4 3 2 1`|
 |`randjoin(joiner = ",", slices = "::"`|Similar to join(), but the selected elements are shuffled before connected.|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|
@@ -145,6 +145,8 @@ This part uses the following **`tvar:test`** to demonstrate:
 |Expression|Description|Examples|
 |:---|:---|:---|
 |`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl:` <br />Returns the value located by the column and row headers.|`${tvardl:test[41][13]}` = `43`|
+|`sum(colSlices = "::", rowSlices = "::")`|Returns the sum of (the sliced rows and columns of) the table. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `440`<br />`...sum(1, 3:)` = `13 + 14` = `27`|
+|`count(str, colSlices = "::", rowSlices = "::")`|Returns the repeated times of the string in (the sliced rows and columns of) the table.|`${lvar:test.count(33)}` = `1`<br />`${lvar:test.count(1)}` = `0`|
 |`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Horizontally connects the table with the joiners.|`...hjoin(",", ",", 1:3, 3:)`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|
 |`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|
 |`hlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`...hlookup(13,3)` = `1`<br />`...hlookup(13,3,2:)` = `0`|
@@ -154,12 +156,15 @@ This part uses the following **`tvar:test`** to demonstrate:
 This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only a representation of the dictionary) to demonstrate:  
 |Expression|Description|Examples|
 |:---|:---|:---|
-|`dvar:` `edvar:`<br />`pdvar:` `epdvar:`|e (existing) / p (persist). Same as other variables.| `${pdvar:dictname}`<br />`${dvar:dictname[key]}` |
-|`length` / `size`|The number of keys in the dict.| `dvar:test.length` = `5` |
-|`ekey(key)` / `evalue(value)`|Check if the key/value exists in the dict. (returns 0/1)| `dvar:test.ekey(a)` = `1`<br />`dvar:test.evalue(4)` = `0` |
-|`keyof(value)`|Reversed lookup by value. Returns the first found key or empty string if not found.| `dvar:test.keyof(1)` = `a`<br />`dvar:test.keyof(4)` = `` |
-|`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`join(kvjoiner = ":", pairjoiner = ",")`|Connects the keys/values/both with the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...join` = `a:1,b:2,c:3,d:4,e:3`|
-|`countvalue(value)`|Returns the count of the given value in the dict.|`...countvalue(3)` = `3`|
+|`sumkeys()` `sumvalues()`|Sum all the keys/values which could be parsed into `double` format.|`${dvar:test.sumkey}` = `0`<br />`${dvar:test.sumvalue}` = `12`|
+|`count(value)`|Returns the count of the given value in the dict.|`...countvalue(3)` = `3`|
+|`dvar:` `edvar:`<br />`pdvar:` `epdvar:`|e (existing) / p (persist). Same as other variables.| `${epdvar:dictname}`<br />`${dvar:test[e]}` = `3` |
+|`length` / `size`|The number of keys in the dict.| `${dvar:test.size}` = `5` |
+|`ekey(key)` `evalue(value)`|Check if the key/value exists in the dict. (returns 0/1)| `${dvar:test.ekey(a)}` = `1`<br />`${dvar:test.evalue(4)}` = `0` |
+|`ifekey(key, t, f)`<br />`ifevalue(value, t, f)`|Similar to the string functions. (returns string t/f)| `...ifekey(a, found, missing)` = `found` |
+|`keyof(value)`|Reversed lookup by value. Returns the first found key or empty string if not found.| `${dvar:test.keyof(1)}` = `a`<br />`${dvar:test.keyof(4)}` = `` |
+|`keysof(value, joiner = ",")`|Lookup all keys matching the given value and join them with the joiner.| `...keyof(3)` = `c,d,e`|
+|`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`join(kvjoiner = ":", pairjoiner = ",")`|Connects the keys/values/both with the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...join` = `a:1,b:2,c:3,d:3,e:3`|
 |`${_dicts}`|Show all session and persist dictionaries with a string. Provides debug info when the variable editor is not updated to support dicts.||
 
 ### Job Properties:
@@ -298,14 +303,17 @@ Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/iss
 The actions, list actions and table actions were sorted in a more reasonable order.  
 Also replaced some opTypes hardcoded by integers to their corresponding enums. 
 
-## Action Viewer
-Added arguments to represent if the variable is persistent and if the expression is numeric/string for the action descriptions (and also log messages);   
+## Trigger Form / Action Viewer
+Added arguments to represent if the variable is persistent and if the expression is numeric/string in the action descriptions (and also log messages);   
 Added a `[Sync]` prefix to the description if the async option of an action is unchecked;  
 Added a warning color when an action has a non-zero delay and the description text is overridden (this usually happens as a mistake when copying end editing actions, and it is hard to debug);  
-Added color options in the action description page to allow customized bg/text colors in the descriptions;  (format: `Lavender`, `230,230,250`, `#e6e6fa`, `#eef`)  
+Added color options in the action description page to allow customized bg/text colors in the descriptions;  (format: `Lavender` / `230,230,250` / `#e6e6fa` / `#eef`)  
 Added a `Color` ExpressionType enum to let the textbox show the input as its background color;  
 Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of multiple selected actions;  
-`Add action` now insert the action under the selected line instead of set it to the bottom.
+`Add action` now insert the action under the selected line instead of set it to the bottom;   
+`Save changes` button would change into `Save and Fire` if autofire is enabled;  
+Added a trigger description label on the bottom showing some info about conditions, source, refire options, sequential, etc;  
+Added a message box to confirm quiting without saving the trigger.
 
 ## Others
 ### Fixed the bug about string functions with no arguments:
@@ -314,8 +322,7 @@ The original regex for string function could not parse `func:length:3*(1+2)` cor
 The regex was editted to solve this issue; it could now also match the whole expression in one step instead of parsing the `funcval` by searching the index of `:` later.  
 (also some other small edits to the regexes)  
 ### Fixed the bug about action checkboxes not showing on Hi-Res screen:
-Related issue: [#91](https://github.com/paissaheavyindustries/Triggernometry/issues/91)   
-Adjusted the initial column width to screenwidth / 50 instead of a fixed value. Also allowed changing the column width.  
+Related issue: [#91](https://github.com/paissaheavyindustries/Triggernometry/issues/91)    
 ### Fixed the MessageBox bug which let it sometimes hide behind the window:
 Now the message boxes will show above the current active window.
 ### Fixed the bug that some columns could not be adjusted in variable state viewer:
@@ -335,6 +342,9 @@ Also added and revised the full CN translations.
 ### Manually fire triggers respecting conditions
 Previously the triggers would ignore all contidion checks when it is manually fired, but sometimes we want it to respect all conditions.  
 So a `Fire (Allow Conditions)` button was added to the right-click menu, and an `Allow conditions for autofiring` option was added to trigger settings.  
+### Add trigger / folder when selecting a trigger:
+The `Add trigger / folder` button is now available when a local trigger is selected.   
+It would add the trigger / folder to the parent folder of the selected trigger, just like pasting triggers from xml.  
 ### Improved CSV Export
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
 ### Code Clean-up  
@@ -345,20 +355,7 @@ Other minor adjustments.
 ## To-do List
 - [ ] Dictionary Variable State Viewer and Editor
 - [ ] Test action ignoring conditions
-- [ ] Undo move actions
+- [ ] Undo move/delete actions
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form
-- [ ] Sum of selected neighbours of a grid in table
-- [ ] `countempty()`
-- [ ] `removeslice` for strings; rewrite for lists / tables
-- [ ] `p(var)rl`...
-- [ ] `coutvalue(value)`
-- [ ] Treatment for empty dict key
-- [ ] combobox row height
-- [ ] RemoveRegex for dict keys
-- [ ] Trigger descriptions on the bottom like: `[Condition] [Sequence] [Refire] [Cooldown] [SourceType] [Mutex] [Autofire]` ...
-- [ ] Add Action when selected a trigger (to its parent folder)
-- [ ] Loop description: delay
-- [ ] 表格动作描述：行列的翻译
-- [ ] customized sorting: change expression type enum
-- [ ] expLeft_TextChanged: plug
-- [ ] ActionViewer: Esc confirm
+- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
+- [ ] Conditional remove index/key/row/column; a way to remove slices from a list, etc.
