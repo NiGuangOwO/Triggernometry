@@ -81,7 +81,7 @@ Check below for details.
 |`_col`|Only available in the table action SetAll and SortCols. <br />Represents the current column index.|
 |`_row`|Only available in the table action SetAll and SortRows. <br />Represents the current row index.|
 |`_this`|Only available in the action SetAll (list/table) and SortByKey (list). <br />Represents the value in the current grid.|
-|`_key` <br />`_val`|Only available in the dict action SetAll. <br />Represents the current key/value.|
+|`_key` <br />`_val`|Only available in the dict action SetAll. <br />Represents the current key/value.| 
 
 ### Numeric Constants:
 |Expression|Description|
@@ -254,15 +254,14 @@ _e.g._ The expressions `,1,2,3,4,5,6,7,8,9` and `,|11,21,31,41|12,22,32,42|13,23
 
 ### Added `SetAll` action for list/table/dict variables:  
 A very flexible way to assign a list/table/dict variable.  
-The dynamic expressions below could be used when transversing the whole variable:
-List variables: `${_this}` `${_index}`
-Dict variables: `${_index}` (when a dict length is given) or `${_key}` `${value}`
+The dynamic expressions below could be used when transversing the whole variable:  
+List variables: `${_this}` `${_index}`  
+Dict variables: `${_index}` (when a dict length is given) or `${_key}` `${value}`  
 `${_this}`, `${_row}`, `${_col}` can be used in table variables.  
-_e.g._ Applying the SetAll action with the expressions `${_index}` on a list (length = 9) can give the previous `lvar:test` (1-9);
-Then applying SetAll with the numeric expression `${_this}^2` on `lvar:test` can give `1, 4, 9, ..., 81`.
-Applying SetAll to a dictionary with the given length `5`, the key expression `${_index}` and value expression `${_index}^2` can give a dictionary `1:1, 2:4, 3:9, 4:16, 5:25`;
-Then applying the key expression `${_value}` and value expression `${_key}` results in `1:1, 4:2, 9:3, 16:4, 25:5`.
-
+_e.g._ Applying the SetAll action with the expressions `${_index}` on a list (length = 9) can give the previous `lvar:test` (1-9);  
+Then applying SetAll with the numeric expression `${_this}^2` on `lvar:test` can give `1, 4, 9, ..., 81`.  
+Applying SetAll to a dictionary with the given length `5`, the key expression `${_index}` and value expression `${_index}^2` can give a dictionary `1:1, 2:4, 3:9, 4:16, 5:25`;  
+Then applying the key expression `${_value}` and value expression `${_key}` results in `1:1, 4:2, 9:3, 16:4, 25:5`.  
 
 ### Added `SetLine` / `InsertLine` action for table variables:  
 Similar to the `Build` action for list variables, the expression is splitted into a list by its first character.  
