@@ -305,7 +305,7 @@ Also replaced some opTypes hardcoded by integers to their corresponding enums.
 ## Trigger Form / Action Viewer  
 Added arguments to represent if the variable is persistent and if the expression is numeric/string in the action descriptions (and also log messages);   
 Added a `[Sync]` prefix to the description if the async option of an action is unchecked;  
-Added a warning color when an action has a non-zero delay and the description text is overridden (this usually happens as a mistake when copying end editing actions, and it is hard to debug);  
+Added a warning color when an action has a non-zero delay and the description text is overridden (this usually happens as a mistake when copying and editing actions, and it is hard to debug);  
 Added color options in the action description page to allow customized bg/text colors in the descriptions;  (format: `Lavender` / `230,230,250` / `#e6e6fa` / `#eef`)  
 Added a `Color` ExpressionType enum to let the textbox show the input as its background color;  
 Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of multiple selected actions;  
