@@ -338,22 +338,24 @@ Hundreds of translations were missing since 1.1.6.0, and some existed ones had t
 Those translation keys were added/fixed in the template and the CN/JP translation files.  
 (The FI/FR files were too outdated and the orders were messed up)  
 Also added and revised the full CN translations.    
-### Manually fire triggers respecting conditions  
+### Manually fire / autofire triggers respecting conditions  
 Previously the triggers would ignore all contidion checks when it is manually fired, but sometimes we want it to respect all conditions.  
 So a `Fire (Allow Conditions)` button was added to the right-click menu, and an `Allow conditions for autofiring` option was added to trigger settings.  
+### Test action ignoring conditions
+Similar to above, a selection `Test action with live values (ignore conditions)` and the corresponding configuration option to ignore conditions as default were added.  
 ### Add trigger / folder when selecting a trigger:  
 The `Add trigger / folder` button is now available when a local trigger is selected.   
 It would add the trigger / folder to the parent folder of the selected trigger, just like pasting triggers from xml.  
 ### Improved CSV Export  
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
-### Code Clean-up  
+### Minor adjustments 
 Combined some repeated logics;  
+Fixed some `Parse()` `ToString()` without using `CultureInfo.InvariantCulture` (minus signs `-`/`−` could be different according to the settings);  
 Fixed some typos;  
-Other minor adjustments.   
+etc.   
   
 ## To-do List  
 - [ ] Dictionary Variable State Viewer and Editor  
-- [ ] Test action ignoring conditions  
 - [ ] Undo move/delete actions  
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form  
 - [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
