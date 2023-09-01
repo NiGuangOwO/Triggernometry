@@ -80,7 +80,7 @@ Check below for details.
 |Expression|Description|  
 |:---|:---|  
 |`_ETprecise`|Gives the precise minutes in the eorzean day.<br />The accurate version of `_ffxivtime` (`_ET`).|  
-|`_index`|Only available in the list action SetAll / SortByKey and dict action SetAll. <br />Represents the current index.|  
+|`_idx`|Only available in the list action SetAll / SortByKey and dict action SetAll. <br />Represents the current index.|  
 |`_col`|Only available in the table action SetAll and SortCols. <br />Represents the current column index.|  
 |`_row`|Only available in the table action SetAll and SortRows. <br />Represents the current row index.|  
 |`_this`|Only available in the action SetAll (list/table) and SortByKey (list). <br />Represents the value in the current grid.|  
@@ -258,19 +258,19 @@ _e.g._ The expressions `,1,2,3,4,5,6,7,8,9` and `,|11,21,31,41|12,22,32,42|13,23
 ### Added `SetAll` action for list/table/dict variables:  
 A very flexible way to assign a list/table/dict variable. The concept is similar to `Select()` in LINQ expressions.  
 The dynamic expressions below could be used when transversing the whole variable:  
-List variables: `${_this}` `${_index}`  
-Dict variables: `${_index}` (when a dict length is given) or `${_key}` `${value}`  
+List variables: `${_this}` `${_idx}`  
+Dict variables: `${_idx}` (when a dict length is given) or `${_key}` `${_val}`  
 `${_this}`, `${_row}`, `${_col}` can be used in table variables.  
-_e.g._ Applying the SetAll action with the expressions `${_index}` on a list (length = 9) can give the previous `lvar:test` (1-9);  
+_e.g._ Applying the SetAll action with the expressions `${_idx}` on a list (length = 9) can give the previous `lvar:test` (1-9);  
 Then applying SetAll with the numeric expression `${_this}^2` on `lvar:test` can give `1, 4, 9, ..., 81`.  
-Applying SetAll to a dictionary with the given length `5`, the key expression `${_index}` and value expression `${_index}^2` can give a dictionary `1:1, 2:4, 3:9, 4:16, 5:25`;  
+Applying SetAll to a dictionary with the given length `5`, the key expression `${_idx}` and value expression `${_idx}^2` can give a dictionary `1:1, 2:4, 3:9, 4:16, 5:25`;  
 Then applying the key expression `${_value}` and value expression `${_key}` results in `1:1, 4:2, 9:3, 16:4, 25:5`.  
 
 ### Added `Filter` action for list/table/dict variables:  (to do)  
 The concept is similar to `Where()` in LINQ expressions.  
 Filter the grids of lists, rows/columns of tables, key-value pairs of dictionaries if the dynamic expression value > 0.  
 e.g.   
-Applying the expression `${lvar:listname.indexof(${_this})} = ${_index}` removes the repeated elements in the list `listname`;  
+Applying the expression `${lvar:listname.indexof(${_this})} = ${_idx}` removes the repeated elements in the list `listname`;  
 Applying the expression `and(${_ffxiventity[${_this}].distance} > 15, ${func:ifequal(DPS):${_ffxiventity[${_this}].role}})` on a list with player names: filters the names of DPSs whose distance to the player > 15 m. 
   
 ### Added `SetLine` / `InsertLine` action for table variables:  
@@ -298,12 +298,12 @@ Useful when dealing with mechanisms related to multiple sorting, like TOP dynami
 Expression format: `n+:key1, n-:key2, s+:key3, ...`  
 `n`/`s`: numeric/string comparison  
 `+`/`-`: ascending/descending (`+` could be omitted)  
-`key`: should include `${_this}` / `${_index}` for lists, `${_row}` for row sorting, `${_col}` for column sorting.  
+`key`: should include `${_this}` / `${_idx}` for lists, `${_row}` for row sorting, `${_col}` for column sorting.  
 If the raw expression contains commas, or starts or ends with spaces, it should be quoted like `"s+:key", ...` or `'s+:key', ...`.  
 _e.g._  
 `n+:${_this}` `n-:${_this}` `s+:${_this}` `s-:${_this}` are the same with the previous 4 sorting actions.  
-Sorting by `n-:${_index}` gives the reversed list.  
-Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_index}%3` gives `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
+Sorting by `n-:${_idx}` gives the reversed list.  
+Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_idx}%3` gives `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
   
 ### Added the folder action "Cancel the Actions of All Triggers In Folder"  
 Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)  
@@ -327,7 +327,9 @@ Added a message box to confirm quiting without saving the trigger.
 ## Variable State Viewer / Editor
 Added support for dictionary variables;  
 Added support for sorting the 8 types of variables by clicking their corresponding dgv table headers;
-Fixed a bug that the "remove all variables" buttons for  were actually not shown  
+Let the selected grid move to the next column / row after adding a column / row. (not changed for inserting);
+Fixed the bug that some columns could not be adjusted in variable state viewer: some columns were set to `Fill`, which forbids the adjustment of its column width if it is not the last column.   
+
 ## Others  
 ### Fixed the bug about string functions with no arguments:  
 Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/issues/92)  
@@ -338,8 +340,6 @@ The regex was editted to solve this issue; it could now also match the whole exp
 Related issue: [#91](https://github.com/paissaheavyindustries/Triggernometry/issues/91)    
 ### Fixed the MessageBox bug which let it sometimes hide behind the window:  
 Now the message boxes will show above the current active window.  
-### Fixed the bug that some columns could not be adjusted in variable state viewer:  
-Some columns were set to `Fill`. This selection would forbid the adjustment of its column width if it is not the last column.  
 ### Added support for linebreaks in expressions  
 Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
 A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
@@ -370,19 +370,22 @@ etc.
   
 ## Current To-do List  
 - [x] Dictionary Variable State Viewer
-- [ ] Dictionary Variable Editor
-- [ ] autofill debounce
-- [ ] Undo move/delete actions   
+- [ ] Variable State Viewer col width
+- [x] Dictionary Variable Editor
+- [ ] Dictionary Variable Editor (Sort)
+- [x] autofill debounce
+- [x] Undo move/delete actions   
 - [ ] `contain()` list
-- [ ] `ifekey(key, t, f)` `ifevalue(value, t, f)`
-- [ ] `sumkeys()` `sumvalues()` change names
-- [ ] `this[col]` `this[row]` in table actions
-- [ ] `pickslice()`
+- [x] `ifekey(key, t, f)` `ifevalue(value, t, f)`
+- [x] `sumkeys()` `sumvalues()` 
+- [x] `_row[col]` `_col[row]` in table actions
+- [ ] `pickslice()` (or `inslice`?)
 - [ ] `max()` `min()` list/table/dict
-- [ ] Optimize the GetSlices function: return all indices directly if no argumemnts were given
+- [x] Optimize the GetSlices function: return all indices directly if no argumemnts were given
 - [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
-- [ ] Filter
-- [ ] Select the trigger after drag and move
+- [ ] ***Filter***
+- [x] Select the trigger after drag and move
+- [x] Cancel selection of actions when clicking elsewhere
 
 ## Future
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.
