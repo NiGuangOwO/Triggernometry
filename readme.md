@@ -56,9 +56,12 @@ The previous keyword "last" is redirected to -1.
 _e.g._ `${tvar:myTable[2][-3]}` gives the value in the `2nd` column and the `-3rd` row.  
 ### Slices  
 A slice expression like `start:end:step` could represent a series of indices starting from `start`, adding `step` every time, and ending **before** `end`.  
-This expression works nearly the same as in Python, but the indices count from 1 for list / tables to keep consistent with previous Triggernometry features.  
-**Slice** (and index) could combine to a **slices** expression, like: `":5, 7, 8:13:2, 16:"` means `1, 2, 3, 4, 7, 8, 10, 12, 16, 17, (...to the end)`  
-Slices expressions are used in several new features (should use "" or '' to cover the expression if it contains comma).  
+This expression works nearly the same as in Python.  
+All the three integers could be omitted: `a:b:c` `a:b:` `a::c` `:b:c` `a::` `:b:` `::c` `::` `a:b` `a:` `:b` `:` 
+The indices accept negative indices; count from 0 for strings and count from 1 for list / tables, to keep consistent with previous Triggernometry features.  
+**Slice** (and index) could combine to a **slices** expression, like: `":5, 7, 8:13:2, 16:"` means `(0), 1, 2, 3, 4, 7, 8, 10, 12, 16, 17, (...to the end)`  
+Slices expressions are widely used in the new features to combine multiple functions, provide a way to "fake" higher-dimension list/table operations in string expressions, and also simplify the expressions/actions without using loops.  
+Note: "slices" is considered as a single argument in functions and methods. Should use `""` or `''` to cover the slices expression if it contains comma.  
   
 ## Autofill  
 Fixed the bug that sometimes autofill is not hidden (like after entering `tvar:` and still showing `tvarrl`);  
@@ -109,7 +112,7 @@ Check below for details.
 |Expression|Description|Examples|  
 |:---|:---|:---|  
 |`parsedmg`|Same as numeric function. No arguments accepted.|`func:parsedmg:A00000`<br />= `160`|  
-|`slice(slices = "::")`|Accepts a slices expression as an argument.<br />Returns the slice of the string.|`func:slice(-3):01234` = `2`<br />`func:slice(1:4):01234` = `123`<br />`func:slice(::-1):01234` = `43210`<br />`func:slice("1,3:"):01234` = `134`|  
+|`slice(slices = ":")`|Accepts a slices expression as an argument.<br />Returns the slice of the string.|`func:slice(-3):01234` = `2`<br />`func:slice(1:4):01234` = `123`<br />`func:slice(::-1):01234` = `43210`<br />`func:slice("1,3:"):01234` = `134`|  
 |`pick(index, separator = ",")`|Separates the given string by the given separator.<br />Returns substring with the index counting from 0.<br />Also supports negative values.  |`func:pick(3):north,west,south,east`<br /> = `east`<br />`func:pick(-1,", "):1, 22, 3, 44, 5`<br /> = `5`|  
 |`contain(str)`<br />`startwith(str)`<br />`endwith(str)`<br />`equal(str)`|Returns `1` or `0`.|`func:contain(23):1234` = `1` <br />`func:endwith(23):1234` = `0`<br />`func:equal(23):1234` = `0`|  
 |`ifcontain(str, t, f)`<br />`ifstartwith(str, t, f)`<br />`ifendwith(str, t, f)`<br />`ifequal(str, t, f)`|Similar to `if()`.|`func:ifcontain(23, a, b):1234` = `a` <br />`func:ifendwith(23, a, b):1234` = `b`<br />`func:ifequal(23, a, b):1234` = `b`|  
@@ -127,10 +130,10 @@ This part uses **`lvar:test` = `1, 2, 3, 4, 5, 6, 7, 8, 9`** (this string is onl
   
 |Expression|Description|Examples|  
 |:---|:---|:---|  
-|`sum(slices = "::")`|Returns the sum of (the slices of) the list. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `45`<br />`${lvar:test.sum(1:5)}` = `10`|  
-|`count(str, slices = "::")`|Returns the repeated times of the string in (the slices of) the list.|`${lvar:test.count(3)}` = `1`<br />`${lvar:test.count(a)}` = `0`|  
-|`join(joiner = ",", slices = "::"`)|Connects (the slices of) the list with the joiner.|`${lvar:test.join}`<br />= `1,2,3,4,5,6,7,8,9`<br />`${lvar:test.join(" ",5::-1)}`<br />= `5 4 3 2 1`|  
-|`randjoin(joiner = ",", slices = "::"`|Similar to join(), but the selected elements are shuffled before connected.|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|  
+|`sum(slices = ":")`|Returns the sum of (the slices of) the list. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `45`<br />`${lvar:test.sum(1:5)}` = `10`|  
+|`count(str, slices = ":")`|Returns the repeated times of the string in (the slices of) the list.|`${lvar:test.count(3)}` = `1`<br />`${lvar:test.count(a)}` = `0`|  
+|`join(joiner = ",", slices = ":"`)|Connects (the slices of) the list with the joiner.|`${lvar:test.join}`<br />= `1,2,3,4,5,6,7,8,9`<br />`${lvar:test.join(" ",5::-1)}`<br />= `5 4 3 2 1`|  
+|`randjoin(joiner = ",", slices = ":"`|Similar to join(), but the selected elements are shuffled before connected.|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|  
 |`ifcontain(str, trueExpe, falseExpr)`|Similar as `if()`.|`...ifcontain(3, found, missing)` <br />= `found` <br />`..ifcontain(a, found, missing)` <br />= `missing`|  
 |`indicesof(str, joiner = ",", slices = "")`|Search for all indices in the given slices of the list, and join the indices to a string. Similar to the string function.||  
   
@@ -145,12 +148,12 @@ This part uses the following **`tvar:test`** to demonstrate:
 |Expression|Description|Examples|  
 |:---|:---|:---|  
 |`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl:` <br />Returns the value located by the column and row headers.|`${tvardl:test[41][13]}` = `43`|  
-|`sum(colSlices = "::", rowSlices = "::")`|Returns the sum of (the sliced rows and columns of) the table. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `440`<br />`...sum(1, 3:)` = `13 + 14` = `27`|  
-|`count(str, colSlices = "::", rowSlices = "::")`|Returns the repeated times of the string in (the sliced rows and columns of) the table.|`${lvar:test.count(33)}` = `1`<br />`${lvar:test.count(1)}` = `0`|  
-|`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Horizontally connects the table with the joiners.|`...hjoin(",", ",", 1:3, 3:)`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|  
-|`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = "::", rowSlices = "::")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|  
-|`hlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`...hlookup(13,3)` = `1`<br />`...hlookup(13,3,2:)` = `0`|  
-|`vlookup(str, rowIndex, colSlices = "::")`|Looks for the string in the given column index and returns the row index.<br />Returns 0 if not found.|`...vlookup(13,1)` = `3`|  
+|`sum(colSlices = ":", rowSlices = ":")`|Returns the sum of (the sliced rows and columns of) the table. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `440`<br />`...sum(1, 3:)` = `13 + 14` = `27`|  
+|`count(str, colSlices = ":", rowSlices = ":")`|Returns the repeated times of the string in (the sliced rows and columns of) the table.|`${lvar:test.count(33)}` = `1`<br />`${lvar:test.count(1)}` = `0`|  
+|`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = ":", rowSlices = ":")`|Horizontally connects the table with the joiners.|`...hjoin(",", ",", 1:3, 3:)`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|  
+|`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = ":", rowSlices = ":")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|  
+|`hlookup(str, rowIndex, colSlices = ":")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`...hlookup(13,3)` = `1`<br />`...hlookup(13,3,2:)` = `0`|  
+|`vlookup(str, rowIndex, colSlices = ":")`|Looks for the string in the given column index and returns the row index.<br />Returns 0 if not found.|`...vlookup(13,1)` = `3`|  
   
 ### Dict Variables:  
 This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only a representation of the dictionary) to demonstrate:  
@@ -253,7 +256,7 @@ _e.g._ The expressions `,1,2,3,4,5,6,7,8,9` and `,|11,21,31,41|12,22,32,42|13,23
 `:,a:1,b:2,c:3` can build the dictionary `a: 1, b: 2, c: 3`.  
   
 ### Added `SetAll` action for list/table/dict variables:  
-A very flexible way to assign a list/table/dict variable.  
+A very flexible way to assign a list/table/dict variable. The concept is similar to `Select()` in LINQ expressions.  
 The dynamic expressions below could be used when transversing the whole variable:  
 List variables: `${_this}` `${_index}`  
 Dict variables: `${_index}` (when a dict length is given) or `${_key}` `${value}`  
@@ -262,6 +265,13 @@ _e.g._ Applying the SetAll action with the expressions `${_index}` on a list (le
 Then applying SetAll with the numeric expression `${_this}^2` on `lvar:test` can give `1, 4, 9, ..., 81`.  
 Applying SetAll to a dictionary with the given length `5`, the key expression `${_index}` and value expression `${_index}^2` can give a dictionary `1:1, 2:4, 3:9, 4:16, 5:25`;  
 Then applying the key expression `${_value}` and value expression `${_key}` results in `1:1, 4:2, 9:3, 16:4, 25:5`.  
+
+### Added `Filter` action for list/table/dict variables:  (to do)  
+The concept is similar to `Where()` in LINQ expressions.  
+Filter the grids of lists, rows/columns of tables, key-value pairs of dictionaries if the dynamic expression value > 0.  
+e.g.   
+Applying the expression `${lvar:listname.indexof(${_this})} = ${_index}` removes the repeated elements in the list `listname`;  
+Applying the expression `and(${_ffxiventity[${_this}].distance} > 15, ${func:ifequal(DPS):${_ffxiventity[${_this}].role}})` on a list with player names: filters the names of DPSs whose distance to the player > 15 m. 
   
 ### Added `SetLine` / `InsertLine` action for table variables:  
 Similar to the `Build` action for list variables, the expression is splitted into a list by its first character.  
@@ -313,7 +323,11 @@ Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of 
 `Save changes` button would change into `Save and Fire` if autofire is enabled;  
 Added a trigger description label on the bottom showing some info about conditions, source, refire options, sequential, etc;  
 Added a message box to confirm quiting without saving the trigger.  
-  
+
+## Variable State Viewer / Editor
+Added support for dictionary variables;  
+Added support for sorting the 8 types of variables by clicking their corresponding dgv table headers;
+Fixed a bug that the "remove all variables" buttons for  were actually not shown  
 ## Others  
 ### Fixed the bug about string functions with no arguments:  
 Related issue: [#92](https://github.com/paissaheavyindustries/Triggernometry/issues/92)  
@@ -354,9 +368,21 @@ Fixed some `Parse()` `ToString()` without using `CultureInfo.InvariantCulture` (
 Fixed some typos;  
 etc.   
   
-## To-do List  
-- [ ] Dictionary Variable State Viewer and Editor  
-- [ ] Undo move/delete actions  
-- [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form  
-- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
-- [ ] Conditional remove index/key/row/column; a way to remove slices from a list, etc.  
+## Current To-do List  
+- [x] Dictionary Variable State Viewer
+- [ ] Dictionary Variable Editor
+- [ ] autofill debounce
+- [ ] Undo move/delete actions   
+- [ ] `contain()` list
+- [ ] `ifekey(key, t, f)` `ifevalue(value, t, f)`
+- [ ] `sumkeys()` `sumvalues()` change names
+- [ ] `this[col]` `this[row]` in table actions
+- [ ] `pickslice()`
+- [ ] `max()` `min()` list/table/dict
+- [ ] Optimize the GetSlices function: return all indices directly if no argumemnts were given
+- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
+- [ ] Filter
+- [ ] Select the trigger after drag and move
+
+## Future
+- [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.
