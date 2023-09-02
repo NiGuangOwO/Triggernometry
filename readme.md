@@ -148,7 +148,7 @@ This part uses the following **`tvar:test`** to demonstrate:
 |Expression|Description|Examples|  
 |:---|:---|:---|  
 |`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl:` <br />Returns the value located by the column and row headers.|`${tvardl:test[41][13]}` = `43`|  
-|`sum(colSlices = ":", rowSlices = ":")`|Returns the sum of (the sliced rows and columns of) the table. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `440`<br />`...sum(1, 3:)` = `13 + 14` = `27`|  
+|`sum(colSlices = ":", rowSlices = ":")`|Returns the sum of (the sliced rows and columns of) the table. <br /> Only the values which could be parsed into `double` format would be summed.|`${lvar:test.sum}` = `440`<br />`...sum(1, :)`<br />= `11 + 12 + 13 + 14`<br />= `50`|  
 |`count(str, colSlices = ":", rowSlices = ":")`|Returns the repeated times of the string in (the sliced rows and columns of) the table.|`${lvar:test.count(33)}` = `1`<br />`${lvar:test.count(1)}` = `0`|  
 |`hjoin(joiner1 = ",", joiner2 = "⏎", colSlices = ":", rowSlices = ":")`|Horizontally connects the table with the joiners.|`...hjoin(",", ",", 1:3, 3:)`<br />= `13,23,14,24`<br />`${tvar:test.hjoin}` = <br />`11,21,31,41`<br />`12,22,32,42`<br />`13,23,33,43`<br />`14,24,34,44`|  
 |`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = ":", rowSlices = ":")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|  
@@ -159,7 +159,7 @@ This part uses the following **`tvar:test`** to demonstrate:
 This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only a representation of the dictionary) to demonstrate:  
 |Expression|Description|Examples|  
 |:---|:---|:---|  
-|`sumkeys()` `sumvalues()`|Sum all the keys/values which could be parsed into `double` format.|`${dvar:test.sumkey}` = `0`<br />`${dvar:test.sumvalue}` = `12`|  
+|`sumkeys()` `sum()`|Sum all the keys/values which could be parsed into `double` format.|`${dvar:test.sumkey}` = `0`<br />`${dvar:test.sum}` = `12`|  
 |`count(value)`|Returns the count of the given value in the dict.|`...countvalue(3)` = `3`|  
 |`dvar:` `edvar:`<br />`pdvar:` `epdvar:`|e (existing) / p (persist). Same as other variables.| `${epdvar:dictname}`<br />`${dvar:test[e]}` = `3` |  
 |`length` / `size`|The number of keys in the dict.| `${dvar:test.size}` = `5` |  
@@ -377,7 +377,7 @@ etc.
 - [x] Undo move/delete actions   
 - [ ] `contain()` list
 - [x] `ifekey(key, t, f)` `ifevalue(value, t, f)`
-- [x] `sumkeys()` `sumvalues()` 
+- [x] ✓ `sumkeys()` `sum()` 
 - [x] `_row[col]` `_col[row]` in table actions
 - [ ] `pickslice()` (or `inslice`?)
 - [ ] `max()` `min()` list/table/dict
