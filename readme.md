@@ -380,7 +380,7 @@ etc.
 - [x] ✓ `sumkeys()` `sum()` 
 - [x] `_row[col]` `_col[row]` in table actions
 - [ ] `pickslice()` (or `inslice`?)
-- [ ] `max()` `min()` list/table/dict
+- [x] `max()` `min()` list/table/dict
 - [x] Optimize the GetSlices function: return all indices directly if no argumemnts were given
 - [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
 - [ ] ***Filter***
