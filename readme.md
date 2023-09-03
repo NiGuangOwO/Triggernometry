@@ -325,10 +325,12 @@ Added a warning color when an action has a non-zero delay and the description te
 Added color options in the action description page to allow customized bg/text colors in the descriptions;  (format: `Lavender` / `230,230,250` / `#e6e6fa` / `#eef`)  
 Added a `Color` ExpressionType enum to let the textbox show the input as its background color;  
 Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of multiple selected actions;  
+Added the button `Undo` to enable the undo of movement / delete of actions for one step;  
 `Add action` now insert the action under the selected line instead of set it to the bottom;   
 `Save changes` button would change into `Save and Fire` if autofire is enabled;  
 Added a trigger description label on the bottom showing some info about conditions, source, refire options, sequential, etc;  
-Added a message box to confirm quiting without saving the trigger.  
+Added a message box to confirm quiting without saving the trigger;  
+Deselect the action rows when clicking elsewhere.  
 
 ## Log Form
 Added more precise error information in the logs like which expression caused error when expanding expressions;  
@@ -380,16 +382,15 @@ Fixed some typos;
 etc.   
   
 ## Current To-do List  
-- [ ] autofill debounce
-- [x] Undo move/delete actions   
-- [ ] `contain()` list
+- [x] `contain()` list
 - [ ] `pickslice()` (or `inslice`?)
+- [ ] tempvar
 - [ ] ***Filter***
-- [x] Select the trigger after drag and move
-- [x] Cancel selection of actions when clicking elsewhere
+- [ ] autofill debounce
+- [ ] review
 
 ## Future
-- [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.
-- [ ] Dictionary Variable Editor (Sort)
-- [ ] Count errors and warnings
-- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
+- [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.  
+- [ ] Dictionary Variable Editor (Sort)  
+- [ ] Show the count of errors and warnings  
+- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
