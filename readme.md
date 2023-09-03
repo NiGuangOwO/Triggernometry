@@ -83,6 +83,8 @@ Check below for details.
 |`_idx`|Only available in the list action SetAll / SortByKey and dict action SetAll. <br />Represents the current index.|  
 |`_col`|Only available in the table action SetAll and SortCols. <br />Represents the current column index.|  
 |`_row`|Only available in the table action SetAll and SortRows. <br />Represents the current row index.|  
+|`_col[i]`|Only available in the table action SortCols. <br />Represents the value in the row index `i` and the current column.|  
+|`_row[i]`|Only available in the table action SortRows. <br />Represents the value in the column index `i` and the current row.|  
 |`_this`|Only available in the action SetAll (list/table) and SortByKey (list). <br />Represents the value in the current grid.|  
 |`_key` <br />`_val`|Only available in the dict action SetAll. <br />Represents the current key/value.|  
   
@@ -136,6 +138,8 @@ This part uses **`lvar:test` = `1, 2, 3, 4, 5, 6, 7, 8, 9`** (this string is onl
 |`randjoin(joiner = ",", slices = ":"`|Similar to join(), but the selected elements are shuffled before connected.|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|  
 |`ifcontain(str, trueExpe, falseExpr)`|Similar as `if()`.|`...ifcontain(3, found, missing)` <br />= `found` <br />`..ifcontain(a, found, missing)` <br />= `missing`|  
 |`indicesof(str, joiner = ",", slices = "")`|Search for all indices in the given slices of the list, and join the indices to a string. Similar to the string function.||  
+|`max(type = "n", slices = ":")` <br /> `min(type = "n", slices = ":")`|Returns the extremum value in (the slices of) the list. `type`: `n` for numeric, `h` for hex, `s` for string.|`${lvar:test.max}` = 9 <br /> `...min(n, 3:) = 3`|
+
   
 ### Table Variables:  
 This part uses the following **`tvar:test`** to demonstrate:  
@@ -154,6 +158,7 @@ This part uses the following **`tvar:test`** to demonstrate:
 |`vjoin(joiner1 = ",", joiner2 = "⏎", colSlices = ":", rowSlices = ":")`|Vertically connects the table with the joiners.|`${tvar:test.vjoin}` = <br />`11,12,13,14`<br />`21,22,23,24`<br />`31,32,33,34`<br />`41,42,43,44`|  
 |`hlookup(str, rowIndex, colSlices = ":")`|Looks for the string in the given row index and returns the column index.<br />Returns 0 if not found.|`...hlookup(13,3)` = `1`<br />`...hlookup(13,3,2:)` = `0`|  
 |`vlookup(str, rowIndex, colSlices = ":")`|Looks for the string in the given column index and returns the row index.<br />Returns 0 if not found.|`...vlookup(13,1)` = `3`|  
+|`max(type = "n", colSlices = ":", rowSlices = ":")` <br /> `min(type = "n", colSlices = ":", rowSlices = ":")`|Same as the list method.|(omitted)|
   
 ### Dict Variables:  
 This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only a representation of the dictionary) to demonstrate:  
@@ -168,7 +173,8 @@ This part uses **`dvar:test` = `a:1, b:2, c:3, d:3, e:3`** (this string is only 
 |`keyof(value)`|Reversed lookup by value. Returns the first found key or empty string if not found.| `${dvar:test.keyof(1)}` = `a`<br />`${dvar:test.keyof(4)}` = `` |  
 |`keysof(value, joiner = ",")`|Lookup all keys matching the given value and join them with the joiner.| `...keyof(3)` = `c,d,e`|  
 |`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`join(kvjoiner = ":", pairjoiner = ",")`|Connects the keys/values/both with the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...join` = `a:1,b:2,c:3,d:3,e:3`|  
-|`${_dicts}`|Show all session and persist dictionaries with a string. Provides debug info when the variable editor is not updated to support dicts.||  
+|`max(type = "n")` <br /> `min(type = "n")`<br />`maxkey(type = "n")` <br /> `minkey(type = "n")`|Same as the list method.|(omitted)|
+
   
 ### Job Properties:  
 `${_job[XXX].prop}`: returns the property of the given job.  
@@ -298,7 +304,7 @@ Useful when dealing with mechanisms related to multiple sorting, like TOP dynami
 Expression format: `n+:key1, n-:key2, s+:key3, ...`  
 `n`/`s`: numeric/string comparison  
 `+`/`-`: ascending/descending (`+` could be omitted)  
-`key`: should include `${_this}` / `${_idx}` for lists, `${_row}` for row sorting, `${_col}` for column sorting.  
+`key`: should include `${_this}` / `${_idx}` for lists, `${_row}` `${_row[i]}` for row sorting, `${_col}` `${_col[i]}` for column sorting.  
 If the raw expression contains commas, or starts or ends with spaces, it should be quoted like `"s+:key", ...` or `'s+:key', ...`.  
 _e.g._  
 `n+:${_this}` `n-:${_this}` `s+:${_this}` `s-:${_this}` are the same with the previous 4 sorting actions.  
@@ -324,6 +330,13 @@ Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of 
 Added a trigger description label on the bottom showing some info about conditions, source, refire options, sequential, etc;  
 Added a message box to confirm quiting without saving the trigger.  
 
+## Log Form
+Added more precise error information in the logs like which expression caused error when expanding expressions;  
+Added a `custom` log type (`info` < `custom` < `warning`) which should contain no log from the program.   
+Adjusted the `warning` / `error` log message colors to be less saturated instead of pure red/yellow, and also added a green color to the `custom` logs.   
+Use checkboxes instead of comboboxes to filter logs, which is much clearer:   
+<img src="https://github.com/MnFeN/Triggernometry/assets/85232361/76de6fa8-2596-4ebf-b538-296749bca3d4" width="200">
+
 ## Variable State Viewer / Editor
 Added support for dictionary variables;  
 Added support for sorting the 8 types of variables by clicking their corresponding dgv table headers;
@@ -344,9 +357,6 @@ Now the message boxes will show above the current active window.
 Previously the linebreaks do not fully tolerate with splitting arguments, codes which contain trimming, and also regexes.  
 A special character `⏎` was used as a placeholder for all linebreaks when parsing expressions, then replaced back after parsed.  
 This character could also be used in expressions directly in Triggernometry, _e.g._ `${func:repeat(5, ⏎):text}`  
-### Log messages:  
-Added more precise error information in the logs like which expression caused error when expanding expressions;  
-Adjusted the warning / error log message colors to be less saturated instead of pure red/yellow.  
 ### Full translation documents:  
 Hundreds of translations were missing since 1.1.6.0, and some existed ones had the wrong keys.  
 Those translation keys were added/fixed in the template and the CN/JP translation files.  
@@ -357,8 +367,9 @@ Previously the triggers would ignore all contidion checks when it is manually fi
 So a `Fire (Allow Conditions)` button was added to the right-click menu, and an `Allow conditions for autofiring` option was added to trigger settings.  
 ### Test action ignoring conditions
 Similar to above, a selection `Test action with live values (ignore conditions)` and the corresponding configuration option to ignore conditions as default were added.  
-### Add trigger / folder when selecting a trigger:  
-The `Add trigger / folder` button is now available when a local trigger is selected.   
+### Main UI  
+The `Add trigger / folder` button is now available when a local trigger is selected. It would add the trigger / folder to the parent folder of the selected trigger, just like pasting triggers from xml;
+The trigger / folder will be selected after drag and move.
 It would add the trigger / folder to the parent folder of the selected trigger, just like pasting triggers from xml.  
 ### Improved CSV Export  
 Added support for table variables containing commas and double quotes. (Previously the grids were simply joint together with `,`)  
@@ -369,23 +380,16 @@ Fixed some typos;
 etc.   
   
 ## Current To-do List  
-- [x] Dictionary Variable State Viewer
-- [ ] Variable State Viewer col width
-- [x] Dictionary Variable Editor
-- [ ] Dictionary Variable Editor (Sort)
-- [x] autofill debounce
+- [ ] autofill debounce
 - [x] Undo move/delete actions   
 - [ ] `contain()` list
-- [x] `ifekey(key, t, f)` `ifevalue(value, t, f)`
-- [x] ✓ `sumkeys()` `sum()` 
-- [x] `_row[col]` `_col[row]` in table actions
 - [ ] `pickslice()` (or `inslice`?)
-- [x] `max()` `min()` list/table/dict
-- [x] Optimize the GetSlices function: return all indices directly if no argumemnts were given
-- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
 - [ ] ***Filter***
 - [x] Select the trigger after drag and move
 - [x] Cancel selection of actions when clicking elsewhere
 
 ## Future
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.
+- [ ] Dictionary Variable Editor (Sort)
+- [ ] Count errors and warnings
+- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)
