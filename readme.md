@@ -383,9 +383,9 @@ etc.
   
 ## Current To-do List  
 - [x] `contain()` list
-- [ ] `pickslice()` (or `inslice`?)
-- [ ] tempvar
+- [ ] tempvar; remove "pick"
 - [ ] ***Filter***
+- [ ] operators only applied to one of its adjacent number, like !0 = 1
 - [ ] autofill debounce
 - [ ] review
 
