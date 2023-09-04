@@ -396,6 +396,7 @@ System.ArgumentOutOfRangeException - Index out of range.
 ## Current To-do List  
 - [x] `contain()` list
 - [x] tempvar
+- [x] nextET
 - [ ] ***Filter***
 - [x] Unary operators: !0 = 1
 - [x] autofill debounce
