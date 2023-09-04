@@ -387,7 +387,9 @@ etc.
 - [ ] ***Filter***
 - [ ] operators only applied to one of its adjacent number, like !0 = 1
 - [ ] autofill debounce
+- [ ] Operators: `&&` `||` `!` `&` `|` `^^` `%%` `//` `? :` 
 - [ ] review
+
 
 ## Future
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.  
