@@ -382,7 +382,8 @@ Fixed some typos;
 etc.   
 
 ## Known Issues
-The error below was observed once when clicking on the action but could not be reproduced:  
+- The dynamic variables like `${_idx}` are not thread safe and need to be used in sync actions.
+- The error below was observed once when clicking on the action but could not be reproduced:  
 ```
 System.ArgumentOutOfRangeException - Index out of range.
    in System.Collections.ArrayList.get_Item(Int32 index)
@@ -399,7 +400,7 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [x] nextET
 - [ ] Pastebin
 - [ ] ***Filter***
-- [ ] combine sort row/col
+- [x] combine sort row/col
 - [x] Unary operators: !0 = 1
 - [x] autofill debounce
 - [x] Operators: `&&` `||` `!` `&` `|` `^^` `%%` `//` `? :` 
