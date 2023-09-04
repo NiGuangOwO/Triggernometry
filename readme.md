@@ -399,6 +399,7 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [x] nextET
 - [ ] Pastebin
 - [ ] ***Filter***
+- [ ] combine sort row/col
 - [x] Unary operators: !0 = 1
 - [x] autofill debounce
 - [x] Operators: `&&` `||` `!` `&` `|` `^^` `%%` `//` `? :` 
