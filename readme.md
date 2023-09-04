@@ -397,8 +397,9 @@ System.ArgumentOutOfRangeException - Index out of range.
 ## Current To-do List  
 - [x] `contain()` list
 - [x] tempvar
-- [x] nextET
-- [ ] Pastebin
+- [x] rewrite math parser 
+- [x] nextET change to numeric function
+- [ ] Clipboard
 - [ ] ***Filter***
 - [x] combine sort row/col
 - [x] Unary operators: !0 = 1
