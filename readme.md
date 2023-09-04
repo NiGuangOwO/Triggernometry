@@ -380,14 +380,26 @@ Combined some repeated logics;
 Fixed some `Parse()` `ToString()` without using `CultureInfo.InvariantCulture` (minus signs `-`/`−` could be different according to the settings);  
 Fixed some typos;  
 etc.   
-  
+
+## Known Issues
+The error below was observed once when clicking on the action but could not be reproduced:  
+```
+System.ArgumentOutOfRangeException - Index out of range.
+   in System.Collections.ArrayList.get_Item(Int32 index)
+   in System.Windows.Forms.DataGridViewSelectedRowCollection.get_Item(Int32 index)
+   in Triggernometry.CustomControls.ActionViewer.btnEditAction_Click(Object sender, EventArgs e)
+   in Triggernometry.CustomControls.ActionViewer.dgvActions_CellDoubleClick(Object sender, DataGridViewCellEventArgs e)
+   in System.Windows.Forms.DataGridView.OnCellDoubleClick(DataGridViewCellEventArgs e)
+   in System.Windows.Forms.DataGridView.OnDoubleClick(EventArgs e)
+```
+
 ## Current To-do List  
 - [x] `contain()` list
-- [ ] tempvar; remove "pick"
+- [x] tempvar
 - [ ] ***Filter***
-- [ ] operators only applied to one of its adjacent number, like !0 = 1
-- [ ] autofill debounce
-- [ ] Operators: `&&` `||` `!` `&` `|` `^^` `%%` `//` `? :` 
+- [x] Unary operators: !0 = 1
+- [x] autofill debounce
+- [x] Operators: `&&` `||` `!` `&` `|` `^^` `%%` `//` `? :` 
 - [ ] review
 
 
@@ -396,3 +408,4 @@ etc.
 - [ ] Dictionary Variable Editor (Sort)  
 - [ ] Show the count of errors and warnings  
 - [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
+- [ ] Figure out a way to apply rotation matrix
