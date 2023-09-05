@@ -399,7 +399,6 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [x] tempvar
 - [x] rewrite math parser 
 - [x] nextET change to numeric function
-- [ ] Clipboard
 - [x] ***Filter***
 - [x] combine sort row/col
 - [x] Unary operators: !0 = 1
@@ -414,3 +413,4 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [ ] Show the count of errors and warnings  
 - [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
 - [ ] Figure out a way to apply rotation matrix
+- [ ] Clipboard
