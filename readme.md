@@ -434,10 +434,10 @@ System.ArgumentOutOfRangeException - Index out of range.
 ```
 
 ## Current To-do List  
-- [ ] Clipboard
-- [ ] UnsetRegex for all types of var
-- [ ] Pop to list
-- [ ] review
+- [x] Clipboard
+- [x] UnsetRegex for all types of var
+- [x] Pop to list
+- [x] review
 
 
 ## Future
