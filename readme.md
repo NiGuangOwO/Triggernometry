@@ -15,7 +15,8 @@ Several bugs in the parsing logic for minus signs have been fixed:
   - Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316)  
 - The original code gave the minus sign a hidden priority over other operations, leading to errors in the calculation order, such as `-2^2 = 4` (whereas the answer should be -4 in most modern languages).  
 - The original code failed to recognize the `-` in `-func(args)` as a minus sign, causing errors in expressions like `0 = -sin(0)`. The code would attempt to apply a minus operation between `=` and `sin(0)`.
-  - Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316)  
+  - Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316)   
+
 These bugs have been fixed, and the entire logic for handling +/- signs has been rewritten for simplicity. Previously, special logic was used to treat `+`/`-` in both the lexer and the parser. Now, the lexer tokenizes every `+`/`-` without discrimination, leaving simple logic in the parser to handle them correctly.  
 ### Lexer Logic  
 - The lexer has been simplified to focus only on whether the current character is part of an operator. It then separates operators from non-operator characters.  
