@@ -191,7 +191,7 @@ For details on dynamic expressions, refer to the actions section.
 |`ifekey(key, t, f)`<br />`ifevalue(value, t, f)`|Similar to string functions (returns string t/f).| `...ifekey(a, found, missing)` = `found` |
 |`keyof(value)`|Reverse lookup by value. Returns the first found key or an empty string if not found.| `${dvar:test.keyof(1)}` = `a`<br />`${dvar:test.keyof(4)}` = `` |
 |`keysof(value, joiner = ",")`|Lookup all keys matching the given value and join them with the joiner.| `...keyof(3)` = `c,d,e`|
-|`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`join(kvjoiner = "=", pairjoiner = ",")`|Combine the keys/values/both using the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...join` = `a=1,b=2,c=3,d=3,e=3`|
+|`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`joinall(kvjoiner = "=", pairjoiner = ",")`|Combine the keys/values/both using the joiners.|`...joinkeys(-)` = `a-b-c-d-e`<br />`...joinall` = `a=1,b=2,c=3,d=3,e=3`|
 |`max(type = "n")` <br /> `min(type = "n")`<br />`maxkey(type = "n")` <br /> `minkey(type = "n")`|Same as the list methods.|(omitted)|
 
 ### Job Properties:
