@@ -4,21 +4,9 @@ Check the main repo for Triggernometry documentations:
 https://github.com/paissaheavyindustries/Triggernometry  
   
 # What's New  
-## Overview  
-1. Mathparser: multiple bug fixes about parsing expressions  
-2. Arguments: more precise argument splitting; escaping placeholders in arguments; etc.  
-3. Indices: negative indices for backward counting; slices expression as an argument to represent a series of indices.  
-4. Autofill: more precise and comprehensive autofill list.    
-5. Dictionary: added related expressions, methods, actions, and XML serilization. (Variable state viewer and editor were not added yet)  
-6. Functions: added more functions, methods, and expressions for strings, lists, and tables.  
-7. Entities: introduced a lookup expression for jobids, names in different languages, and abbreviations; added several FFXIV-parsed entity properties.  
-8. Build variables: several methods and actions which provides flexible ways to build or rebuild list / table variables in one step.  
-9. Sorting: allowed customized multiple-key sorting of lists and tables.  
-10. ActionViewer: move to top/bottom, move multiple actions, more detailed descriptions, description bg/text color.   
-11. Other changes  
   
 ## MathParser  
-The core of the MathParser has been mainly rewritten:  
+The core of the MathParser had been mainly rewritten:  
 ### Parsing Minus Signs:  
 Several bugs in the parsing logic for minus signs have been fixed:  
 - The original code only checked the preceding character to determine if a `+`/`-` was a sign or an operator. This oversight caused incorrect parsing of expressions like `func(1, -1)` or `1 - -1`.
