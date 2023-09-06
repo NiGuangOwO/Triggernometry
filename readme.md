@@ -97,7 +97,7 @@ These bugs have been fixed, and the entire logic for handling +/- signs has been
 |`_row[i]`|Dynamic expression. Represents the value in the column index `i` and the current row.|  
 |`_this`|Dynamic expression. Represents the value in the current grid.|  
 |`_key` <br />`_val`|Dynamic expression. Represents the current key/value.|  
-|`_clipboard`|Current text copied to the system clipboard.|  
+|`_clipboard`|Current copied text in the system clipboard.|  
 
 For details on dynamic expressions, refer to the actions section.
 
@@ -262,7 +262,26 @@ For details on dynamic expressions, refer to the actions section.
   
 ### Updated `PopFirst` / `PopLast` actions for list variables:  
 - `PopFirst` was modified to accept an optional `index` argument, which also supports negative values.  
-- The action name `PopFirst` in the code remained unchanged, and `PopLast` was retained for XML compatibility reasons. However, the functionality of `PopLast` now redirects to `PopFirst` with index = `-1`.  
+- The action name `PopFirst` in the code remained unchanged, and `PopLast` was retained for XML compatibility reasons.
+- However, the functionality of `PopLast` now redirects to `PopFirst` with index = `-1`.
+
+### Added `PopToList` actions (set/insert):
+- Pop and insert
+  - Pops an element from the source list and inserts it into the target list.
+  - If the target index was not given, it would be appended to the end of the list.
+  - Note: this is not the same as index `-1`, which inserts the value between the last 2 elements
+  - _e.g._ source list: `1,2,3,4,5`, source index: `3`, target list: `a,b,c,d,e`
+    - target index: `3` => `a,b,3,c,d,e`;
+    - target index: `-1` => `a,b,c,d,3,e`;
+    - target index: ` ` => `a,b,c,d,e,3`;
+- Pop and set
+  - Pops a element and set it to the given index in the target list.
+  - Both of the indices should be given.
+  - _e.g._ other conditions same as above;
+    - target index: `3` => `a,b,3,d,e`;
+    - target index: `-1` => `a,b,c,d,3`;
+- These actions are just combinations of `Pop` and `Set`/`Insert`.
+- The `expression` textbox is used as the target index input, and the descriptions and label instructions would be changed automaticlly.
   
 ### Added basic actions for dict variables:  
 - `Unset`, `UnsetAll`, `UnsetRegex`  
@@ -323,6 +342,16 @@ For details on dynamic expressions, refer to the actions section.
   - `n+:${_this}` `n-:${_this}` `s+:${_this}` `s-:${_this}` correspond to the previous four sorting actions.  
   - Sorting by `n-:${_idx}` reverses the list.  
   - Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_idx}%3` produces `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
+
+### Unset all types of variables matching the regex (in the scalar variable tabpage)
+- This will unset the scalar, list, table, dictionary variables in one step.
+- The persistant option is still respected: unsetting the session vars would not affect persistent vars.
+- Useful when initiating a raid phase.
+
+### Copy the Value of the Variable/Expression to the Clipboard (in the Scalar Variable Tabpage)
+- If the variable name is provided, its value will be copied directly to the clipboard without any parsing.
+- If only an expression is provided, it will be interpreted as a string expression and then copied to the clipboard.
+- Note: In practice, this doesn't necessarily involve scalar variables. To set a scalar variable to the clipboard, you can simply input `${var:name}` in the expression (unless your clipboard contains `${...}` expressions). I have organized it this way just to logically group this clipboard operation under the scalar variable category, avoiding the creation of a separate tabpage which could further slow down the action form loading.
 
 ### Introduced the folder action "Cancel All Actions of Triggers Within Folder"  
 - Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)  
@@ -437,7 +466,7 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [x] Clipboard
 - [x] UnsetRegex for all types of var
 - [x] Pop to list
-- [x] review
+- [ ] review
 
 
 ## Future
