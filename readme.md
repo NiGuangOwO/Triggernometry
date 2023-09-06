@@ -448,3 +448,4 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [ ] Figure out a way to apply rotation matrix
 - [ ] Add customized exceptions to the math functions (need to tolerate with testmode and the exptextbox bgcolor logic).
 - [ ] `_color[x][y]`
+- [ ] global font settings
