@@ -447,3 +447,4 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
 - [ ] Figure out a way to apply rotation matrix
 - [ ] Add customized exceptions to the math functions (need to tolerate with testmode and the exptextbox bgcolor logic).
+- [ ] `_color[x][y]`
