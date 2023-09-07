@@ -1,4 +1,4 @@
-- [浏览中文版 View in Chinese](https://github.com/MnFeN/Triggernometry/edit/readme/readme_CN.md)
+- [浏览中文版 View in Chinese](https://github.com/MnFeN/Triggernometry/blob/readme/readme_CN.md)
 - This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
 - [Check the main repo for Triggernometry documentations](https://github.com/paissaheavyindustries/Triggernometry)
   
