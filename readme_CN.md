@@ -148,7 +148,7 @@
 |`ifmatch(str, t, f):regex`|与 `if()` 类似。|`func:match(404D, a, b):404[B-D]` = `a`|
 |`replace(oldStr, newStr = "", isLooped = 0)`|在指定字符串中用新字符串替换旧字符串。可以循环替换。|`func:replace(" "):1 2 3`<br />= `123`<br />`func:replace(aa,a):aaaaaa`<br />= `aaa`<br />`func:replace(aa,a,1):aaaaaa`<br />= `a`|
 |`repeat(times, joiner = "")`|将字符串重复指定次数，可以添加连接符。|`func:repeat(3):a` = `aaa`<br />`func:repeat(3, +):1` = `1+1+1`|
-|`padleft`<br />`padright`<br />`trim`<br />`trimleft`<br />`trimright`  |这些函数在旧版本中只支持字符码的函数，现在可以接受字符本身或其字符码。<br />`0`-`9` 被解释为字符而不是字符码，因为 ASCII 0-9 控制字符几乎不会使用到。<br /输入汉字、全宽字符、CJK 扩展区字符时再不需要用五位的字符码了。|`func:trim(48, 2, a):abcd0320`<br />= `bcd03`<br />`func:padleft(0,8):1ABCD`<br />= `0001ABCD`|  
+|`padleft`<br />`padright`<br />`trim`<br />`trimleft`<br />`trimright`  |这些函数在旧版本中只支持字符码的函数，现在可以接受字符本身或其字符码。<br />`0`-`9` 被解释为字符而不是字符码，因为 ASCII 0-9 控制字符几乎不会使用到。<br />输入汉字、全宽字符、CJK 扩展区字符时再不需要用五位的字符码了。|`func:trim(48, 2, a):abcd0320`<br />= `bcd03`<br />`func:padleft(0,8):1ABCD`<br />= `0001ABCD`|  
 
 ### 列表变量：
 - 本段使用 **`lvar:test` = `1, 2, 3, 4, 5, 6, 7, 8, 9`**（此字符串仅为列表的表示）为例。
@@ -166,7 +166,7 @@
 |`max(type = "n", slices = ":")` <br /> `min(type = "n", slices = ":")`|根据 `type` 返回列表（的切片）中的最值：`n` （默认）表示数字，`h` 表示十六进制，`s` 表示字符串。若有无法解析为该类型的字符串则会报错。|`${lvar:test.max}` = `9` <br />`...min(n, 3:)` = `3`|
 
 ### 表格变量：
-- 本节演示如下 **`tvar:test`**：
+- 本段以如下 **`tvar:test`** 为例：
 
 |11|21|31|41|
 |---|---|---|---|
@@ -176,7 +176,7 @@
 
 |表达式|描述|示例|
 |:---|:---|:---|
-|`${?tvar:...}`|直接根据由 `,` 和 `\|` 分割的表达式构建临时表格。<br />与 `${?lvar:}` 类似。|`${?tvar: a,b | c,d [2][2]}` = `d`|
+|`${?tvar:...}`|直接由 `,` 和 `\|` 分割表达式并构建临时表格。<br />与 `${?lvar:}` 类似。|`${?tvar: a,b | c,d [2][2]}` = `d`|
 |`tvardl:` `ptvardl:`|与 `tvarrl:`/`tvarcl:` 类似的双基准查找。<br />返回两个表头所对应的行列处的值。|`${tvardl:test[41][13]}` = `43`|
 |`sum(colSlices = ":", rowSlices = ":")`|返回表格（的行列切片）中的值之和。<br />只有可以解析为 `double` 格式的值才会相加。|`${lvar:test.sum}` = `440`<br />`...sum(1, :)` = `11 + 12 + 13 + 14` = `50`|
 |`count(str, colSlices = ":", rowSlices = ":")`|返回字符串在表格（的切片行和列）中出现的次数。|`${lvar:test.count(33)}` = `1`<br />`${lvar:test.count(1)}` = `0`|
@@ -185,6 +185,23 @@
 |`hlookup(str, rowIndex, colSlices = ":")`|在给定行中搜索字符串并返回列索引。<br />如果未找到，返回 0。|`...hlookup(13,3)` = `1`<br />`...hlookup(13,3,2:)` = `0`|
 |`vlookup(str, colIndex, rowSlices = ":")`|在给定列中搜索字符串并返回列索引。<br />如果未找到，返回 0。|`...vlookup(13,1)` = `3`|  
 |`max(type = "n", colSlices = ":", rowSlices = ":")` <br /> `min(type = "n", colSlices = ":", rowSlices = ":")`|与列表方法相同。|略|  
+
+### 字典变量：
+- 本部分以 **`dvar:test` = `a=1, b=2, c=3, d=3, e=3`** （这个字符串仅为字典的表现形式）作为示例：
+
+| 表达式 | 描述 | 示例 |
+|:---|:---|:---|
+|`${?dvar:...}`|直接由 `=` 和 `.` 分割表达式并构建一个临时字典。<br />与 `${?lvar:}` 相似。|`${?dvar: 7CD2=内, 7CD6=外, 7CD7=分散 [7CD2] }` = `内`|
+|`sumkeys()` `sum()`|求和所有可以解析为 `double` 格式的键/值。|`${dvar:test.sumkey}` = `0`<br />`${dvar:test.sum}` = `12`|
+|`count(value)`|返回字典中给定值的计数。|`...countvalue(3)` = `3`|
+|`dvar:` `edvar:`<br />`pdvar:` `epdvar:`|e (存在) / p (永久)。与其他变量相似。| `${epdvar:dictname}`<br />`${dvar:test[e]}` = `3` |
+|`length` / `size`|字典中的键数量。| `${dvar:test.size}` = `5` |
+|`ekey(key)` `evalue(value)`|检查键/值是否存在于字典中（返回 0/1）。| `${dvar:test.ekey(a)}` = `1`<br />`${dvar:test.evalue(4)}` = `0` |
+|`ifekey(key, t, f)`<br />`ifevalue(value, t, f)`|与字符串函数相似（返回字符串 t/f）。| `...ifekey(a, 有, 无)` = `有` |
+|`keyof(value)`|按值反向查找键，返回找到的“第一个”键，如果未找到则返回空字符串。| `${dvar:test.keyof(1)}` = `a`<br />`${dvar:test.keyof(4)}` = `` |
+|`keysof(value, joiner = ",")`|查找所有与给定值匹配的键，并使用连接符连接。| `...keyof(3)` = `c,d,e`|
+|`joinkeys(joiner = ",")`<br />`joinvalues(joiner = ",")`<br />`joinall(kvjoiner = "=", pairjoiner = ",")`|使用连接符合并键/值/或两者。|`...joinkeys(-)` = `a-b-c-d-e`<br />`...joinall` = `a=1,b=2,c=3,d=3,e=3`|
+|`max(type = "n")` <br /> `min(type = "n")`<br />`maxkey(type = "n")` <br /> `minkey(type = "n")`|与列表方法相同。|(省略)|
 
 ### 职业属性:
 - `${_job[XXX].prop}`: 返回指定职业的属性。  
