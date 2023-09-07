@@ -37,6 +37,7 @@ These bugs have been fixed, and the entire logic for handling +/- signs has been
 ### Precision Error Tolerance  
 - The tolerance level has been changed from `double.Epsilon` to a constant (set to 1E-9), making it more suitable for Triggernometry use.  
 - This rule only applies to functions and operators involving (explicit or implicit) comparisons, like `=` `>` `>=` `sign` `truncate`, etc.
+- This rule will not reduce any computational accuracy.  
 - Values within the range `x ± tolerance` will be considered equal to `x` during comparisons.  
 ### Aliases  
 - In the original code, a list of aliases (e.g., `atan2` => `arctan2`) existed but was not utilized.
