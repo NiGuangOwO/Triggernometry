@@ -31,7 +31,8 @@ These bugs have been fixed, and the entire logic for handling +/- signs has been
   - `&&` `||` `^^` `!`: logical AND / OR / XOR / NOT  
   - `%%` `//`: real `mod` and exact division  
   - `√`: sqrt()  
-  - `>=` `<=` `==` `!=`  as aliases
+  - `>=` `<=` `!=`  as aliases
+  - `==` the only string operator: string equal to. `DD5 == DD5` = `1`.
   - `&` `|` `<<` `>>`: bitwise operations (useful for representing the state of multiple entities appearing in random locations using a single variable)  
   - `? :`: ternary operator  
 ### Precision Error Tolerance  
