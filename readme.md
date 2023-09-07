@@ -13,15 +13,18 @@ Several bugs in the parsing logic for minus signs have been fixed:
   - Related: [#87](https://github.com/paissaheavyindustries/Triggernometry/issues/87)  
 - In the function `BasicArithmeticalExpression()`, only positive values were handled when applying a minus sign, neglecting non-positive values. This led to incorrect parsing of expressions like `-(-1)` into `-1`.
   - Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316)  
-- The original code gave the minus sign a hidden priority over other operations, leading to errors in the calculation order, such as `-2^2 = 4` (whereas the answer should be -4 in most modern languages).  
+- The original code gave the minus sign a hidden highest priority over other operations, leading to errors in the calculation order, such as `-2^2 = 4` (whereas the answer should be -4 in most modern languages).  
 - The original code failed to recognize the `-` in `-func(args)` as a minus sign, causing errors in expressions like `0 = -sin(0)`. The code would attempt to apply a minus operation between `=` and `sin(0)`.
   - Related: [Discord](https://discord.com/channels/374517624228544512/1114692015163191316)   
 
 These bugs have been fixed, and the entire logic for handling +/- signs has been rewritten for simplicity. Previously, special logic was used to treat `+`/`-` in both the lexer and the parser. Now, the lexer tokenizes every `+`/`-` without discrimination, leaving simple logic in the parser to handle them correctly.  
 ### Lexer Logic  
 - The lexer has been simplified to focus only on whether the current character is part of an operator. It then separates operators from non-operator characters.  
-- If the parser fails to parse a basic expression, it will throw an error detailing which operator in which expression could not be parsed.  
-- The earlier lexer tried to add `*` between expressions like `3abs(0)`, but this approach was flawed. Distinguishing between `3a` in `3abs(0)` and the hex number `3ab` is not possible without scanning the entire list of functions to match names. Therefore, explicit `*` between numbers and functions/constants is still required.  
+- This logic passes the invalid inputs to the parser, and the parser now can raise errors detailing which operator in which expression could not be parsed.  
+- The earlier lexer tried to add `*` between expressions like `3abs(0)`, but this approach is not correct both in logic and in code:
+  - Distinguishing between `3ab` in `3abs(0)` and the hex number `3ab` is not possible without scanning the entire list of functions to match names;
+  - The code would never give it a chance to consider `a` as the first character of the token to apply this logic, when there is a `3` in front of it.
+- Since it needs excess time for scanning the whole list of functions to match the expression, this is not changed and an explicit `*` between numbers and functions/constants is still required.  
 ### Operators  
 - The parser now supports unary, ternary, and right-associative operators, in addition to the previously supported single-character left-associative binary operators.  
 - The following operators have been added:  
@@ -37,18 +40,18 @@ These bugs have been fixed, and the entire logic for handling +/- signs has been
 - Values within the range `x ± tolerance` will be considered equal to `x` during comparisons.  
 ### Aliases  
 - In the original code, a list of aliases (e.g., `atan2` => `arctan2`) existed but was not utilized.
-- Those lines of code have been removed due to being incompatible with Triggernometry requirements, and the aliases have been directly incorporated into the list of functions.  
+- Those lines of code have been removed due to being irrelavent with Triggernometry requirements, and the aliases have been directly incorporated into the list of functions.  
 ### Spaces  
 - Spaces are now stripped from the expression before parsing to simplify the logic.  
 - Side effect: Numerical string functions can no longer include meaningful spaces within their arguments (though this type of function was not previously supported).
 
 ## Arguments  
-- The original `SplitArgument` function generated incorrect `args` lists when encountering unmatched quotes or consecutive commas, and it also failed to consider line breaks.  
+- The original `SplitArgument` function generated incorrect `args` lists when encountering unmatched quotes or consecutive commas, and it also did not support line breaks.  
 - The edited code now employs regular expressions to precisely extract all parameters situated between the string's beginning, end, and commas.  
 - Unquoted expressions are trimmed; empty or unquoted whitespaces return an empty list.  
 - _e.g._ (1,2,  3  ,"  4  ",   "5"  , "'", ', ', ) now translates to a list with the arguments:  
 - `1` `2` `3` `  4  ` `5` `'` `, ` `(empty)`.  
-- Arguments should not contain `)` `{` `}` due to the parsing logic in expanding expressions, so the following escape rules apply:  
+- Arguments should not contain `)` `{` `}` due to the parsing logic in expanding expressions, so the following escape rules are applied:  
 
   + `{` should be escaped with full-width `｛` or `__LB__`;  
   + `}` should be escaped with full-width `｝` or `__RB__`;  
@@ -93,8 +96,8 @@ These bugs have been fixed, and the entire logic for handling +/- signs has been
 |`_idx`|Dynamic expression. Represents the current index.|  
 |`_col`|Dynamic expression. Represents the current column index.|  
 |`_row`|Dynamic expression. Represents the current row index.|  
-|`_col[i]`|Dynamic expression. Represents the value in the row index `i` and the current column.|  
-|`_row[i]`|Dynamic expression. Represents the value in the column index `i` and the current row.|  
+|`_col[i]`|Dynamic expression. Represents the value of the row index `i` in the current column.|  
+|`_row[i]`|Dynamic expression. Represents the value of the column index `i` in the current row.|  
 |`_this`|Dynamic expression. Represents the value in the current grid.|  
 |`_key` <br />`_val`|Dynamic expression. Represents the current key/value.|  
 |`_clipboard`|Current copied text in the system clipboard.|  
@@ -122,7 +125,7 @@ For details on dynamic expressions, refer to the actions section.
 |:---|:---|:---|  
 |`parsedmg(hex)`|Converts the given hex string for damage/healing in the `0x15`/`0x16` ACT log lines to the corresponding decimal value.<br />Rule: Padleft the hex string with `0`s to 8 digits as `XXXXYYZZ`, then convert `ZZXXXX` to decimal.|`parsedmg(A00000)` = `160`|  
 |`freq(note, semitones = 0)`|Returns the frequency (Hz) of the specified note (using scientific pitch notation, accidentals represented as `#`, `b`, `x`) adjusted by the semitones offset.|`freq(A4)` <br />= `freq(G#4, 1)` <br />= `freq(Bb4, -1)` <br />= `freq(A5, -12)` <br />= `440`|
-|`nextETms(XX:XX)` `nextETms(ETminutes)`|Provides the time (ms) remaining until the next specified Eorzean time.|`nextETms(2:00)`<br />= `nextETms(02:00.00)`<br />=`nextETms(120)`<br />= `175000`<br />(assuming the current ET is `1:00`)|
+|`nextETms(XX:XX)` `nextETms(ETminutes)`|Provides the time (ms) remaining until the next specified Eorzean time.|The current ET is `1:00`: <br />`nextETms(2:00)`<br />= `nextETms(02:00.00)`<br />=`nextETms(120)`<br />= `175000`(2 min 55 s)|
 
   
 ### String Functions:  
@@ -153,7 +156,7 @@ For details on dynamic expressions, refer to the actions section.
 |`join(joiner = ",", slices = ":")`|Joins (the slices of) the list using the specified joiner.|`${lvar:test.join}` = `1,2,3,4,5,6,7,8,9`<br />`${lvar:test.join(" ",5::-1)}`<br />= `5 4 3 2 1`|  
 |`randjoin(joiner = ",", slices = ":")`|Similar to join(), but the selected elements are shuffled before being joined..|`${lvar:test.randjoin}`<br />= `4,9,2,3,5,7,8,1,6`<br />(random example)|  
 |`contain(str, slices = ":")`|Returns 1 if (the slices of) the list contains the given string, otherwise 0.|`...contain(3)` = `1` <br />`...contain(3, 4:)` = `0`|  
-|`ifcontain(str, trueExpe, falseExpr)`|Similar to `if()`. If the list contains the string, returns `trueExpe`; otherwise, returns `falseExpr`.|`...ifcontain(3, found, missing)` = `found` <br />`...ifcontain(a, found, missing)` = `missing`|  
+|`ifcontain(str, trueExpe, falseExpr)`|Similar to `if()`. If the list contains the string, returns `trueExpr`; otherwise, returns `falseExpr`.|`...ifcontain(3, found, missing)` = `found` <br />`...ifcontain(a, found, missing)` = `missing`|  
 |`indicesof(str, joiner = ",", slices = ":")`|Searches for all occurrences of the string in the given slices of the list and joins the indices into a string. Similar to the string function.||
 |`max(type = "n", slices = ":")` <br /> `min(type = "n", slices = ":")`|Returns the extremum value in (the slices of) the list, depending on the type: `n` for numeric, `h` for hex, `s` for string.|`${lvar:test.max}` = `9` <br />`...min(n, 3:)` = `3`|  
 
@@ -168,7 +171,7 @@ For details on dynamic expressions, refer to the actions section.
 
 |Expression|Description|Examples|  
 |:---|:---|:---|  
-|`${?tvar:...}`|Builds a temporary table directly from the expression split by `,` and `|`.<br />Similar to `${?lvar:}`. |`${?tvar: a,b | c,d [2][2]}` = `d`|
+|`${?tvar:...}`|Builds a temporary table directly from the expression split by `,` and `\|`.<br />Similar to `${?lvar:}`. |`${?tvar: a,b | c,d [2][2]}` = `d`|
 |`tvardl:` `ptvardl:`|Double-based lookup similar to `tvarrl:`/`tvarcl:`. <br />Returns the value identified by the column and row headers.|`${tvardl:test[41][13]}` = `43`|  
 |`sum(colSlices = ":", rowSlices = ":")`|Returns the sum of the values in (the sliced rows and columns of) the table. <br />Only values that can be parsed into the `double` format are summed.|`${lvar:test.sum}` = `440`<br />`...sum(1, :)`<br />= `11 + 12 + 13 + 14`<br />= `50`|  
 |`count(str, colSlices = ":", rowSlices = ":")`|Returns the number of times the string appears in (the sliced rows and columns of) the table.|`${lvar:test.count(33)}` = `1`<br />`${lvar:test.count(1)}` = `0`|  
@@ -179,7 +182,8 @@ For details on dynamic expressions, refer to the actions section.
 |`max(type = "n", colSlices = ":", rowSlices = ":")` <br /> `min(type = "n", colSlices = ":", rowSlices = ":")`|Same as the list method.|(omitted)|  
   
 ### Dict Variables:
-- This part uses **`dvar:test` = `a=1, b=2, c=3, d=3, e=3`** (this string is only a representation of the dictionary) to demonstrate:  
+- This part uses **`dvar:test` = `a=1, b=2, c=3, d=3, e=3`** (this string is only a representation of the dictionary) to demonstrate:
+ 
 |Expression|Description|Examples|
 |:---|:---|:---|
 |`${?dvar:...}`|Builds a temporary dict directly from the expression split by `=`, `.`.<br />Similar to `${?lvar:}`.|`${?dvar: 7CD2=in, 7CD6=out, 7CD7=spread [7CD2] }` = `in`|
@@ -196,13 +200,11 @@ For details on dynamic expressions, refer to the actions section.
 
 ### Job Properties:
 - `${_job[XXX].prop}`: returns the property of the specified job.  
-- Properties:  
-```  
-    role; job; jobid (same as _ffxiventity)  
-    isT; isH; isTH; isD; isM; isR; isTM; isHR; isC; isG; isCG; (0 or 1)  
-    jobCN; jobDE; jobEN; jobFR; jobJP; jobKR; (full names in different languages)    
-    jobCN1; jobCN2; jobEN3 (= job); jobJP1 (abbreviations of varying lengths)  
-```  
+- Properties:   
+  - role; job; jobid (same as _ffxiventity)  
+  - isT; isH; isTH; isD; isM; isR; isTM; isHR; isC; isG; isCG; (0 or 1)  
+  - jobCN; jobDE; jobEN; jobFR; jobJP; jobKR; (full names in different languages)    
+  - jobCN1; jobCN2; jobEN3 (= job); jobJP1 (abbreviations of varying lengths)  
 - `jobXX`, `jobXXn`, `jobid` could be used as the key `XXX` in `${_job[XXX].prop}`.  
 - These properties are also included in `_ffxiventity` and `_ffxivparty`.  
 - _e.g._   
@@ -219,6 +221,7 @@ For details on dynamic expressions, refer to the actions section.
 ## Abbreviations to Enhance User Experience:
 - Expressions can become extremely long when working with complex logic, which may involve several nested `${}` instances.
 - To alleviate this, several abbreviations have been introduced to shorten these expressions:
+
 |Full|Abbrev.|  
 |:---:|:---:|  
 |`${numeric:...}` |`${n:...}`|  
@@ -239,11 +242,11 @@ For details on dynamic expressions, refer to the actions section.
 |`projectheight()` |`projh()`|  
 |`angle()` |`θ()`|  
 |`relangle()` |`relθ()`|  
-|`.width` |`.w`|  
-|`.height` |`.h`|  
-|`.hlookup()` |`.hl()`|  
-|`.vlookup()` |`.vl()`|  
-|`.heading` |`.h`|  
+|(table) `.width` |`.w`|  
+|(table) `.height` |`.h`|  
+|(table) `.hlookup()` |`.hl()`|  
+|(table) `.vlookup()` |`.vl()`|  
+|(entity) `.heading` |`.h`|  
   
 ## Actions  
 ### Fixed a bug in the list method `Insert` and table variable `Resize`:  
@@ -254,7 +257,7 @@ For details on dynamic expressions, refer to the actions section.
   - `Rows[i].Values.AddRange(new Variable[newWidth - Rows[i].Values.Count]);`  
   
 ### Fixed a bug in the list method `Set`:  
-- The original code inserted one fewer `VariableScalar` into the list as placeholders.   
+- The original code inserted one fewer `VariableScalar` into the list as placeholders when the list needs to be expanded.   
 - This caused a problem when trying to set a value at a given `index` in a list with length `index - 1`. The result was an appended list that lacked the value to be set.  
   
 ### Fixed a bug in the list method `Split`:  
@@ -333,15 +336,15 @@ For details on dynamic expressions, refer to the actions section.
 |14|24|34|44|  
 
 ### Added `SortByKeys` for lists, and `SortLine` for tables:  
-- These actions sort based on the specified key expressions, proving useful for scenarios involving multi-criteria sorting, such as in TOP dynamis.  
-- Expression format: `n+:key1, n-:key2, s+:key3, ...`  
+- These actions sort based on the specified key functions, proving useful for scenarios involving multi-criteria sorting, such as in TOP dynamis.  
+- Key functions format: `n+:key1, n-:key2, s+:key3, ...`  
   - `n`/`s`: numeric/string comparison  
   - `+`/`-`: ascending/descending (the `+` is optional)  
   - `key`: should include `${_this}` / `${_idx}` for lists, `${_row}` or `${_row[i]}` for row sorting, `${_col}` or `${_col[i]}` for column sorting.  
-- If an expression contains commas, or starts/ends with spaces, it should be enclosed in quotes, like `"s+:key", ...` or `'s+:key', ...`. _e.g._  
+- If an function contains commas, or starts/ends with spaces, it should be enclosed in quotes, like `"s+:key", ...` or `'s+:key', ...`. _e.g._  
   - `n+:${_this}` `n-:${_this}` `s+:${_this}` `s-:${_this}` correspond to the previous four sorting actions.  
   - Sorting by `n-:${_idx}` reverses the list.  
-  - Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the expression `n-:${f:substring(0):${_this}}, n+:${_idx}%3` produces `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
+  - Sorting the list `[11, 12, 13, 21, 22, 23, 31, 32, 33]` with the functions `n-:${f:substring(0):${_this}}, n+:${_idx}%3` produces `[33, 31, 32, 23, 21, 22, 13, 11, 12]`.  
 
 ### Unset all types of variables matching the regex (in the scalar variable tabpage)
 - This will unset the scalar, list, table, dictionary variables in one step.
@@ -351,13 +354,14 @@ For details on dynamic expressions, refer to the actions section.
 ### Copy the Value of the Variable/Expression to the Clipboard (in the Scalar Variable Tabpage)
 - If the variable name is provided, its value will be copied directly to the clipboard without any parsing.
 - If only an expression is provided, it will be interpreted as a string expression and then copied to the clipboard.
-- Note: In practice, this doesn't necessarily involve scalar variables. To set a scalar variable to the clipboard, you can simply input `${var:name}` in the expression (unless your clipboard contains `${...}` expressions). I have organized it this way just to logically group this clipboard operation under the scalar variable category, avoiding the creation of a separate tabpage which could further slow down the action form loading.
+- Note: Actually, this doesn't necessarily involve scalar variables. To set a scalar variable to the clipboard, you can simply input `${var:name}` in the expression (unless your clipboard contains `${...}` expressions). I have organized it this way just to logically group this clipboard operation under the scalar variable category, avoiding the creation of a separate tabpage which could further slow down the action form loading.
 
 ### Introduced the folder action "Cancel All Actions of Triggers Within Folder"  
 - Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)  
 
-### Refined Actions List  
-- Reorganized the actions, list actions, and table actions into a more logical sequence. Additionally, replaced several opTypes that were hardcoded as integers with their corresponding enums.
+### Refined Actions List Order  
+- Reorganized the actions, list actions, and table actions into a more logical sequence.
+- Additionally, replaced several opTypes that were hardcoded as integers with their corresponding enums.
   
 ## Trigger Form / Action Viewer  
 - Added arguments to represent if the variable is persistent and if the expression is numeric/string in the action descriptions (and also log messages);   
@@ -393,7 +397,7 @@ Fixed the bug that some columns could not be adjusted in variable state viewer: 
 - **Func Without Parameters**: Fixed an issue where string functions without arguments weren't parsed correctly.
   - **Related Issue**: [#92](https://github.com/paissaheavyindustries/Triggernometry/issues/92)
   - The original regex misinterpreted expressions like `func:length:3*(1+2)`, which considers `length:3*` as the function name and `1+2` as the argument.  
-  - Modifications to the regex now allow it to correctly match the entire expression in a single step.
+  - Modifications to the regex now allow it to correctly match the entire expression in a single step, instead of looking for the `:` later.
   - The regular expressions also underwent minor adjustments.
 
 - **Hi-Res Action Checkboxes**: Rectified a bug causing action checkboxes to remain hidden on Hi-Resolution screens.
@@ -427,13 +431,13 @@ Fixed the bug that some columns could not be adjusted in variable state viewer: 
 - **CSV Export Improvements**: Enhanced support for table variables that contain commas and double quotes, providing more accurate exports, instead of simply joining together with `,`.
 
 - **Miscellaneous Adjustments**: 
-  - Optimized redundant logic patterns.
-  - Addressed potential localization issues by ensuring consistent use of `CultureInfo.InvariantCulture`.
+  - Optimized some repeated codes;
+  - Added `CultureInfo.InvariantCulture` to some of the `Parse()` and `ToString()` functions that missed localization settings.
   - Corrected typos.
   - _etc._
 
 ## Different Behaviours
-
+Besides the bug fuxes and UI adjustments, the following behaviors are different comparing with the old version:
 - **Mathparser Adjustments**:
   - The `:` character is now part of the `? :` ternary operator.
   - The `^` operator is now right-associative.
@@ -442,7 +446,7 @@ Fixed the bug that some columns could not be adjusted in variable state viewer: 
 
 - **Input Validation**: Some of the undefined or invalid inputs, which previously returned default values `` or `0`, now raise specific error messages.
 
-- **Beep Frequency**: The default beep frequency is now in-tune (C6, 1046.5 Hz).
+- **Beep Frequency**: The default beep frequency is not out-of-tune anymore (C6, 1046.5 Hz).
 
 ## Known Issues
 
@@ -463,9 +467,7 @@ System.ArgumentOutOfRangeException - Index out of range.
 ```
 
 ## Current To-do List  
-- [x] Clipboard
-- [x] UnsetRegex for all types of var
-- [x] Pop to list
+- [x] `==` as string comparison operator
 - [ ] review
 
 
