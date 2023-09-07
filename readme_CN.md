@@ -1,7 +1,7 @@
 ## [View this page in English](https://github.com/MnFeN/Triggernometry/blob/readme/readme.md)
 ## [浏览主仓库 Triggernometry 文档](https://github.com/paissaheavyindustries/Triggernometry)
 
-- 本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
+本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
 
 # 新增内容
 
