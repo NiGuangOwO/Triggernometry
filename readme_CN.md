@@ -146,7 +146,7 @@
 |`indicesof(str, joiner = ",", slices = ":")`|在字符串的指定部分搜索所有索引，然后以 joiner 连接。|`func:indicesof(a):abcbabcba` = `0,4,8`<br />`func:indicesof(a, "-", ::-1):abcbabcba` = `8-4-0`|
 |`match(str):regex`|返回 `1` 或 `0`。<br />注意：正则表达式不应包含 `{` `}`。<br />`{` 应使用全宽 `｛` 或 `__LB__` 转义；<br />`}` 应使用全宽 `｝` 或 `__RB__` 转义；<br />`｛` `｝` 应使用 `__FLB__` `__FRB__` 转义。<br />下面两个函数同样适用这些正则规则。|`func:match(404D):404[B-D]` = `1`<br />`func:match(4000A3BF):4.｛7｝` = `1`|
 |`capture(str, group):regex`|返回捕获的字符串 `$groupindex` 或 `${groupname}`。如果 `groupindex` = `0`，则返回整个匹配的字符串。<br />如果找不到 `groupname` 或 `groupindex` 超出范围，则返回一个空字符串。<br />遵循前述正则规则。|`func:capture(Player NameGilgamesh, server):.+ .+(?<server>[A-Z].+)`<br />= `Gilgamesh`|
-|`ifmatch(str, t, f):regex`|与 `if()` 类似。|`func:match(404D, a, b):404[B-D]` = `a`|
+|`ifmatch(str, t, f):regex`|与 `if()` 类似。|`func:ifmatch(404D, a, b):404[B-D]` = `a`|
 |`replace(oldStr, newStr = "", isLooped = 0)`|在指定字符串中用新字符串替换旧字符串。可以循环替换。|`func:replace(" "):1 2 3`<br />= `123`<br />`func:replace(aa,a):aaaaaa`<br />= `aaa`<br />`func:replace(aa,a,1):aaaaaa`<br />= `a`|
 |`repeat(times, joiner = "")`|将字符串重复指定次数，可以添加连接符。|`func:repeat(3):a` = `aaa`<br />`func:repeat(3, +):1` = `1+1+1`|
 |`padleft`<br />`padright`<br />`trim`<br />`trimleft`<br />`trimright`  |这些函数在旧版本中只支持字符码的函数，现在可以接受字符本身或其字符码。<br />`0`-`9` 被解释为字符而不是字符码，因为 ASCII 0-9 控制字符几乎不会使用到。<br />输入汉字、全宽字符、CJK 扩展区字符时再不需要用五位的字符码了。|`func:trim(48, 2, a):abcd0320`<br />= `bcd03`<br />`func:padleft(0,8):1ABCD`<br />= `0001ABCD`|  
