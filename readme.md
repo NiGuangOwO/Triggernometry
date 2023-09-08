@@ -103,6 +103,7 @@ These bugs have been fixed, and the entire logic for handling +/- signs has been
 |`_this`|Dynamic expression. Represents the value in the current grid.|  
 |`_key` <br />`_val`|Dynamic expression. Represents the current key/value.|  
 |`_clipboard`|Current copied text in the system clipboard.|  
+|`_config[x]`|Returns some user configurations that would impact the results of user operations or triggers. (See Autofill form for details) |
 
 For details on dynamic expressions, refer to the actions section.
 
@@ -112,6 +113,7 @@ For details on dynamic expressions, refer to the actions section.
 |`semitone`|`2^(1/12)`. <br />The frequency ratio between 2 adjacent semitones.|  
 |`cent`|`2^(1/1200)`. <br />The frequency ratio between 2 adjacent cents.|  
 |`ETmin2sec`|`35/12`. <br />The ratio between 1 ET minute and 1 real second.|  
+|`δ`|`1E-9`. <br />The math tolerance for comparison. (check the previous part)|  
 
 ### Numeric Functions:  
 |Expression|Description|Examples|  
@@ -263,7 +265,11 @@ For details on dynamic expressions, refer to the actions section.
 - This caused a problem when trying to set a value at a given `index` in a list with length `index - 1`. The result was an appended list that lacked the value to be set.  
   
 ### Fixed a bug in the list method `Split`:  
-- The original code did not adhere to the persistent options of the source/target variables.   
+- The original code did not adhere to the persistent options of the source/target variables.
+
+### Fixed a bug about the persistent button: 
+- It is not enabled but the option is still effective when unsetting all variables. 
+- Enabled the persistent button when selecting these actions.   
   
 ### Updated `PopFirst` / `PopLast` actions for list variables:  
 - `PopFirst` was modified to accept an optional `index` argument, which also supports negative values.  
@@ -362,15 +368,24 @@ For details on dynamic expressions, refer to the actions section.
 - Related issue: [#48](https://github.com/paissaheavyindustries/Triggernometry/issues/48)  
 
 ### Refined Actions List Order  
-- Reorganized the actions, list actions, and table actions into a more logical sequence.
+- Reorganized the actions, list actions, and table actions into a more logical sequence. 
 - Additionally, replaced several opTypes that were hardcoded as integers with their corresponding enums.
-  
+
+### Adjusted Tab Index in Action Form
+- Only allow the selection between textboxes when switching with Tab.
+- Also corrected some orders.
+
+## Expression Textbox
+- Add a `Color` ExpressionType enum to let the textbox show the input as its background color;
+- Change the textbox bgcolor to light blue if the related persistent switch is on.
+- Add a light yellow warning color when the numeric/string expression textbox contains an alphanumeric `${...}` expression that is not a capture group or a special variable (like `_since`).
+- In multiline mode, change from a fixed height of 100 to a height limit of 100-300, dynamically adjusting according to the text height.
+
 ## Trigger Form / Action Viewer  
 - Added arguments to represent if the variable is persistent and if the expression is numeric/string in the action descriptions (and also log messages);   
 - Added a `[Sync]` prefix to the description if the async option of an action is unchecked;  
 - Added a warning color when an action has a non-zero delay and the description text is overridden (this usually happens as a mistake when copying and editing actions, and it is hard to debug);  
 - Added color options in the action description page to allow customized bg/text colors in the descriptions;  (format: `Lavender` / `230,230,250` / `#e6e6fa` / `#eef`)  
-- Added a `Color` ExpressionType enum to let the textbox show the input as its background color;  
 - Added the buttons `Move to top` and `Move to bottom`, and enabled the moving of multiple selected actions;  
 - Added the button `Undo` to enable the undo of movement / delete of actions for one step;  
 - `Add action` now insert the action under the selected line instead of set it to the bottom;   
@@ -426,11 +441,11 @@ Fixed the bug that some columns could not be adjusted in variable state viewer: 
 
 - **Testing Actions**: Introduced a `Test action with live values (ignore conditions)` option and a corresponding default configuration setting to bypass conditions during tests.
 
-- **Main UI Enhancements**:
+- **Main UI**:
   - Enabled the `Add trigger / folder` buttons when a local trigger is selected, which adds the trigger / folder to the parent folder, just like pasting triggers from xml;
-  - Automatically select the trigger/folder after drag and move.
+  - Automatically select the trigger/folder after drag and move;
 
-- **CSV Export Improvements**: Enhanced support for table variables that contain commas and double quotes, providing more accurate exports, instead of simply joining together with `,`.
+- **CSV Export**: Enhanced support for table variables that contain commas and double quotes, providing more accurate exports, instead of simply joining together with `,`.
 
 - **Miscellaneous Adjustments**: 
   - Optimized some repeated codes;
