@@ -408,8 +408,10 @@ For details on dynamic expressions, refer to the actions section.
 - Added more precise error information in the logs like which expression caused error when expanding expressions;  
 - Added `custom` log types (`info` < `custom2` < `custom` < `warning`) which should contain no log from the program.   
 - Adjusted the `warning` / `error` log message colors to be less saturated instead of pure red/yellow, and also added a green color to the `custom` logs.   
-- Use checkboxes instead of comboboxes to filter logs, which is much clearer:   
-![image](https://github.com/MnFeN/Triggernometry/assets/85232361/56e14147-dda5-452c-9f59-fc0edda6b2e2)
+- Use checkboxes instead of comboboxes to filter logs, which is much clearer:
+
+<p align="center"><img src="[图片的URL](https://github.com/MnFeN/Triggernometry/assets/85232361/6d1058cc-2288-4f7d-98f3-3325c4a7e250)" width="800"></p>
+
 
 ## Variable State Viewer / Editor
 Added support for dictionary variables;  
