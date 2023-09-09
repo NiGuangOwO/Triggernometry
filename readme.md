@@ -410,8 +410,7 @@ For details on dynamic expressions, refer to the actions section.
 - Adjusted the `warning` / `error` log message colors to be less saturated instead of pure red/yellow, and also added a green color to the `custom` logs.   
 - Use checkboxes instead of comboboxes to filter logs, which is much clearer:
 
-<p align="center"><img src="https://github.com/MnFeN/Triggernometry/assets/85232361/6d1058cc-2288-4f7d-98f3-3325c4a7e250" width="800"></p>
-
+<p align="center"><img src="https://github.com/MnFeN/Triggernometry/assets/85232361/077998de-2f08-4a42-a839-0a73ddf274ed" width="800"></p>
 
 ## Variable State Viewer / Editor
 Added support for dictionary variables;  
