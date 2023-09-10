@@ -246,6 +246,7 @@
 |`${exvar:...}` | `${ev:}` `${el:}` `${et:}` `${ed:}` |  
 |`${(p)var:...}` `${(p)lvar:...}` <br />`${(p)tvar:...}` `${(p)dvar:...}` | `${(p)v:}` `${(p)l:}` <br />`${(p)t:}` `${(p)d:}` |  
 |`${?lvar:...}` `${?tvar:...}` `${?dvar:...}` | `${?l:}` `${?t:}` `${?d:}` |  
+|`${_loopiterator}`|`${_i}`|
 |`${_ffxiventity[...].prop}` |`${_entity[...].prop}`|  
 |`${_ffxivparty[...].prop}` |`${_party[...].prop}`|  
 |`${_ffxivplayer}` |`${_me}`|  
