@@ -413,10 +413,17 @@ For details on dynamic expressions, refer to the actions section.
 <p align="center"><img src="https://github.com/MnFeN/Triggernometry/assets/85232361/077998de-2f08-4a42-a839-0a73ddf274ed" width="800"></p>
 
 ## Variable State Viewer / Editor
-Added support for dictionary variables;  
-Added support for sorting the 8 types of variables by clicking their corresponding dgv table headers;
-Let the selected grid move to the next column / row after adding a column / row. (not changed for inserting);
-Fixed the bug that some columns could not be adjusted in variable state viewer: some columns were set to `Fill`, which forbids the adjustment of its column width if it is not the last column.   
+- Added support for dictionary variables;  
+- Added support for sorting the 8 types of variables by clicking their corresponding dgv table headers;
+- Let the selected grid move to the next column / row after adding a column / row. (not changed for inserting);
+- Fixed the bug that some columns could not be adjusted in variable state viewer: some columns were set to `Fill`, which forbids the adjustment of its column width if it is not the last column.   
+
+## Main UI:
+- Enabled the `Add trigger / folder` buttons when a local trigger is selected, which adds the trigger / folder to the parent folder, just like pasting triggers from xml;
+- Similarly, enabled drag and move onto another trigger, which would moved the selected item into the parent folder;
+- Automatically select the trigger/folder after drag and move;
+- Added shortcuts:  
+<p align="center"><img src="https://github.com/MnFeN/Triggernometry/assets/85232361/97333b4d-ee2a-4ac2-996b-8040d5f28f68" width="400"></p>
 
 ## Others
 
@@ -450,12 +457,7 @@ Fixed the bug that some columns could not be adjusted in variable state viewer: 
   - Enhanced manual trigger firing to optionally respect conditions through the `Fire (Allow Conditions)` right-click menu option.
   - Also, introduced an `Allow conditions for autofiring` setting for triggers.
 
-- **Testing Actions**: Introduced a `Test action with live values (ignore conditions)` option and a corresponding default configuration setting to bypass conditions during tests.
-
-- **Main UI**:
-  - Enabled the `Add trigger / folder` buttons when a local trigger is selected, which adds the trigger / folder to the parent folder, just like pasting triggers from xml;
-  - Similarly, enabled drag and move onto another trigger, which would moved the selected item into the parent folder;
-  - Automatically select the trigger/folder after drag and move/
+- **Test Action**: Introduced a `Test action with live values (ignore conditions)` option and a corresponding default configuration setting to bypass conditions during tests.
 
 - **CSV Export**: Enhanced support for table variables that contain commas and double quotes, providing more accurate exports, instead of simply joining together with `,`.
 
