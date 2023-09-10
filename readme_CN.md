@@ -425,7 +425,7 @@
 - 与之类似，现在允许拖拽元素到触发器上，会将其自动置于触发器的父分组内；
 - 在拖拽移动触发器或分组后，自动选中移动的元素。
 - 添加快捷键：  
-<p align="center"><img src="https://github.com/MnFeN/Triggernometry/assets/85232361/e73a4332-516f-402a-8ffb-89391f6e5446" width="800"></p>
+<p align="center"><img src="https://github.com/MnFeN/Triggernometry/assets/85232361/e73a4332-516f-402a-8ffb-89391f6e5446" width="350"></p>
 
 ## 其他
 ### Bug 修复：
