@@ -231,7 +231,7 @@
   
 ### 实体属性:  
 - 已向 `${_ffxiventity}` 和 `${_ffxivparty}` 添加了多个实体属性:  
-  - `bnpcid`, `bnpcnameid`, `ownerid`, `type`,  
+  - `bnpcid`, `bnpcnameid`, `ownerid`, `type`, `partytype`, `address`
   - `castid`, `casttime`, `maxcasttime`, `iscasting`  
 
 ## 缩写：
