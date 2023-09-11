@@ -229,7 +229,7 @@ For details on dynamic expressions, refer to the actions section.
   
 ### Entity Properties:  
 - Several entity properties have been added to `${_ffxiventity}` and `${_ffxivparty}`:  
-  - `bnpcid`, `bnpcnameid`, `ownerid`, `type`,  
+  - `bnpcid`, `bnpcnameid`, `ownerid`, `type`, `partytype`, `address`
   - `castid`, `casttime`, `maxcasttime`, `iscasting`  
   
 ## Abbreviations to Enhance User Experience:
