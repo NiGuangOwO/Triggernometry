@@ -280,8 +280,13 @@ For details on dynamic expressions, refer to the actions section.
 
 ### Fixed a bug about the persistent button: 
 - It is not enabled but the option is still effective when unsetting all variables. 
-- Enabled the persistent button when selecting these actions.   
-  
+- Enabled the persistent button when selecting these actions.
+
+### Add dynamic expression support for the `Set` action of lists, tables, and dictionaries:
+- List: `_this` `_idx`
+- Table: `_this` `_row` `col` `_row[i]` `col[i]`
+- Dictionary: `_val`
+
 ### Updated `PopFirst` / `PopLast` actions for list variables:  
 - `PopFirst` was modified to accept an optional `index` argument, which also supports negative values.  
 - The action name `PopFirst` in the code remained unchanged, and `PopLast` was retained for XML compatibility reasons.
@@ -486,6 +491,7 @@ Besides the bug fuxes and UI adjustments, the following behaviors are different 
 - **Math Parser Limitations**: Doesn't support operators sharing the same priority level and not fixed in this version.
 - **Dictionary Editor Display**: Dictionary variables now list keys in their intrinsic order instead of a sorted manner.
 - **Performance**: Loading the action form has been notably slow (~0.8-2 s) from long time ago, possibly due to the expanded variety of actions. I am not familiar with WinForms and I am wondering if it could be fixed.
+- **Autofill**: Occasionally the autofilled regex groups are not updated after the trigger regex has been edited. Could be fixed by clicking the regex textbox.
 - An error was once reported upon clicking the action, but it could not be reproduced.
 
 ```
@@ -502,7 +508,6 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [ ] Detailed action descriptions
 - [ ] review
 
-
 ## Future
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.
 - [ ] RichTextBox
@@ -514,3 +519,4 @@ System.ArgumentOutOfRangeException - Index out of range.
 - [ ] `_color[x][y]`
 - [ ] global font settings
 - [ ] deselect actions in loop dgv
+- [ ] aura
