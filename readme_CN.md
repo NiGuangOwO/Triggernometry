@@ -4,7 +4,74 @@
 本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
 
 # 新增内容
+## ActionViewer
+- 修复了 ActionViewer 中部分按钮有时不能正确启用/禁用的错误；
+- 修复了 dgvActions 中双击时偶尔因未选中动作导致的空引用错误；
+- 修复了计算触发器总延迟时未忽略禁用的动作的错误；
+- 修复了撤销会打乱 `OrderNumber` 的问题，并将撤销时的浅复制改为深复制（可撤销单个动作的修改）；
+- 在动作右键菜单中添加了一些快捷设置，以便批量调节异步、延迟、条件等动作属性；
+- 粘贴动作后选中粘贴的动作；
+- 点击其他位置时取消选中动作；
 
+## ConditionViewer
+- 条件右键菜单中添加了展开/折叠全部的选项，并在加载时展开全部条件；
+  (https://discord.com/channels/374517624228544512/1154813334835707957)
+
+## ExpressionTextBox
+- `MaxLength` 从默认值 `32767` 改为 `1000000`，以便使用脚本；
+- 修正了自动补全的 Table 方法 `vlookup()` 中提示的参数名错误；
+- 修正了 `MaximumSize` 的计算错误并微调高度；
+
+## ActionForm
+- 对变量操作等部分动作添加了内置的文本提示帮助，并整合了 `SendKeys` 等方法的文本提示；
+- 修复了 `KeyPress` 动作测试时，文本框显示两秒后执行，但实际并没有相关代码延迟两秒的错误；
+- 修复了 `SendKeys` 动作中键盘录制工具输出结果的错误；
+  (https://discord.com/channels/374517624228544512/599935468578144276/1152402243245588572)
+
+## LogForm
+- 所有级别日志类型已勾选时，自动勾选“全选”
+
+## StateForm
+- 微调列宽；
+- 修复了具名回调界面无任何内容的错误，`RefreshNamedCallbacks` 函数原本没有任何内容；
+
+## BridgeFFXIV
+- 修复了 `NullCombatant` 已定义但从未初始化的错误；
+- 将 `ClearCombatant` 中的属性改为空字符串，以免混淆，如 `NullCombatant.x` 为 0 会让人误以为查询到了 `x = 0` 的实体；
+- 将 `Jobs` 相关的所有属性加入实体字典；
+- 将 `TranslateJob`、`TranslateRole` 函数用 `Entity.cs` 中定义的字典代替；
+
+## Action
+- 修复了 `KeyPress`、`SendWindowMessage` 动作描述不支持 `procid` 的问题；
+- 新增了字典动作 `GetEntityByName` / `GetEntityById`、表格动作 `GetAllEntities`，以便一次性获取单个或全部实体信息；
+- 表格动作 `Resize` 可省略宽高之一以表示该维度不改变；
+
+## Context
+- 修复了属性相关的正则中使用贪婪匹配变量名的错误；
+- 增加了 `_rowcl[...]` `_colrl[...]` 两个动态变量，用于查找该行/列中某个文本的列/行索引；
+- 增加了 `ecallback:...`，用于检测是否存在某个名称的具名回调；
+- 修复了表格的 `contain` 和 `ifcontain` 方法被置于字典变量相关代码块中的错误；
+- `func:pick():string` 改为使用与分割参数一致的逻辑分割 string，而非根据逗号简单拆分；
+
+## Interpreter
+- API 受限时错误信息提示具体 API 名称；
+- 脚本运行过程中出错时，捕获 AggregateException 并生成对应的错误信息；
+- 增加了字典变量的 SetDictVariable 和 GetDictVariable；
+- 对于 SetXXXVariable，提供的变量参数为 null 时删除该变量；
+
+## MathParser
+- 增加了运算符 `??`：若前一个参数无法解析为数值，则返回后一个参数，类似于空合并运算符。如：`1 ?? 2 = 1`; `A ?? 2 = 2`；
+- 修复了 `roundir` 函数值域的错误；
+- 增加了对十六进制，二进制，八进制的直接输入支持，如 `0xFF`, `0b11`, `0o77`；
+- 对于待判断的 `${...}` 表达式返回空字符串导致 `==`、`??` 处于 tokens 列表首尾的情况添加了条件判断
+
+## RealPlugin
+- 保存配置时校验临时文件最后一行的内容，以尝试修复 ACT 被强制退出时 `StreamWriter.write` 中断导致配置文件末尾残缺的问题；
+- 加载配置文件时，若最后一行内容不正确则视为配置损坏，自动加载 `.previous` 文件；
+- 修复 `ReadyForOperation` 函数偶发的空引用异常；
+- 添加了用于在脚本中根据回调名称添加/删除回调的 `RegisterNamedCallback` 和 `UnregisterNamedCallback` 的重载
+
+# 以前的修改
 ## 数学解析器 (MathParser)
 数学解析器的大部分核心内容已经被重写：
 ### 负号解析：
