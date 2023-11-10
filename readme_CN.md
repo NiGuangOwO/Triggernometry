@@ -4,6 +4,7 @@
 本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
 
 # 新增内容
+2023/11/10
 ## ActionViewer
 - 修复了 ActionViewer 中部分按钮有时不能正确启用/禁用的错误；
 - 修复了 dgvActions 中双击时偶尔因未选中动作导致的空引用错误；
@@ -72,6 +73,7 @@
 - 添加了用于在脚本中根据回调名称添加/删除回调的 `RegisterNamedCallback` 和 `UnregisterNamedCallback` 的重载
 
 # 以前的修改
+2023/9
 ## 数学解析器 (MathParser)
 数学解析器的大部分核心内容已经被重写：
 ### 负号解析：
