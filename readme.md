@@ -4,7 +4,79 @@
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
 # What's New  
+2023/11/10  
+- ActionViewer
+  - Fixed a bug where some buttons in ActionViewer sometimes are not enabled/disabled correctly;
+  - Fixed a null reference error occasionally caused by double-clicking in dgvActions without actually selecting an action;
+  - Fixed an error where disabled actions were not ignored when calculating total delay in the descriptions;
+  - Fixed the issue where undo button would mess up `OrderNumber`. Also changed shallow copy to deep copy when saving the actions, allowing to undo modifications of individual actions;
+  - Added quick settings in the action right-click menu for batch adjustment of async, delay, conditions, and other action properties;
+  - After pasting actions, the pasted actions are selected;
+  - Deselect actions when clicking elsewhere;
+
+- ConditionViewer
+  - Added options to expand/collapse all in the conditions right-click menu;
+  - Expanded all conditions on load.  
+    (https://discord.com/channels/374517624228544512/1154813334835707957)
+
+- ExpressionTextBox
+  - MaxLength changed from default `32767` to `1000000` for scripting usage;
+  - Corrected the parameter name error in the autocomplete Table method `vlookup()`;
+  - Fixed a calculation error in `MaximumSize` and adjusted the height;
+
+- ActionForm
+  - Added built-in text hints for variable operations and some of the other actions, integrating text hints for some actions like `SendKeys`;
+  - Fixed a bug in the `KeyPress` action test: the text box says it would delay two seconds before execution, but actually there were no code for this delay;
+  - Fixed the wrong output results of the keyboard recording tool in `SendKeys` action.   
+    (https://discord.com/channels/374517624228544512/599935468578144276/1152402243245588572)
+
+- LogForm
+  - When all levels of log types are checked, `Select All` is automatically checked;
+
+- StateForm
+  - Adjusted the column widths;
+  - Fixed an issue that the named callback interface was not working, as the RefreshNamedCallbacks function originally had no content;
+
+- BridgeFFXIV
+  - Fixed the error where `NullCombatant` was defined but never initialized;
+  - Changed attributes in `ClearCombatant` to empty strings to avoid confusion, like `NullCombatant.x` being `0` might be mistaken for querying an entity with `x = 0`;
+  - Added all properties related to `Jobs` to the entity dictionary;
+  - Replaced `TranslateJob`, `TranslateRole` functions with a dictionary defined in `Entity.cs`;
+
+- Action
+  - Fixed the issue where `KeyPress`, `SendWindowMessage` action descriptions did not support `procid`;
+  - Added dictionary actions `GetEntityByName` / `GetEntityById`, table action `GetAllEntities`, to obtain single or all entity information at once;
+  - Table action `Resize` can omit one of width/height to indicate that dimension remains unchanged;
+
+- Context
+  - Fixed the error of using greedy matching for variable names in some of the regexes;
+  - Added two dynamic variables `_rowcl[...]` `_colrl[...]` for finding the column/row index of certain text in that row/column;
+  - Added `ecallback:...` to check for the existence of a named callback;
+  - Fixed the error of placing table `contain` and `ifcontain` methods in the dictionary variable code block;
+  - Changed `func:pick():string` to split string based on the same logic as splitting parameters, instead of simply splitting by comma.
+
+- Interpreter
+  - Error messages specify the exact API name when API is restricted;
+  - During script execution, catches `AggregateException` and generates corresponding error messages;
+  - Added `SetDictVariable` and `GetDictVariable`;
+  - For `SetXXXVariable`, deletes the variable if the provided variable parameter is given as `null`;
   
+- MathParser
+  - Added operator `??`: If the previous parameter cannot be parsed as a number, then returns the next parameter, similar to the null coalescing operator.   
+    _e.g._, `1 ?? 2 = 1`, `A ?? 2 = 2`;
+  - Fixed an error of the value range of the `roundir` / `roundvec` functions;
+  - Added direct input support for hexadecimal, binary, octal, like `0xFF`, `0b11`, `0o77`;
+  - Added condition checks for situations where a `${...}` expression returns an empty string causing `==`, `??` to be at the start or end of tokens list
+
+- RealPlugin
+  - Verified the content of the last line of the temp file when saving configurations, attempting to fix issues of incomplete file ends caused by abrupt ACT exit during `StreamWriter.write`;
+  - When loading the configuration file, check the last line to judge if the file is corrupted. If so, the `.previous` backup file will be automatically loaded.
+  - Fixed a rare null reference exception in `ReadyForOperation` function;
+  - Added overloaded `RegisterNamedCallback` and `UnregisterNamedCallback` functions for adding/removing callbacks by name in scripts.
+
+
+# Previous
+2023/9
 ## MathParser  
 The core of the MathParser had been mainly rewritten:  
 ### Parsing Minus Signs:  
