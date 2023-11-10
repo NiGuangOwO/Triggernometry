@@ -6,8 +6,8 @@ This document is a summary for my edited parts since Triggernometry v1.1.7.3.
 # What's New  
 2023/11/10  
 - ActionViewer
-  - Fixed a bug where some buttons in ActionViewer sometimes are not enabled/disabled correctly;
-  - Fixed a null reference error occasionally caused by double-clicking in dgvActions without actually selecting an action;
+  - Fixed a bug where some buttons in `ActionViewer` sometimes are not enabled/disabled correctly;
+  - Fixed a null reference error occasionally caused by double-clicking in `dgvActions` without actually selecting an action;
   - Fixed an error where disabled actions were not ignored when calculating total delay in the descriptions;
   - Fixed the issue where undo button would mess up `OrderNumber`. Also changed shallow copy to deep copy when saving the actions, allowing to undo modifications of individual actions;
   - Added quick settings in the action right-click menu for batch adjustment of async, delay, conditions, and other action properties;
