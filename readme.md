@@ -50,7 +50,7 @@ This document is a summary for my edited parts since Triggernometry v1.1.7.3.
 
 - Context
   - Fixed the error of using greedy matching for variable names in some of the regexes;
-  - Added two dynamic variables `_rowcl[...]` `_colrl[...]` for finding the column/row index of certain text in that row/column;
+  - Added two dynamic variables `_rowcl[...]` `_colrl[...]` to return the cell value by its corresponding header (like `tvarrl` `tvarcl`);
   - Added `ecallback:...` to check for the existence of a named callback;
   - Fixed the error of placing table `contain` and `ifcontain` methods in the dictionary variable code block;
   - Changed `func:pick():string` to split string based on the same logic as splitting parameters, instead of simply splitting by comma.
