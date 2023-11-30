@@ -27,13 +27,13 @@ This document is a summary for my edited parts since Triggernometry v1.1.7.3.
 - RealPlugin
   - Fix a bug where the version in `cfg.Constants` was not updated on the first launch after updating the plugin, but on the second launch
   - Expand the exceptions in named callbacks (delegates) to show their actual exception messages
-  - Added a `static RealPlugin plug` for convenient referencing (all the `RealPlugin` instances throughout the entire program are the same one).
+  - Added a `static RealPlugin RealPlugin.plug` for convenient referencing (all the `RealPlugin` instances throughout the entire program are the same one).
 
 - Others
   - Minor changes:
     - Change `void Context.XxxxxError()` to `Exception Context.XxxxxError()`
     - Change `I18n.TrlXxxxx()` to a single function `I18n.Trl("xxxxx")`
-    - Change some of the `plug`s to `static RealPlugin plug`;
+    - Change some `internal` to `public` for scripts
     - Translation fixes
     
 **2023/11/10**  
