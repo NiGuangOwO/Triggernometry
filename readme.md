@@ -3,8 +3,40 @@
 
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
-# What's New  
-2023/11/10  
+# What's New 
+**2023/11/29**
+- ActionViewer
+  - Add `Copy Conditions`, `Paste Conditions`, `Test Action` in the right-click menu
+
+- ActionForm / Action
+  - Fix [the null reference bug](https://discord.com/channels/374517624228544512/599935468578144276/1176446751675252736) related with template trigger
+  - The log entries for exceptions occurring in actions will now include the corresponding descriptions and trigger path
+  - Added two actions:
+    - VariableScalar - `Increment` (for convenience) 
+    - VariableTable - `AppendH` (append tables horizontally)
+  - Update the links to the keypress documentations and switch to the corresponding links for the selected language option
+  - Fix the issue that some table actions did not set their changer and time, such as `Resize` and `Copy`
+
+- Context
+  - `${estorage:xxx}`: check if the scripting storage contains the key `xxx`
+  - `${_storage[xxx]}`: output the objects in the scripting storage
+  - `${_configpath}` `${_pluginpath}`: the corresponding local folder paths
+  - Added `${_config[UnsafeUsage]}`;
+  - Changed the `${_config[API]}` results to bitwise (`0-7`, `Local << 2 | Remote << 1 | Admin`)
+
+- RealPlugin
+  - Fix a bug where the version in `cfg.Constants` was not updated on the first launch after updating the plugin, but on the second launch
+  - Expand the exceptions in named callbacks (delegates) to show their actual exception messages
+  - Added a `static RealPlugin plug` for convenient referencing (all the `RealPlugin` instances throughout the entire program are the same one).
+
+- Others
+  - Minor changes:
+    - Change `void Context.XxxxxError()` to `Exception Context.XxxxxError()`
+    - Change `I18n.TrlXxxxx()` to a single function `I18n.Trl("xxxxx")`
+    - Change some of the `plug`s to `static RealPlugin plug`;
+    - Translation fixes
+    
+**2023/11/10**  
 - ActionViewer
   - Fixed a bug where some buttons in `ActionViewer` sometimes are not enabled/disabled correctly;
   - Fixed a null reference error occasionally caused by double-clicking in `dgvActions` without actually selecting an action;
