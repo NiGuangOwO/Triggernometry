@@ -4,7 +4,114 @@
 本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
 
 # 新增内容
-2023/11/10
+## 2024/3/27
+### MathParser
+- 添加运算符 `°`，例如，`180° = 3.14159...`
+- 添加函数 `isanglebetween(θ, θ1, θ2)` ，用于判断给定角度 `θ` 是否处于 `θ1` 到 `θ2` 的范围内（按照角度增大的方向，即 FFXIV 坐标系中的逆时针方向）。
+  - 输入角度无需标准化到 [-pi, pi]。输出为 0 或 1。
+    `isanglebetween(pi/4, 0, pi/2) = 1`
+    `isanglebetween(pi, pi/2, -pi/2) = 1`
+    `isanglebetween(0, pi/2, -pi/2) = 0`
+  - 例如：判断角色面向在背对机制中是否安全。
+
+### Actions
+- 在 `LogMessage` 动作中添加新选项 “添加日志到 ACT 战斗记录”，便于在 ACT 战斗记录中一起浏览正常 ACT 日志和自定义日志。
+  - 例如，一个 `1B`（点名标记）日志可以在去除偏移后，以自定义格式添加到战斗记录中，就像是同时生成了一条没有偏移的日志。
+
+### Entity
+- 新增实体属性：`subrole` 和 `roleid`（对应下面定义的文本和数值）。
+```csharp
+public enum RoleType
+{ 
+    None          = 0,
+    Tank          = 8,
+    Healer        = 16,
+    DPS           = 24,
+    Crafter       = 32,
+    Gatherer      = 48,
+    MainRole      = 56,
+
+    PureHealer    = Healer | 1,
+    FlexHealer    = Healer | 2,
+    BarrierHealer = Healer | 3,
+    StrengthMelee  = DPS | 1,
+    DexterityMelee = DPS | 2,
+    PhysicalRanged = DPS | 4,
+    MagicalRanged  = DPS | 6,
+}
+```
+  
+- 对 `_entity` 新增查询模式：`${_entity[key=value].prop}`  
+  - 例如，`${_entity[bnpcid=12601].heading}` 可用于查询 BNpcId 为 12601 的实体面向。
+  - 返回找到的第一个实体。如果没有找到实体，则返回 NullCombatant 的数据。
+  - 例：可以基于某些特征实体的 BNpcId 判断是否处于门神或本体阶段。
+  - 如果需要更复杂的查询条件，或查询多个符合条件的实体，可以使用 Table 动作查询所有实体，或直接使用脚本：
+    `List<VariableDictionary> Triggernometry.PluginBridges.BridgeFFXIV.GetAllEntities()`
+
+### Interpreter
+- 在 Interpreter 中添加了一个静态工具类 `StaticHelpers`，以便于在 class 中使用与 Context 实例无关的方法。
+- `TriggernometryHelpers` 的所有方法仍然可用。
+- 例：
+```csharp
+using Triggernometry.Variables;
+using static Triggernometry.Interpreter;
+
+class ConfigForm
+{
+    //...
+
+    public void LoadFromConfig()
+    {
+        VariableDictionary config = StaticHelpers.GetDictVariable(isPersistent, configName);
+        // ...
+    }
+}
+```
+  
+### 其他
+- 按照新增的 `procid` 逻辑，修改了需要特定窗口标题和 `procid` 的动作描述。
+
+- 修复了若干空引用异常，如 `ActionViewer.Actions = null` 导致在 ActionForm 界面点击时偶发错误，以及 `RealPlugin.plug.currentZone = null` 在 FFXIV 未运行时编辑分组区域限制可能引起的错误。
+
+- 由于之前添加了用于测试动作的其他属性，将 `testmode` 属性重命名为 `testByPlaceholder` 以消除歧义。
+
+- 将几个错误命名为 `cbx...` 的复选框重命名为 `chk...`。
+
+- 其他小修改。
+
+## 2023/11/29
+- ActionViewer
+  - 右键菜单中添加 “复制条件”、“粘贴条件”、“测试动作”
+
+- ActionForm / Action
+  - 修复了与模板触发器相关的空引用错误 [null reference bug](https://discord.com/channels/374517624228544512/599935468578144276/1176446751675252736)
+  - 动作中发生异常的日志条目现在将包含相应的描述和触发器路径
+  - 添加了两个动作：
+    - VariableScalar - `Increment`（数值递增）
+    - VariableTable - `AppendH`（水平追加表格）
+  - 更新了 KeyPress 的帮助文档链接，并根据所选语言选项切换到相应语言的链接
+  - 修复了一些表格动作没有设置其变更者和时间的问题，例如 `Resize` 和 `Copy`
+
+- Context
+  - `${estorage:xxx}`：检查脚本 Storage 中是否包含键 `xxx`
+  - `${_storage[xxx]}`：输出脚本存储中的对象（ToString）
+  - `${_configpath}` `${_pluginpath}`：对应的本地文件夹路径
+  - 添加了 `${_config[UnsafeUsage]}`;
+  - 将 `${_config[API]}` 的结果改为位运算（`0-7`，`Local << 2 | Remote << 1 | Admin`）
+
+- RealPlugin
+  - 修复了更新插件后第一次启动时 `cfg.Constants` 中的版本号没有更新，但第二次启动时更新的错误
+  - 使具名回调（委托）中的异常在日志中正确显示实际的异常信息
+  - 添加了 `static RealPlugin RealPlugin.plug` 以便于引用（单例模式，整个程序中的所有 `RealPlugin` 实例都是同一个）。
+
+- 其他
+  - 小改动：
+    - 将 `void Context.XxxxxError()` 改为 `Exception Context.XxxxxError()`
+    - 将 `I18n.TrlXxxxx()` 改为单一方法 `I18n.Trl("xxxxx")`
+    - 将一些 `internal` 改为 `public` 以供脚本使用
+    - 翻译修正
+
+# 2023/11/10
 ## ActionViewer
 - 修复了 ActionViewer 中部分按钮有时不能正确启用/禁用的错误；
 - 修复了 dgvActions 中双击时偶尔因未选中动作导致的空引用错误；
@@ -72,8 +179,7 @@
 - 修复 `ReadyForOperation` 函数偶发的空引用异常；
 - 添加了用于在脚本中根据回调名称添加/删除回调的 `RegisterNamedCallback` 和 `UnregisterNamedCallback` 的重载
 
-# 以前的修改
-2023/9
+# 2023/9
 ## 数学解析器 (MathParser)
 数学解析器的大部分核心内容已经被重写：
 ### 负号解析：
