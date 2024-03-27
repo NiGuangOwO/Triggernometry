@@ -2,6 +2,7 @@
 ## [浏览主仓库 Triggernometry 文档](https://github.com/paissaheavyindustries/Triggernometry)
 
 本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
+~~ChatGPT 机翻完大致改改，懒得再写一遍中文了x~~
 
 # 新增内容
 ## 2024/3/27
