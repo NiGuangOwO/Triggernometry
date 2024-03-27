@@ -3,9 +3,9 @@
 
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
-# What's New 
-**2024/3/27**
-### MathParser
+# What's New  
+## 2024/3/27  
+### MathParser  
 - Added an operator `°`, for example, `180° = 3.14159...`
 - Added a function `isanglebetween(θ, θ1, θ2)` to determine if a given angle `θ` is within the range from `θ1` to `θ2` (in the direction of increasing angle, *i.e.* counter-clockwise in FFXIV coordinate system).
   - The input angles do not need to be normalized to [-pi, pi]. The output is 0 or 1.
@@ -80,7 +80,7 @@ class ConfigForm
 
 - Other minor modifications.
 
-**2023/11/29**
+## 2023/11/29
 - ActionViewer
   - Add `Copy Conditions`, `Paste Conditions`, `Test Action` in the right-click menu
 
@@ -112,7 +112,7 @@ class ConfigForm
     - Change some `internal` to `public` for scripts
     - Translation fixes
     
-**2023/11/10**  
+## 2023/11/10  
 - ActionViewer
   - Fixed a bug where some buttons in `ActionViewer` sometimes are not enabled/disabled correctly;
   - Fixed a null reference error occasionally caused by double-clicking in `dgvActions` without actually selecting an action;
@@ -183,8 +183,7 @@ class ConfigForm
   - Added overloaded `RegisterNamedCallback` and `UnregisterNamedCallback` functions for adding/removing callbacks by name in scripts.
 
 
-# Previous
-2023/9
+## 2023/9
 ## MathParser  
 The core of the MathParser had been mainly rewritten:  
 ### Parsing Minus Signs:  
