@@ -4,6 +4,82 @@
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
 # What's New 
+**2024/3/27**
+### MathParser
+- Added an operator `°`, for example, `180° = 3.14159...`
+- Added a function `isanglebetween(θ, θ1, θ2)` to determine if a given angle `θ` is within the range from `θ1` to `θ2` (in the direction of increasing angle, *i.e.* counter-clockwise in FFXIV coordinate system).
+  - The input angles do not need to be normalized to [-pi, pi]. The output is 0 or 1.
+    `isanglebetween(pi/4, 0, pi/2) = 1`
+    `isanglebetween(pi, pi/2, -pi/2) = 1`
+    `isanglebetween(0, pi/2, -pi/2) = 0`
+  - Example: Determine if the character's heading is safe in a back-facing mechanism.
+
+### Actions
+- In the `LogMessage` action, a new option "Add log to ACT combat record" has been added to facilitate browsing both regular and custom logs together in the ACT combat record.
+  - e.g., A `1B` (HeadMarker) log with offset removed can be added to the combat record with a custom format, as if a log without offset was generated at the same time.
+
+### Entity
+- New entity attributes added: `subrole` and `roleid` (corresponding to the text and numeric values defined below).
+  [Related discussion](https://discord.com/channels/374517624228544512/599935468578144276/1185315650047066222)
+```csharp
+  public enum RoleType
+  { 
+      None          = 0,
+      Tank          = 8,
+      Healer        = 16,
+      DPS           = 24,
+      Crafter       = 32,
+      Gatherer      = 48,
+      MainRole      = 56,
+
+      PureHealer    = Healer | 1,
+      FlexHealer    = Healer | 2,
+      BarrierHealer = Healer | 3,
+      StrengthMelee  = DPS | 1,
+      DexterityMelee = DPS | 2,
+      PhysicalRanged = DPS | 4,
+      MagicalRanged  = DPS | 6,
+  }
+```
+  
+- Added a new query pattern for `_entity`:  `${_entity[key=value].prop}`  
+  - For example, `${_entity[bnpcid=12601].heading}` can be used to query the entity of BNpcId 12601.  
+  - It returns the first entity found. If no entity is found, it returns the data of NullCombatant.  
+  - You can determine whether you are in the door boss based on the BNpcId of some characteristic entities.
+  - If you need more complex query conditions, or to query multiple entities that meet the conditions, you can use the Table action to query all entities, or use scripts directly:
+  `List<VariableDictionary> Triggernometry.PluginBridges.BridgeFFXIV.GetAllEntities()`
+
+### Interpreter
+- Added a static utility class `StaticHelpers` to the Interpreter to facilitate the use of methods that are independent of the Context instance.
+- All methods of `TriggernometryHelpers` are still available.
+- Example:
+```csharp
+using Triggernometry.Variables;
+using static Triggernometry.Interpreter;
+
+class ConfigForm
+{
+    //...
+
+    public void LoadFromConfig()
+    {
+        VariableDictionary config = StaticHelpers.GetDictVariable(isPersistent, configName);
+        // ...
+    }
+}
+```
+
+### Others
+- Modified action descriptions for actions requiring specific window titles and `procid`, following the newly added logic about `procid`.
+
+- Fixed several null reference exceptions, such as `ActionViewer.Actions = null` causing sporadic errors when clicking in the ActionForm interface, and `RealPlugin.plug.currentZone = null` causing potential errors when editing group area restrictions with FFXIV not running.
+
+- Renamed the `testmode` property to `testByPlaceholder` to avoid ambiguity, due to previously added properties for testing actions.
+
+- Renamed several incorrectly named `cbx...` checkboxes to `chk...`.
+
+- Other minor modifications.
+
 **2023/11/29**
 - ActionViewer
   - Add `Copy Conditions`, `Paste Conditions`, `Test Action` in the right-click menu
