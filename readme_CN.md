@@ -9,7 +9,7 @@
 ### MathParser
 - 添加运算符 `°`，例如，`180° = 3.14159...`  
 - 添加函数 `isanglebetween(θ, θ1, θ2)` ，用于判断给定角度 `θ` 是否处于 `θ1` 到 `θ2` 的范围内（按照角度增大的方向，即 FFXIV 坐标系中的逆时针方向）。
-  - 输入角度无需标准化到 [-pi, pi]。输出为 0 或 1。
+  - 输入角度无需标准化到 [-pi, pi]。输出为 0 或 1。  
     `isanglebetween(pi/4, 0, pi/2) = 1`  
     `isanglebetween(pi, pi/2, -pi/2) = 1`  
     `isanglebetween(0, pi/2, -pi/2) = 0`  
