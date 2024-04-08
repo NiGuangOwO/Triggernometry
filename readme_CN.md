@@ -1,10 +1,45 @@
 ## [View this page in English](https://github.com/MnFeN/Triggernometry/blob/readme/readme.md)
 ## [浏览主仓库 Triggernometry 文档](https://github.com/paissaheavyindustries/Triggernometry)
 
-本文档是 Triggernometry v1.1.7.3 版本后我所修改部分的中文版总结。
+本文档是自 Triggernometry v1.1.7.3 版本以来我所修改部分的中文版总结。
 ~~ChatGPT 机翻完大致改改，懒得再写一遍中文了x~~
 
 # 新增内容
+## 2024/4/7
+### 消息框
+- 更智能的自动填充：
+  - 如果在变量名的文本框中输入了只包含一个或没有`${...}`表达式的字符串，它会被保存到相应的动态变量列表中；
+  - 如果任何输入字符串包含单层变量表达式，如`${var:name}`，则`name`会被保存到相应的动态变量列表中；
+  - 如果用户在类似`${v:...`之后输入，或在变量名的表达式文本框中输入，它也会检查动态列表中的所有名字。
+  - 此功能与所有类型的变量（临时/永久）、文本/图像悬浮窗和命名回调兼容。
+- 更改了ActionForm中Enter键的行为：
+  - 在单行模式表达式文本框中按Enter键时，会切换到多行模式；
+  - 在多行模式中按下时，将直接添加一个换行符，下一行将与上一行具有相同的缩进。
+
+### 文本悬浮窗
+- 颜色表达式
+  - 为文本悬浮窗的前景色、背景色和轮廓色添加了3个表达式文本框。
+  - 颜色表达式与动作描述中的相同，并将显示相应的解析颜色作为文本框的背景色：
+    - `aaccff` / `#aaccff`
+    - `acf` / `#acf`
+    - `192, 0, 18`
+  - 这些颜色接受表达式，因此可以根据某些实际值在同一个动作中动态改变颜色，而无需使用只有颜色不同的几个不同动作。（但目前仍然需要执行动作以刷新颜色）
+    例如，根据 DSR P6 中两条龙的血量改变文本颜色。
+  - 仍然保留了颜色选择器，为用户提供直接选择颜色的方式。
+
+### RealPlugin / 解释器
+- 将`RealPlugin.WindowsUtils`类移动到`Triggernometry.Utilities`命名空间，并添加了相应的脚本API安全选项。
+- 添加了一个ffxiv进程句柄（具有全部访问权限）：
+  ```csharp
+    public IntPtr Triggernometry.Realplugin.plug.XivHandle
+  ```
+  注意：这依然安全，因为所有危险API依然默认受限。它也可以在以后用于读取ACT中不可用或更新太慢的一些实体属性（如坐标）。
+- 由于当前脚本环境无法直接访问`System.Text.Json`，添加了两个Json方法：
+  ```csharp
+    public static string Triggernometry.Interpreter.StaticHelpers.Serialize(object o, bool indent = true);
+    public static T Triggernometry.Interpreter.StaticHelpers.Deserialize<T>(string s);
+  ```
+  
 ## 2024/3/27
 ### MathParser
 - 添加运算符 `°`，例如，`180° = 3.14159...`  
