@@ -4,6 +4,41 @@
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
 # What's New  
+## 2024/4/7
+### MessageBox 
+- More intelligent autofill:
+  - If a string with one or no `${...}` expressions was input in a textbox for variable names, it would be saved into a corresponding dynamic variable list;
+  - If any input string contains a single-layer variable expressions like `${var:name}`, the `name` would be save into the corresponding dynamic variable list;
+  - If the user is typing after expressions like `${v:...`, or typing in an expreesion textbox for variable names, it would also check all the names in the dynamic list.
+  - This feature is compatitable with all kinds of variables (session/persistent), text/image auras, and named callbacks.
+- Changed behaviour for Enter key in the ActionForm:
+  - When pressing Enter in a single-line mode expression textbox, it would change to multi-line mode; 
+  - When pressing in multi-line mode, it would add a linebreak directly, and the next line would be added the same indent with the previous line.
+
+### Text Aura
+- Color expressions
+  - Added 3 expression textboxes for the text aura's forecolor, backcolor and outlinecolor.
+  - Color expressions are the same as in the action descriptions, and would show the corresponding parsed color as the background color of the textbox:
+    - `aaccff` / `#aaccff`
+    - `acf` / `#acf`
+    - `192, 0, 18`
+  - Those colors accept expressions, so it would be possible to dynamically change the colors based on some real values in a same action, without using several different actions with only the color different. (but for now, the action still needs to be executed to refresh the color)
+    e.g. Changed the text color based on the 2 dragons' HP in DSR P6. 
+  - The color selector is still kept, for providing users a direct way to select colors.
+
+
+### RealPlugin / Interpreter
+- Moved the `RealPlugin.WindowsUtils` class to `Triggernometry.Utilities` namespace, and added the corresponding scripting API safety option  
+- Added a ffxiv process handle (with all access):   
+  ```csharp
+    public IntPtr Triggernometry.Realplugin.plug.XivHandle
+  ```
+  Note: It is still safe because all APIs were still restricted. It could also be used in the future to read some entity properties which are not available in ACT / update too slowly in ACT (like coordination).
+- Added 2 Json methods since the current scripting environment cannot access `System.Text.Json` directly:
+  ```csharp
+    public static string Triggernometry.Interpreter.StaticHelpers.Serialize(object o, bool indent = true);
+    public static T Triggernometry.Interpreter.StaticHelpers.Deserialize<T>(string s);
+  ```
 ## 2024/3/27  
 ### MathParser  
 - Added an operator `°`, for example, `180° = 3.14159...`
