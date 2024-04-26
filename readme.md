@@ -719,18 +719,20 @@ System.ArgumentOutOfRangeException - Index out of range.
 ```
 
 ## Current To-do List  
-- [ ] Detailed action descriptions
-- [ ] review
+- [x] Detailed action descriptions
+- [x] review
+- [x] Show the count of errors 
+- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
 
 ## Future
+- [ ] ReadMemory
+- [ ] More entity data from memory
+- [ ] Global font settings
+- [ ] Aura font size
 - [ ] More intelligent autofill: close the brackets, move the cursor, and refresh the autofill form.
 - [ ] RichTextBox
 - [ ] Dictionary Variable Editor (Sort)  
-- [ ] Show the count of errors and warnings  
-- [x] combobox row height (written but not used: the customized drawing caused the loading time changed from 1 s to 3 s)  
-- [ ] Figure out a way to apply rotation matrix
+- [ ] Vector and matrix
 - [ ] Add customized exceptions to the math functions (need to tolerate with testmode and the exptextbox bgcolor logic).
 - [ ] `_color[x][y]`
-- [ ] global font settings
 - [ ] deselect actions in loop dgv
-- [ ] aura
