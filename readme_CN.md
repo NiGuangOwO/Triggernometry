@@ -18,6 +18,7 @@
     全半角转换。
     
     `${func:tofullwidth:H1}` = `Ｈ１`
+    
     `${func:tohalfwidth:Ｈ１}` = `H1`
 
   - `toxivchar(combineDigits=false)`
@@ -27,8 +28,10 @@
 
   - `ord(separator=",")`
 
-    将字符串转换为字符编码序列。  
-    `${func:ord:Test 1}` = `84,101,115,116,32,49`   
+    将字符串转换为字符编码序列。
+    
+    `${func:ord:Test 1}` = `84,101,115,116,32,49`
+    
     `${func:ord(-):Test 1}` = `84-101-115-116-32-49`  
 
   - `chr(joiner=",")`
@@ -57,6 +60,7 @@
     表达式写作：
 
     `l1d(...)` / `manhattandistance(...)`
+    
     `l∞d(...)` / `chebyshevdistance(...)`  
 
     参数：同`distance()`
