@@ -4,6 +4,183 @@
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
 # What's New  
+
+## 2024/5/27
+
+### Expressions
+
+- **String functions**
+
+  - `tofullwidth` / `tohalfwidth`
+
+    `${func:tofullwidth:H1}` = `Ｈ１`
+    `${func:tohalfwidth:Ｈ１}` = `H1`
+
+  - `toxivchar(combineDigits=false)`
+
+    Convert the alphanumeric characters to the corresponding XIV-defined black box characters.   
+    If `combineDigits`, numbers between 10 and 31 would be converted to a single black box character.
+
+  - `ord(separator=",")`
+
+    Convert a string to a sequence of charcodes.  
+    `${func:ord:Test 1}` = `84,101,115,116,32,49`   
+    `${func:ord(-):Test 1}` = `84-101-115-116-32-49`  
+
+  - `chr(joiner=",")`
+
+    The reverse of `ord`.  
+    `${func:chr:84,101,115,116,32,49}` = `Test 1`
+
+- **Normal expressions**
+
+  - `_triggerpath`
+    The full path of the fired trigger.
+
+- **Math functions**
+
+  - L1 and L∞ distance functions
+
+    Definition of Ln-distance: 
+    
+    - `distance = (|x - x0| ^ n + |y - y0| ^ n + ...) ^ (1 / n)`
+
+    L2-distance: The normal distance (Euclidean distance)  
+    L1-distance: Manhattan distance   
+    L∞-distance: Chebyshev distance  
+
+    The expressions could be written as:
+
+    `l1d(...)` / `manhattandistance(...)`
+    `l∞d(...)` / `chebyshevdistance(...)`  
+
+    parameters: same as `distance()`
+    - e.g. `l1d(x0, y0, x1, y1)` `l1d(x0, y0, z0, x1, y1, z1)`
+
+    If you need to check if 2 locations are close to each other very frequently, `l1d` is better than `distance` (less calculation).
+
+### Actions
+
+- **New action type: ACT Interaction** 
+
+  Contains:
+
+  - Start/End ACT Encounter (The original `End Encounter` is moved here and auto-converted)
+
+  - Enable/disable "Use Deucalion" (injection)
+
+  - Enable/disable "Log All Network Data"
+
+  This feature could be very useful when SE suddenly uses some packets as the only way to figure out a mechanism, while that packet has not been parsed as log lines.  
+
+  You can control this option during certain time and use `252` = `0xFC` network packet log lines to fire your trigger.  
+
+### UI / Improve User Experience
+
+- **Allow to sort a folder in descending order**
+
+  Related discussion: https://discord.com/channels/374517624228544512/1237066801876041783
+
+- **Allow firing triggers outside developer mode**
+
+  Some triggers need the users to manually fire them for self-testing.   
+
+  This is better not considered as "developer" level of usage.   
+
+  There are many people asking about "why I cannot fire the trigger" in Discord, which also shows this point.
+
+- **Display error log count on the main UI**
+
+  Change the "Error has been encountered" message on the UI to display the specific number of errors encountered since the last opening of the error page.
+
+  Also fix an issue where the error info would never display after being opened once despite subsequent errors.
+
+  Additionally, refactored the logging system from a single Queue<InternalLog> to a dictionary keyed by DebugLevelEnum. 
+  This allows a cap of 30000 logs per type instead of a shared cap of 100000, preventing general logs like Info and Verbose from overshadowing older Error/Warning logs.
+
+- **Enhanced double/triple-clicking selection in expression textboxes**
+
+  - Double-click:
+
+    - Clicking on all types of brackets / $ / ¤:
+
+      Select the full expression with enclosed brackets, which could be very useful when writing long nested expressions and you cannot find where the paired bracket is;
+
+    - Clicking on spaces:
+
+      Select the adjacent spaces in the same line;
+
+    - Clicking on other characters:
+
+      Select the current "word" (the splitting is better than original).
+
+  - Triple-click:
+
+    - Single-line: Select all text
+
+    - Multi-line: Select current line
+
+- **Show more information of named callbacks in the state form** 
+
+  - Registrant
+
+  - Registration time
+
+  - Last Invoked
+
+### Codes / Scripts
+
+- **Register Named Callbacks**
+
+  The `registrant` argument has been added:
+
+  ```csharp
+  RegisterNamedCallback(string name, CustomCallbackDelegate callback, object o, string registrant) 
+  ```
+
+  The original function could still be used, and the registrant name would be detected automatically.
+
+- **Added a ReadonlyRichTextbox class to display text with customized format**
+
+  ```csharp
+  public class Triggernometry.CustomControls.ReadonlyRichTextbox : RichTextbox
+  ```
+  
+  This rich textbox has a "transparent" background, and do not allow any kind of mouse interaction (just like a label).
+
+- **Provide more information during import** 
+
+  - When the import fails, show more detailed reason
+
+  - Show the plugin version of the imported xml
+
+### Bug Fixes
+
+Check [the link](https://github.com/paissaheavyindustries/Triggernometry/pull/107) for details.
+
+### Notice: Changed Behaviour
+
+- Line breaks
+
+  `⏎` is considered the same as a linebreak (considered as whitespace characters). So it should be trimmed when splitting arguments, unless it is surrounded by quotation marks.
+
+  - e.g. `listvar.join("⏎")` should be used instead of `listvar.join(⏎)`.
+
+  Also, line breaks could also be used in actions and considered as a single character:
+
+  - e.g. using the expression below to build a list `1, 2, 3`  
+  (the first char is a linebreak, which is used as the separator of the following text when building a list in the action):
+
+    ```
+    
+    1
+    2
+    3
+    ```
+
+    This allows multiline input and makes it easier to read when using a large amount of data to build a variable.
+
+
 ## 2024/4/7
 ### MessageBox 
 - More intelligent autofill:
