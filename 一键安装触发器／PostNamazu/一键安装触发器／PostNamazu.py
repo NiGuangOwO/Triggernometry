@@ -1,72 +1,15 @@
 import os
 import ctypes
-import sys
 import re
 import requests
 from typing import Optional, List
 import webbrowser
 
-def is_admin():
+def is_admin() -> bool:
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-
-def main():
-    print("一键安装触发器/鲶鱼精邮差 by 阿洛\n————————————————————")
-    if not is_admin():
-        input("请使用管理员权限打开程序。")
-        return
-    while True:
-        try:
-            act_type = input("\n请选择你使用的 ACT 版本：\n1. 原版\n2. 呆萌整合\n3. CafeACT\n").strip()
-            match act_type:
-                case "1":
-                    home = os.getenv('APPDATA')
-                    config_path = os.path.join(home, "Roaming", "Advanced Combat Tracker", "Config", "Advanced Combat Tracker.config.xml")
-                    plugin_path = os.path.join(home, "Roaming", "Advanced Combat Tracker", "Plugins")
-                    print("请确保：\n")
-                    print("1. 该程序已置于 ACT 根目录下；")
-                    print("2. 当前没有正在运行的 ACT。")
-                    print("3. 你需要确保已经安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗，并重启过 ACT。")
-                    input("\n确认以上内容后回车继续。")
-                case "2":
-                    current_location = os.getcwd()
-                    config_path = os.path.join(current_location, "Config", "Advanced Combat Tracker.config.xml")
-                    plugin_path = os.path.join(current_location, "Plugins")
-                    print("请确保：\n")
-                    print("1. 该程序已置于 ACT 根目录下；")
-                    print("2. 当前没有正在运行的 ACT。")
-                    input("\n确认以上内容后回车继续。")
-                case "3":
-                    current_location = os.getcwd()
-                    config_path = os.path.join(current_location, "AppData", "Advanced Combat Tracker", "Config", "CafeACT.config.xml")
-                    plugin_path = os.path.join(current_location, "Plugins")
-                    print("请确保：\n")
-                    print("1. 该程序已置于 ACT 根目录下；")
-                    print("2. 当前没有正在运行的 ACT。")
-                    print("3. 你需要确保在插件中心安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗、Triggernometry，并重启过 ACT。")
-                    input("\n确认以上内容后回车继续。")
-                case _:
-                    print("输入必须是 1 / 2 / 3。请重新输入。")
-                    continue
-            if act_type == "3":
-                is_CN = True
-            else:                
-                match input("\n请选择 ACT 对应的客户端：\n1. 国服\n2. 国际服\n").strip():
-                    case "1":
-                        is_CN = True
-                    case "2":
-                        is_CN = False
-                    case _:
-                        print("输入必须是 1 / 2。请重新输入。")
-                        continue
-            set_up_config(config_path, plugin_path, is_CN)
-            input("你可以直接退出程序，或按回车键打开资源网盘，内含分享的触发器资源。")
-            webbrowser.open("https://www.123pan.com/s/1xRXjv-340BH.html", new=2)
-            break
-        except Exception as e:
-            input(f"发生错误: {e}")
 
 class Plugin:
 
@@ -118,6 +61,7 @@ def get_plugin_from_list(plugin_name: str, plugin_list: List[Plugin]) -> Optiona
         if plugin_name.lower() in plugin.name.lower():
             return plugin
     return None
+
 
 REMOTE_FOLDER = "https://vip.123pan.cn/1824544011/Triggernometry_Release_CN/"
 
@@ -182,6 +126,62 @@ def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
         with open(config_path + '_', 'w', encoding='utf-8') as file:
             file.write(new_xml_data)
         print("已完成初始化。")
+
+def main():
+    print("一键安装触发器/鲶鱼精邮差 by 阿洛\n————————————————————")
+    if not is_admin():
+        input("请使用管理员权限打开程序。")
+        return
+    while True:
+        try:
+            act_type = input("\n请选择你使用的 ACT 版本：\n1. 原版\n2. 呆萌整合\n3. CafeACT\n").strip()
+            match act_type:
+                case "1":
+                    home = os.getenv('APPDATA')
+                    config_path = os.path.join(home, "Roaming", "Advanced Combat Tracker", "Config", "Advanced Combat Tracker.config.xml")
+                    plugin_path = os.path.join(home, "Roaming", "Advanced Combat Tracker", "Plugins")
+                    print("请确保：\n")
+                    print("1. 该程序已置于 ACT 根目录下；")
+                    print("2. 当前没有正在运行的 ACT。")
+                    print("3. 你需要确保已经安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗，并重启过 ACT。")
+                    input("\n确认以上内容后回车继续。")
+                case "2":
+                    current_location = os.getcwd()
+                    config_path = os.path.join(current_location, "Config", "Advanced Combat Tracker.config.xml")
+                    plugin_path = os.path.join(current_location, "Plugins")
+                    print("请确保：\n")
+                    print("1. 该程序已置于 ACT 根目录下；")
+                    print("2. 当前没有正在运行的 ACT。")
+                    input("\n确认以上内容后回车继续。")
+                case "3":
+                    current_location = os.getcwd()
+                    config_path = os.path.join(current_location, "AppData", "Advanced Combat Tracker", "Config", "CafeACT.config.xml")
+                    plugin_path = os.path.join(current_location, "Plugins")
+                    print("请确保：\n")
+                    print("1. 该程序已置于 ACT 根目录下；")
+                    print("2. 当前没有正在运行的 ACT。")
+                    print("3. 你需要确保在插件中心安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗、Triggernometry，并重启过 ACT。")
+                    input("\n确认以上内容后回车继续。")
+                case _:
+                    print("输入必须是 1 / 2 / 3。请重新输入。")
+                    continue
+            if act_type == "3":
+                is_CN = True
+            else:                
+                match input("\n请选择 ACT 对应的客户端：\n1. 国服\n2. 国际服\n").strip():
+                    case "1":
+                        is_CN = True
+                    case "2":
+                        is_CN = False
+                    case _:
+                        print("输入必须是 1 / 2。请重新输入。")
+                        continue
+            set_up_config(config_path, plugin_path, is_CN)
+            input("你可以直接退出程序，或按回车键打开资源网盘，内含分享的触发器资源。")
+            webbrowser.open("https://www.123pan.com/s/1xRXjv-340BH.html", new=2)
+            break
+        except Exception as e:
+            input(f"发生错误: {e}")
 
 if __name__ == "__main__":
     main()
