@@ -139,6 +139,14 @@ def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
         raw_plugins = re.findall(r'<Plugin .*?/>', act_plugins_content)
         act_plugins = [Plugin.parse(plugin_xml) for plugin_xml in raw_plugins]
 
+        # requires
+        xiv_parser = get_plugin_from_list("FFXIV_ACT_Plugin", act_plugins)
+        if xiv_parser is None:
+            raise Exception("你尚未安装依赖项 FFXIV_ACT_Plugin 解析插件。")
+        overlay = get_plugin_from_list("Overlay", act_plugins)
+        if overlay is None:
+            raise Exception("你尚未安装依赖项 ngld/OverlayPlugin 悬浮窗/解析插件。")
+
         # Triggernometry
         mlm_trig = get_plugin_from_list("MlmTr", act_plugins)
         if mlm_trig is None:
@@ -150,11 +158,7 @@ def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
         trig = get_plugin_from_list("Triggernometry", act_plugins)
         if trig is None:
             trig = Plugin('True', os.path.join(plugin_path, "Triggernometry.dll"))
-        
-            if parser := get_plugin_from_list("FFXIV_ACT_Plugin", act_plugins):
-                index = act_plugins.index(parser) + 1
-            else:
-                index = (length := len(act_plugins)) if length <= 2 else 2
+            index = act_plugins.index(xiv_parser) + 1
             act_plugins.insert(index, trig)
 
         trig.update(REMOTE_FOLDER + "Triggernometry.dll")
