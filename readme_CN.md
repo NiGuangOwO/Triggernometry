@@ -1,5 +1,8 @@
-## [View this page in English](https://github.com/MnFeN/Triggernometry/blob/readme/readme.md)
-## [浏览主仓库 Triggernometry 文档](https://github.com/paissaheavyindustries/Triggernometry)
+**当前 `readme` 分支仅用于说明文档和相关工具。如果要浏览 Triggernometry 代码，可以点击左上角切换其他分支。**  
+
+**[View this page in English](https://github.com/MnFeN/Triggernometry/blob/readme/readme.md)**
+
+**[浏览主仓库 Triggernometry 文档](https://github.com/paissaheavyindustries/Triggernometry)**
 
 本文档是自 Triggernometry v1.1.7.3 版本以来我所修改部分的中文版总结。  
 
