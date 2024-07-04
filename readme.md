@@ -1,5 +1,8 @@
-## [浏览中文版 View in Chinese](https://github.com/MnFeN/Triggernometry/blob/readme/readme_CN.md)
-## [Check the main repo for Triggernometry documentations](https://github.com/paissaheavyindustries/Triggernometry)
+**This `readme` branch is only for documentations and related tools. Please check other branches to view Triggernometry codes.**  
+
+**[浏览中文版 View in Chinese](https://github.com/MnFeN/Triggernometry/blob/readme/readme_CN.md)**  
+
+**[Check the main repo for Triggernometry documentations](https://github.com/paissaheavyindustries/Triggernometry)**  
 
 This document is a summary for my edited parts since Triggernometry v1.1.7.3.  
   
