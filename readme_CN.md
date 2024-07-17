@@ -684,7 +684,7 @@ class ConfigForm
 
 ### 为列表、表格、字典的 `Set` 动作添加动态表达式支持：
 - 列表：`_this` `_idx`
-- 表格：`_this` `_row` `col` `_row[i]` `col[i]`
+- 表格：`_this` `_row` `_col` `_row[i]` `_col[i]`
 - 字典：`_val`
 
 ### 更新了列表变量的 `PopFirst` / `PopLast` 动作：  
