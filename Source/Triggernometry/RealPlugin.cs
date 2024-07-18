@@ -2083,10 +2083,23 @@ namespace Triggernometry
                     ui.pnlWelcome.Visible = false;
                     ui.btnOptions.Enabled = true;
                 }
+                // 对于旧版配置，尝试开启自动更新
+                if (new Version(cfg.PrevPluginVersion) < new Version("1.2.0.118") && cfg.UpdateNotifications != Configuration.UpdateNotificationsEnum.Yes && I18n.IsChineseEnvironment)
+                {
+                    if (Assembly.GetEntryAssembly()?.GetName().Name == "CafeACT")
+                    {
+                        ui.QueueToast(new Toast
+                        {
+                            ToastText = $检测到 CafeACT 环境，故未自动开启 Triggernometry 自动更新。如有需要，可在插件设置中手动启用。",
+                            ToastType = Toast.ToastTypeEnum.OK
+                        });
+                    }
+                    else cfg.UpdateNotifications = Configuration.UpdateNotificationsEnum.Yes;
+                }
                 if (cfg.UpdateNotifications == Configuration.UpdateNotificationsEnum.Yes)
                 {
                     exwhere = I18n.Translate("internal/Plugin/iniupdates", "checking for updates");
-                    CheckForUpdates();
+                    CheckForUpdates(); 
                 }
                 exwhere = I18n.Translate("internal/Plugin/initoasts", "setting up toasts");
                 if (complainAboutReload == true)
@@ -2151,6 +2164,10 @@ namespace Triggernometry
                 }
                 pluginStatusText.Text = I18n.Translate("internal/Plugin/iniready", "Ready");
                 FilteredAddToLog(DebugLevelEnum.Info, I18n.Translate("internal/Plugin/inited", "Initialized"));
+                if (I18n.IsChineseEnvironment)
+                {
+                    ui.AddDefaultRepoCN();
+                }
                 Task tx = new Task(() =>
                 {
                     AllRepositoryUpdates(true);
@@ -2191,79 +2208,79 @@ namespace Triggernometry
             // update the repo
             if (!useBackup)  
             {
-            try
-            {
-                if (singleUpdate == true)
+                try
                 {
-                    trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
-                    FilteredAddToLog(DebugLevelEnum.Verbose, trans);
-                    r.AddToLog(trans);
-                    ShowProgress(-1, trans);
-                }
-                System.Threading.Thread.Sleep(500);
+                    if (singleUpdate == true)
+                    {
+                        trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
+                        FilteredAddToLog(DebugLevelEnum.Verbose, trans);
+                        r.AddToLog(trans);
+                        ShowProgress(-1, trans);
+                    }
+                    System.Threading.Thread.Sleep(500);
                     long localsize = 0;
                     (DateTime remdate, long remsize) = FetchRepositoryMetadata(r);
-                DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
-                bool cacheExpired = false;
-                if (r.KeepLocalBackup == true)
-                {
-                    string repofn = GetRepositoryBackupFilename(r);
-                    if (File.Exists(repofn) == true)
-                    {
-                        FileInfo fi = new FileInfo(repofn);
-                        localsize = fi.Length;
-                        cacheExpired = (fi.LastWriteTime < cacheExpiry);
-                    }
-                }
-                    // nothing has changed: try to load local backup
-                if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
-                {
-                    trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
-                    FilteredAddToLog(DebugLevelEnum.Info, trans);
-                    r.AddToLog(trans);
-                        if (LoadLocalBackupForRepository(r) == true) // success
-                    {
-                            if (singleUpdate) CompleteSingleUpdate(r);
-                        return;
-                    }
-                }
-                else
-                {
-                    trans = I18n.Translate("internal/Plugin/repofetching", "Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version", r.Name, r.LastUpdated, remdate, localsize, remsize);
-                    FilteredAddToLog(DebugLevelEnum.Verbose, trans);
-                    r.LastUpdated = remdate;
-                }
-                string data;
-                trans = I18n.Translate("internal/Plugin/repodownloading", "Downloading repository {0} from {1}", r.Name, r.Address);
-                FilteredAddToLog(DebugLevelEnum.Info, trans);
-                using (WebClient wc = new WebClient())
-                {
-                    wc.Headers["User-Agent"] = "Triggernometry Repository Updater";
-                    byte[] rawdata = wc.DownloadData(r.Address);
-                    data = Encoding.UTF8.GetString(rawdata);
-                }
-                TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                    if (!exp.Corrupted)
-                {
-                    r.ContentSize = data.Length;
-                    AddContentToRepository(exp, r);
+                    DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
+                    bool cacheExpired = false;
                     if (r.KeepLocalBackup == true)
                     {
-                        SaveLocalBackupForRepository(r, data);
+                        string repofn = GetRepositoryBackupFilename(r);
+                        if (File.Exists(repofn) == true)
+                        {
+                            FileInfo fi = new FileInfo(repofn);
+                            localsize = fi.Length;
+                            cacheExpired = (fi.LastWriteTime < cacheExpiry);
+                        }
+                    }
+                    // nothing has changed: try to load local backup
+                    if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
+                    {   
+                        trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
+                        FilteredAddToLog(DebugLevelEnum.Info, trans);
+                        r.AddToLog(trans);
+                        if (LoadLocalBackupForRepository(r) == true) // success
+                        {
+                            if (singleUpdate) CompleteSingleUpdate(r);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        trans = I18n.Translate("internal/Plugin/repofetching", "Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version", r.Name, r.LastUpdated, remdate, localsize, remsize);
+                        FilteredAddToLog(DebugLevelEnum.Verbose, trans);
+                        r.LastUpdated = remdate;
+                    }
+                    string data;
+                    trans = I18n.Translate("internal/Plugin/repodownloading", "Downloading repository {0} from {1}", r.Name, r.Address);
+                    FilteredAddToLog(DebugLevelEnum.Info, trans);
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.Headers["User-Agent"] = "Triggernometry Repository Updater";
+                        byte[] rawdata = wc.DownloadData(r.Address);
+                        data = Encoding.UTF8.GetString(rawdata);
+                    }
+                    TriggernometryExport exp = TriggernometryExport.Unserialize(data);
+                    if (!exp.Corrupted)
+                    {
+                        r.ContentSize = data.Length;
+                        AddContentToRepository(exp, r);
+                        if (r.KeepLocalBackup == true)
+                        {
+                            SaveLocalBackupForRepository(r, data);
+                        }
+                    }
+                    else
+                    {
+                        trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
+                        FilteredAddToLog(DebugLevelEnum.Error, trans);
+                        r.AddToLog(trans);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
-                    FilteredAddToLog(DebugLevelEnum.Error, trans);
+                    trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.ToString());
                     r.AddToLog(trans);
-                }
-            }
-            catch (Exception ex)
-            {
-                trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.ToString());
-                r.AddToLog(trans);
-                FilteredAddToLog(DebugLevelEnum.Error, trans);
+                    FilteredAddToLog(DebugLevelEnum.Error, trans);
                     useBackup = true; // use local backup if the update failed
                 }
             }
@@ -2292,11 +2309,11 @@ namespace Triggernometry
         }
 
         private void CompleteSingleUpdate(Repository r)
-            {
+        {
             string trans = I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete");
-                r.AddToLog(trans);
+            r.AddToLog(trans);
             ShowProgressWhenComplete(trans);
-            }
+        }
 
         internal void AllRepositoryUpdates(bool isStartup)
         {
@@ -3965,7 +3982,7 @@ namespace Triggernometry
         public void RegisterNamedCallback(int id, string name, Delegate callback, object o, string registrant)
         {
             NamedCallback nc = new NamedCallback
-        {
+            {
                 Id = id,
                 Callback = callback,
                 Obj = o,
@@ -4036,6 +4053,55 @@ namespace Triggernometry
                 callbacksByName.Remove(name);
             }
         }
+
+
+        #region CN version only
+        public void FixConfigurationCN()
+        {
+            List<string> changedOptions = new List<string> { "已自动开启下列配置：" };
+            if (cfg.UseOsClipboard == false)
+            {
+                cfg.UseOsClipboard = true;
+                changedOptions.Add("使用系统剪贴板");
+            }
+            if (cfg.UseACTForTTS == false)
+            {
+                cfg.UseACTForTTS = true;
+                changedOptions.Add("使用 ACT 插件播报 TTS");
+            }
+            if (cfg.AutosaveEnabled == false)
+            {
+                cfg.AutosaveEnabled = true;
+                changedOptions.Add("自动保存配置");
+            }
+            UseDeucalionHook(true);
+            bool cafe = false;
+            if (cfg.UpdateNotifications != Configuration.UpdateNotificationsEnum.Yes)
+            {
+                if (Assembly.GetEntryAssembly()?.GetName().Name == "CafeACT")
+                {
+                    cafe = true;
+                }
+                else
+                {
+                    cfg.UpdateNotifications = Configuration.UpdateNotificationsEnum.Yes;
+                    changedOptions.Add("启动时检查更新");
+                }
+            }
+
+            string msg = (changedOptions.Count == 1) ? "触发器配置正确。" : string.Join("\n · ", changedOptions);
+            if (!cafe)
+            {
+                MessageBox.Show(msg, "Triggernometry", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                msg += "\n\n" + "检测到 CafeACT 环境，故未自动开启 Triggernometry 自动更新。\n如有需要，可在插件设置中手动启用。";
+                MessageBox.Show(msg, "Triggernometry", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        #endregion
+
     }
 
 }

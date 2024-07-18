@@ -322,6 +322,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Memory.cs" />
+    <Compile Include="MLMDecryption.cs" />
     <Compile Include="ObsController.cs" />
     <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />

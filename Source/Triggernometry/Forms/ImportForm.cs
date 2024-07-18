@@ -239,6 +239,9 @@ namespace Triggernometry.Forms
 
         private void TryImportText()
         {
+            if (importData.StartsWith("mlm-"))
+                importData = MlmDecryption.Decrypt(importData).Replace("<TriggernometryExport", "<TriggernometryExport PluginVersion=\"1.1.7.1\"");
+
             string starting = importData.Length > 100 ? importData.Substring(0, 100) : importData;
             starting = starting.TrimStart();
             bool isHtml;

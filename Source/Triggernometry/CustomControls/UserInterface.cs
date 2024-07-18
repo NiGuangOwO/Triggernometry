@@ -2076,6 +2076,118 @@ namespace Triggernometry.CustomControls
             }
         }
 
+        private static readonly List<string> _legalRepoPrefixes = new List<string> {
+            "https://github.com/paissaheavyindustries/Triggernometry",
+            "https://vip.123pan.cn/1824544011/"
+        };
+
+        public void AddRepo(Repository r, bool shouldUpdate)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new System.Action(() => AddRepo(r, shouldUpdate)));
+                return;
+            }
+            if (!_legalRepoPrefixes.Any(prefix => r.Address.StartsWith(prefix)))
+            {
+                plug.UnfilteredAddToLog(RealPlugin.DebugLevelEnum.Error, 
+                    I18n.IsChineseEnvironment
+                    ? $"正在尝试添加的远程仓库地址 {r.Address} 未在信任列表内，你需要手动添加此远程仓库。"
+                    : $"The repository address {r.Address} you are trying to add is not a trusted address and needs to be added manually."
+                );
+                return;
+            }
+
+            RepositoryFolder rfo = (RepositoryFolder)treeView1.Nodes[1].Tag;
+            TreeNode tn = rfo.Repositories
+                .Where(repo => repo.Address == r.Address)
+                .Select(repo => treeView1.Nodes[1].Nodes.Cast<TreeNode>().FirstOrDefault(node => node.Tag == repo))
+                .FirstOrDefault();
+
+            if (tn != null)
+            {
+                tn.Text = r.Name;
+                tn.Checked = r.Enabled;
+                tn.ImageIndex = (int)ImageIndices.RemoteRepoUnavailable;
+                tn.SelectedImageIndex = tn.ImageIndex;
+
+                Repository existingRepo = (Repository)tn.Tag;
+                existingRepo.Name = r.Name;
+                existingRepo.Enabled = r.Enabled;
+                existingRepo.AllowProcessLaunch = r.AllowProcessLaunch;
+                existingRepo.AllowScriptExecution = r.AllowScriptExecution;
+                existingRepo.AllowDiskOperations = r.AllowDiskOperations;
+                existingRepo.AllowWindowMessages = r.AllowWindowMessages;
+                existingRepo.AllowObsControl = r.AllowObsControl;
+                existingRepo.KeepLocalBackup = r.KeepLocalBackup;
+                existingRepo.UpdatePolicy = r.UpdatePolicy;
+                existingRepo.AudioOutput = r.AudioOutput;
+            }
+            else
+            {
+                tn = new TreeNode
+                {
+                    Text = r.Name,
+                    Tag = r,
+                    Checked = r.Enabled,
+                    ImageIndex = (int)ImageIndices.RemoteRepoUnavailable
+                };
+                tn.SelectedImageIndex = tn.ImageIndex;
+                rfo.Repositories.Add(r);
+                r.Parent = rfo;
+                treeView1.Nodes[1].Nodes.Add(tn);
+                treeView1.Nodes[1].Expand();
+            }
+            RecolorStartingFromNode(tn.Parent, tn.Parent.Checked, true);
+            treeView1.Sort();
+            if (shouldUpdate)
+            {
+                ForceUpdateRepository(tn);
+            }
+        }
+
+        public void AddRepos(IEnumerable<Repository> repos, bool shouldUpdate)
+        {
+            foreach (Repository r in repos)
+            {
+                AddRepo(r, shouldUpdate);
+            }
+        }
+
+        public void AddDefaultRepoCN(bool shouldUpdate = false)
+        {
+            Repository selfTest = new Repository
+            {
+                Enabled = true,
+                Address = "https://vip.123pan.cn/1824544011/Remote_Triggers/SelfTest.xml",
+                AllowProcessLaunch = true,
+                AllowScriptExecution = true,
+                KeepLocalBackup = true,
+                Name = "问题自检工具箱 + 使用教程",
+                NewBehavior = Repository.NewBehaviorEnum.AsDefined,
+                UpdatePolicy = Repository.UpdatePolicyEnum.Startup,
+                AudioOutput = Repository.AudioOutputEnum.NeverOverride
+            };
+            AddRepos(new List<Repository> { selfTest }, false);
+        }
+
+        public void AddMoreRepoCN(bool shouldUpdate = true)
+        {
+            Repository advancedWaymark = new Repository
+            {
+                Enabled = true,
+                Address = "https://vip.123pan.cn/1824544011/Remote_Triggers/AdvWm.xml",
+                AllowProcessLaunch = true,
+                AllowScriptExecution = true,
+                KeepLocalBackup = true,
+                Name = "高级标点工具箱",
+                NewBehavior = Repository.NewBehaviorEnum.AsDefined,
+                UpdatePolicy = Repository.UpdatePolicyEnum.Startup,
+                AudioOutput = Repository.AudioOutputEnum.NeverOverride
+            };
+            AddRepos(new List<Repository> { advancedWaymark }, shouldUpdate);
+        }
+
         private void btnOptions_DropDownOpening(object sender, EventArgs e)
         {
             btnActionQueueProcessing.Visible = cfg.DeveloperMode;
