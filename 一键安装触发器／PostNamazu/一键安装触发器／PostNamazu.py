@@ -4,6 +4,7 @@ import re
 import requests
 from typing import Optional, List
 import webbrowser
+import pyperclip
 
 def is_admin() -> bool:
     try:
@@ -64,14 +65,14 @@ def get_plugin_from_list(plugin_name: str, plugin_list: List[Plugin]) -> Optiona
 
 
 REMOTE_FOLDER = "https://vip.123pan.cn/1824544011/Triggernometry_Release_CN/"
-
-def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
+REMOTE_RESOURCE = "https://www.123pan.com/s/1xRXjv-340BH.html"
+def set_up_config(config_path: str, plugin_path: str):
 
     try:
         with open(config_path, 'r', encoding='utf-8') as file:
             xml_data = file.read()
     except FileNotFoundError:
-        raise FileNotFoundError("错误：配置文件不存在。你可能选择了错误的 ACT 版本，或程序未置于根目录。")
+        raise FileNotFoundError(f"错误：配置文件{config_path}不存在。你可能选择了错误的 ACT 版本，或程序未置于根目录。")
 
     matches = list(re.finditer(r'<ActPlugins>(.*?)</ActPlugins>', xml_data, re.DOTALL))
 
@@ -91,14 +92,20 @@ def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
         if overlay is None:
             raise Exception("你尚未安装依赖项 ngld/OverlayPlugin 悬浮窗/解析插件。")
 
-        # Triggernometry
+        # mlm
         mlm_trig = get_plugin_from_list("MlmTr", act_plugins)
         if mlm_trig is None:
             mlm_trig = get_plugin_from_list("莫灵喵", act_plugins)
         if mlm_trig is not None:
             mlm_trig.delete()
             act_plugins.remove(mlm_trig)
+            old_trig_config_path = os.path.join(config_path, mlm_trig.name[:-4] + "config.xml")
+            pyperclip.copy(old_trig_config_path)
+            print(f"检测到莫灵喵魔改版触发器，"
+                  f"你可以稍后在触发器插件页面手动导入旧配置文件 {old_trig_config_path} 以恢复全部内容，"
+                  f"此路径已存入剪贴板。")
 
+        # Triggernometry
         trig = get_plugin_from_list("Triggernometry", act_plugins)
         if trig is None:
             trig = Plugin('True', os.path.join(plugin_path, "Triggernometry.dll"))
@@ -109,18 +116,39 @@ def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
         trig.update(REMOTE_FOLDER + "zh-CN.triglations.xml", "zh-CN.triglations.xml")
 
         # PostNamazu
-        namazu = get_plugin_from_list("PostNamazu", act_plugins)
-        if namazu is None:
-            namazu = Plugin('True', os.path.join(plugin_path, "PostNamazu.dll"))
-            act_plugins.append(namazu)
-        if is_CN:
-            namazu.update(REMOTE_FOLDER + "PostNamazuCN.dll")
-        else:
-            namazu.update(REMOTE_FOLDER + "PostNamazuInt.dll")
+        print("你是否需要安装或更新鲶鱼精邮差（PostNamazu）？\n"
+              "0. 否\n"
+              "1. 是，国服版本\n"
+              "2. 是，国际服版本\n")
+        while True:
+            match input().strip():
+                case "0":
+                    update = False
+                    break
+                case "1":
+                    update = True
+                    is_CN = True
+                    break
+                case "2":
+                    update = True
+                    is_CN = False
+                    break
+                case _:
+                    print("输入必须是 0 / 1 / 2。请重新输入。")
+        if update:
+            namazu = get_plugin_from_list("PostNamazu", act_plugins)
+            if namazu is None:
+                namazu = Plugin('True', os.path.join(plugin_path, "PostNamazu.dll"))
+                act_plugins.append(namazu)
+            if is_CN:
+                namazu.update(REMOTE_FOLDER + "PostNamazuCN.dll")
+            else:
+                namazu.update(REMOTE_FOLDER + "PostNamazuInt.dll")
 
         modified_content = ''.join([p.to_xml_string() for p in act_plugins]) + "\n    "
         new_xml_data = xml_data.replace(act_plugins_content, modified_content)
 
+        # edit config
         with open(config_path, 'w', encoding='utf-8') as file:
             file.write(new_xml_data)
         with open(config_path + '_', 'w', encoding='utf-8') as file:
@@ -128,7 +156,8 @@ def set_up_config(config_path: str, plugin_path: str, is_CN: bool):
         print("已完成初始化。")
 
 def main():
-    print("一键安装触发器/鲶鱼精邮差 by 阿洛\n————————————————————")
+    print("自动安装触发器/鲶鱼精邮差 by 阿洛\n"
+          "---------------------------------")
     if not is_admin():
         input("请使用管理员权限打开程序。")
         return
@@ -138,47 +167,35 @@ def main():
             match act_type:
                 case "1":
                     home = os.getenv('APPDATA')
-                    config_path = os.path.join(home, "Roaming", "Advanced Combat Tracker", "Config", "Advanced Combat Tracker.config.xml")
-                    plugin_path = os.path.join(home, "Roaming", "Advanced Combat Tracker", "Plugins")
-                    print("请确保：\n")
-                    print("1. 该程序已置于 ACT 根目录下；")
-                    print("2. 当前没有正在运行的 ACT。")
-                    print("3. 你需要确保已经安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗，并重启过 ACT。")
-                    input("\n确认以上内容后回车继续。")
+                    config_path = os.path.join(home, "Advanced Combat Tracker", "Config", "Advanced Combat Tracker.config.xml")
+                    plugin_path = os.path.join(home, "Advanced Combat Tracker", "Plugins")
+                    input("已选择 1. 原版，请确保：\n\n"
+                          "1. 当前没有正在运行的 ACT；\n"
+                          "2. 你需要确保已经安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗，并重启过 ACT。\n\n"
+                          "确认以上内容后回车继续。\n")
                 case "2":
                     current_location = os.getcwd()
                     config_path = os.path.join(current_location, "Config", "Advanced Combat Tracker.config.xml")
                     plugin_path = os.path.join(current_location, "Plugins")
-                    print("请确保：\n")
-                    print("1. 该程序已置于 ACT 根目录下；")
-                    print("2. 当前没有正在运行的 ACT。")
-                    input("\n确认以上内容后回车继续。")
+                    input("已选择 2. 呆萌整合，请确保：\n\n"
+                          "1. 该程序已置于 ACT 根目录下；\n"
+                          "2. 当前没有正在运行的 ACT。\n\n"
+                          "确认以上内容后回车继续。\n")
                 case "3":
                     current_location = os.getcwd()
                     config_path = os.path.join(current_location, "AppData", "Advanced Combat Tracker", "Config", "CafeACT.config.xml")
                     plugin_path = os.path.join(current_location, "Plugins")
-                    print("请确保：\n")
-                    print("1. 该程序已置于 ACT 根目录下；")
-                    print("2. 当前没有正在运行的 ACT。")
-                    print("3. 你需要确保在插件中心安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗、Triggernometry，并重启过 ACT。")
-                    input("\n确认以上内容后回车继续。")
+                    input("已选择 3. CafeACT，请确保：\n\n"
+                          "1. 该程序已置于 ACT 根目录下；\n"
+                          "2. 当前没有正在运行的 ACT；"
+                          "3. 你需要确保在插件中心安装了 FF14 解析插件、ngld/OverlayPlugin 悬浮窗、Triggernometry，并重启过 ACT。\n\n"
+                          "确认以上内容后回车继续。\n")
                 case _:
                     print("输入必须是 1 / 2 / 3。请重新输入。")
                     continue
-            if act_type == "3":
-                is_CN = True
-            else:                
-                match input("\n请选择 ACT 对应的客户端：\n1. 国服\n2. 国际服\n").strip():
-                    case "1":
-                        is_CN = True
-                    case "2":
-                        is_CN = False
-                    case _:
-                        print("输入必须是 1 / 2。请重新输入。")
-                        continue
-            set_up_config(config_path, plugin_path, is_CN)
+            set_up_config(config_path, plugin_path)
             input("你可以直接退出程序，或按回车键打开资源网盘，内含分享的触发器资源。")
-            webbrowser.open("https://www.123pan.com/s/1xRXjv-340BH.html", new=2)
+            webbrowser.open(REMOTE_RESOURCE, new=2)
             break
         except Exception as e:
             input(f"发生错误: {e}")
