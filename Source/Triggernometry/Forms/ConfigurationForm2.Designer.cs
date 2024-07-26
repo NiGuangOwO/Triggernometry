@@ -2728,7 +2728,7 @@
             // 
             // lblExternalUpdateWarn
             // 
-            this.lblExternalUpdateWarn.AutoEllipsis = true;
+            this.lblExternalUpdateWarn.AutoSize = true;
             this.lblExternalUpdateWarn.BackColor = System.Drawing.SystemColors.Info;
             this.lblExternalUpdateWarn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblExternalUpdateWarn.Dock = System.Windows.Forms.DockStyle.Top;

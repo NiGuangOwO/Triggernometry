@@ -50,6 +50,7 @@ namespace Triggernometry.Forms
             lblTtsRepV.Tag = I18n.DoNotTranslate;
             btnUiFont.Tag = I18n.DoNotTranslate;
             RestoredSavedDimensions();
+            lblHeader.Text = btnStartup.Text;
             FormClosing += ConfigurationForm2_FormClosing;
             SetShortcutTooltips();
         }
@@ -904,8 +905,7 @@ namespace Triggernometry.Forms
 
         private void SetShortcutTooltips()
         {
-            toolTip.SetToolTip(chkShortcutEnableTemplates,
-                I18n.Translate("internal/ConfigurationForm/tipShortcutEnableTemplates", "Allow to input ${{...}} expressions with shortcuts.") + "\n\n" +
+            string tip = I18n.Translate("internal/ConfigurationForm/tipShortcutEnableTemplates", "Allow to input ${{...}} expressions with shortcuts.") + "\n\n" +
                 "Ctrl + Shift + 4: ${}\n" +
                 "Ctrl + Shift + V/L/T/D: ${v/l/t/d:}\n" +
                 "Ctrl + Shift + P, V/L/T/D: ${pv/pl/pt/pd:}\n" +
@@ -913,18 +913,25 @@ namespace Triggernometry.Forms
                 "Ctrl + Shift + F: ${f::}\n" +
                 "Ctrl + Shift + E: ${_entity[].}\n" +
                 "Ctrl + Shift + M: ${_me.id}\n" +
-                "Ctrl + Shift + A: " + I18n.Translate("internal/ConfigurationForm/tipShortcutCtrlShiftA", "Select the next outer layer of brackets"));
-            toolTip.SetToolTip(chkShortcutUseAbbrevInTemplates,
-                I18n.Translate("internal/ConfigurationForm/tipShortcutUseAbbrevInTemplates", "Use abbreviations in the template expressions instead of the full name:") + "\n\n" +
+                "Ctrl + Shift + A: " + I18n.Translate("internal/ConfigurationForm/tipShortcutCtrlShiftA", "Select the next outer layer of brackets");
+            toolTip.SetToolTip(chkShortcutEnableTemplates, tip);
+            toolTip.SetToolTip(lblShortcutEnableTemplates, tip);
+
+            tip = I18n.Translate("internal/ConfigurationForm/tipShortcutUseAbbrevInTemplates", "Use abbreviations in the template expressions instead of the full name:") + "\n\n" +
                 "${var/lvar/tvar/dvar:} => ${v/l/t/d:}\n" +
                 "${pvar/plvar/ptvar/pdvar:} => ${pv/pl/pt/pd:}\n" +
                 "${numeric:} => ${n:}\n" +
                 "${func:} => ${f:}\n" +
                 "${_ffxiventity[].} => ${_entity[].}\n" +
-                "${_ffxiventity[${_ffxivplayer}].id} => ${_me.id}");
-            toolTip.SetToolTip(chkShortcutWrapTextWhenSelected, I18n.Translate("internal/ConfigurationForm/tipShortcutWrapTextWhenSelected",
+                "${_ffxiventity[${_ffxivplayer}].id} => ${_me.id}";
+            toolTip.SetToolTip(chkShortcutUseAbbrevInTemplates, tip);
+            toolTip.SetToolTip(lblShortcutUseAbbrevInTemplates, tip);
+
+            tip = I18n.Translate("internal/ConfigurationForm/tipShortcutWrapTextWhenSelected",
                 "If any text is selected when using the shortcut, \nwrap the text in the template expression, \ninstead of replacing it with an empty template expression.\n\n" +
-                "For example, you can select the expression \"1 + 1\" and press Ctrl + Shift + N, \nthen you will get \"${{n: 1 + 1}}\"."));
+                "For example, you can select the expression \"1 + 1\" and press Ctrl + Shift + N, \nthen you will get \"${{n: 1 + 1}}\".");
+            toolTip.SetToolTip(chkShortcutWrapTextWhenSelected, tip);
+            toolTip.SetToolTip(lblShortcutWrapTextWhenSelected, tip);
         }
 
         #endregion
