@@ -181,6 +181,12 @@
     <Compile Include="CustomControls\ActionEditor.Designer.cs">
       <DependentUpon>ActionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SimpleInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SimpleInputForm.Designer.cs">
+      <DependentUpon>SimpleInputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomControls\ActionViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
