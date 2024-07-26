@@ -563,12 +563,21 @@ namespace TriggernometryProxy
         {
             foreach (var plugin in ActGlobals.oFormActMain.ActPlugins)
             {
-                if (plugin.cbEnabled.Checked && plugin.pluginObj != null)
+                if (plugin.cbEnabled.Checked && plugin.pluginObj?.GetType()?.ToString() == name)
                 {
-                    if (plugin.lblPluginTitle.Text == name)
-                    {
-                        return plugin;
-                    }
+                    return plugin;
+                }
+            }
+            return null;
+        }
+
+        public static ActPluginData GetPluginDataByFileName(string name)
+        {
+            foreach (var plugin in ActGlobals.oFormActMain.ActPlugins)
+            {
+                if (plugin.cbEnabled.Checked && plugin.pluginFile?.Name == name)
+                {
+                    return plugin;
                 }
             }
             return null;
@@ -601,7 +610,7 @@ namespace TriggernometryProxy
 
             static FfxivActPluginHelper()
             {
-                pluginData = GetPluginDataByName("FFXIV_ACT_Plugin.dll");
+                pluginData = GetPluginDataByName("FFXIV_ACT_Plugin.FFXIV_ACT_Plugin");
                 pluginObj = pluginData?.pluginObj;
                 if (pluginObj == null) return;
                 ScanControls(pluginData.tpPluginSpace);
