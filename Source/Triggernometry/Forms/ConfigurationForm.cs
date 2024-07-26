@@ -1098,7 +1098,7 @@ namespace Triggernometry.Forms
 
         private void btnEndpointHistUpdate_Click(object sender, EventArgs e)
         {
-            tslEndpointHistoryCount.Text = plug._ep.ReceivedTelegrams.ToString();
+            tlsEndpointHistoryCount.Text = plug._ep.ReceivedTelegrams.ToString();
             lock (teleHistory)
             {
                 teleHistory.Clear();

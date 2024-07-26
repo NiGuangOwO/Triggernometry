@@ -228,6 +228,9 @@
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update all enabled repositories]" Translation="Update all enabled repositories" />
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update containing repository]" Translation="Update containing repository" />
     <TranslationEntry Key="ActionForm/cbxRepositoryOp[Update selected repository]" Translation="Update selected repository" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[Default]" Translation="Default" />
+    <TranslationEntry Key="ActionForm/cbxSoundMethod[Windows Media Player API]" Translation="Windows Media Player API" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom center]" Translation="Bottom center" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom left]" Translation="Bottom left" />
     <TranslationEntry Key="ActionForm/cbxTextAuraAlignment[Bottom right]" Translation="Bottom right" />
@@ -248,6 +251,9 @@
     <TranslationEntry Key="ActionForm/cbxTriggerOp[Fire the specified trigger]" Translation="Fire the specified trigger" />
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[FFXIV zone ID]" Translation="FFXIV zone ID" />
     <TranslationEntry Key="ActionForm/cbxTriggerZoneType[Zone name]" Translation="Zone name" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[Default]" Translation="Default" />
+    <TranslationEntry Key="ActionForm/cbxTtsMethod[Windows Speech API]" Translation="Windows Speech API" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[Numeric]" Translation="Numeric" />
     <TranslationEntry Key="ActionForm/cbxTvarExpType[String]" Translation="String" />
     <TranslationEntry Key="ActionForm/cbxTvarOpType[Append whole table variable to another table horizontally]" Translation="Append whole table variable to another table horizontally" />
@@ -472,8 +478,10 @@
     <TranslationEntry Key="ActionForm/lblScriptExtEditor" Translation="External editor has been launched - script contents will be read back from the disk and refreshed when you close the external editor." />
     <TranslationEntry Key="ActionForm/lblScriptWarning" Translation="Actions of this type may be potentially dangerous and cause damage if, for example, the trigger is fired with parameters that fall outside of the expected values. Please be aware of the risk." />
     <TranslationEntry Key="ActionForm/lblSoundFile" Translation="Sound file to play" />
+    <TranslationEntry Key="ActionForm/lblSoundMethod" Translation="Audio output method" />
     <TranslationEntry Key="ActionForm/lblSoundVolume" Translation="Sound volume (0 ... 100 %)" />
     <TranslationEntry Key="ActionForm/lblSpeechRate" Translation="Speech speed rate (-10 ... +10)" />
+    <TranslationEntry Key="ActionForm/lblSpeechRouting" Translation="Audio output method" />
     <TranslationEntry Key="ActionForm/lblSpeechVolume" Translation="Speech volume (0 ... 100 %)" />
     <TranslationEntry Key="ActionForm/lblTextAuraAlignment" Translation="Text alignment" />
     <TranslationEntry Key="ActionForm/lblTextAuraFont" Translation="Font" />
@@ -596,7 +604,6 @@
     <TranslationEntry Key="ActionForm/tabDebugging" Translation="Debugging" />
     <TranslationEntry Key="ActionForm/tabDescription" Translation="Description" />
     <TranslationEntry Key="ActionForm/tabScheduling" Translation="Scheduling" />
-    <TranslationEntry Key="ActionForm/tlsMouseLocation" Translation="X: 123, Y: 1234" />
     <TranslationEntry Key="AuraDesignForm/alignmentToolStripMenuItem" Translation="Alignment" />
     <TranslationEntry Key="AuraDesignForm/bottomCenterToolStripMenuItem" Translation="Bottom center" />
     <TranslationEntry Key="AuraDesignForm/bottomLeftToolStripMenuItem" Translation="Bottom left" />
@@ -625,13 +632,13 @@
     <TranslationEntry Key="BenchmarkForm/colAvgEvalTime" Translation="Average evaluation time" />
     <TranslationEntry Key="BenchmarkForm/colName" Translation="Name" />
     <TranslationEntry Key="BenchmarkForm/colPercOnConditions" Translation="% on conditions" />
-    <TranslationEntry Key="BenchmarkForm/colPercOnFolder" Translation="% on folder" />
+    <TranslationEntry Key="BenchmarkForm/colPercOnFolder" Translation="% on folder" />   
     <TranslationEntry Key="BenchmarkForm/colPercOnRegexp" Translation="% on regexp" />
     <TranslationEntry Key="BenchmarkForm/colRelEvalTime" Translation="Relative evaluation time" />
     <TranslationEntry Key="BenchmarkProgressForm" Translation="Benchmark in progress" />
     <TranslationEntry Key="BenchmarkProgressForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="ConfigurationForm" Translation="Configuration" />
-    <TranslationEntry Key="ConfigurationForm/" Translation="518400" />
+    <TranslationEntry Key="ConfigurationForm/btnAudio" Translation="Audio" />
     <TranslationEntry Key="ConfigurationForm/btnCacheFileBrowse" Translation="Browse" />
     <TranslationEntry Key="ConfigurationForm/btnCacheFileClear" Translation="Clear cache" />
     <TranslationEntry Key="ConfigurationForm/btnCacheImageBrowse" Translation="Browse" />
@@ -642,27 +649,56 @@
     <TranslationEntry Key="ConfigurationForm/btnCacheRepoClear" Translation="Clear cache" />
     <TranslationEntry Key="ConfigurationForm/btnCacheSoundBrowse" Translation="Browse" />
     <TranslationEntry Key="ConfigurationForm/btnCacheSoundClear" Translation="Clear cache" />
+    <TranslationEntry Key="ConfigurationForm/btnCaching" Translation="Caching" />
     <TranslationEntry Key="ConfigurationForm/btnCancel" Translation="Cancel" />
     <TranslationEntry Key="ConfigurationForm/btnClearSelection" Translation="Clear selection" />
     <TranslationEntry Key="ConfigurationForm/btnConstAdd" Translation="Add constant" />
+    <TranslationEntry Key="ConfigurationForm/btnConstants" Translation="Constants" />
     <TranslationEntry Key="ConfigurationForm/btnConstEdit" Translation="Edit constant" />
-    <TranslationEntry Key="ConfigurationForm/btnConstRemove" Translation="Remove value" />
+    <TranslationEntry Key="ConfigurationForm/btnConstRemove" Translation="Remove constant" />
+    <TranslationEntry Key="ConfigurationForm/btnEndpoint" Translation="Endpoint" />
     <TranslationEntry Key="ConfigurationForm/btnEndpointHistUpdate" Translation="Update" />
     <TranslationEntry Key="ConfigurationForm/btnEndpointStart" Translation="Start" />
     <TranslationEntry Key="ConfigurationForm/btnEndpointStop" Translation="Stop" />
     <TranslationEntry Key="ConfigurationForm/btnFfxivJobDown" Translation="Move down" />
     <TranslationEntry Key="ConfigurationForm/btnFfxivJobRestore" Translation="Restore default" />
     <TranslationEntry Key="ConfigurationForm/btnFfxivJobUp" Translation="Move up" />
+    <TranslationEntry Key="ConfigurationForm/btnGameSpecific" Translation="Game-specific" />
+    <TranslationEntry Key="ConfigurationForm/btnLogging" Translation="Logging" />
+    <TranslationEntry Key="ConfigurationForm/btnMisc" Translation="Miscellaneous" />
     <TranslationEntry Key="ConfigurationForm/btnOk" Translation="OK" />
+    <TranslationEntry Key="ConfigurationForm/btnSecurity" Translation="Security" />
+    <TranslationEntry Key="ConfigurationForm/btnShortcuts" Translation="Shortcuts" />
+    <TranslationEntry Key="ConfigurationForm/btnStartup" Translation="Startup" />
     <TranslationEntry Key="ConfigurationForm/btnSubAdd" Translation="Add substitution" />
     <TranslationEntry Key="ConfigurationForm/btnSubEdit" Translation="Edit substitution" />
     <TranslationEntry Key="ConfigurationForm/btnSubRemove" Translation="Remove substitution" />
+    <TranslationEntry Key="ConfigurationForm/btnSubstitutions" Translation="Substitutions" />
     <TranslationEntry Key="ConfigurationForm/btnTriggerTemplate" Translation="Edit template trigger" />
     <TranslationEntry Key="ConfigurationForm/btnUnlockSecurity" Translation="Unlock security settings for editing" />
-    <TranslationEntry Key="ConfigurationForm/cbxActionAsync" Translation="New actions asynchronous by default" />
-    <TranslationEntry Key="ConfigurationForm/cbxAutosaveConfig" Translation="Enable configuration auto-save" />
-    <TranslationEntry Key="ConfigurationForm/cbxDevMode" Translation="Developer mode" />
-    <TranslationEntry Key="ConfigurationForm/cbxEnableHwAccel" Translation="Enable aura hardware acceleration" />
+    <TranslationEntry Key="ConfigurationForm/btnUpdateCheck" Translation="Check for updates" />
+    <TranslationEntry Key="ConfigurationForm/btnUpdates" Translation="Updates" />
+    <TranslationEntry Key="ConfigurationForm/btnUserInterface" Translation="User interface" />
+    <TranslationEntry Key="ConfigurationForm/capAppearance/lblContent" Translation="Appearance" />
+    <TranslationEntry Key="ConfigurationForm/capAuraManagement/lblContent" Translation="Overlay management" />
+    <TranslationEntry Key="ConfigurationForm/capAutosaving/lblContent" Translation="Autosaving" />
+    <TranslationEntry Key="ConfigurationForm/capBehavior/lblContent" Translation="Behavior" />
+    <TranslationEntry Key="ConfigurationForm/capDownloads/lblContent" Translation="File downloads" />
+    <TranslationEntry Key="ConfigurationForm/capEndpointSettings/lblContent" Translation="Settings" />
+    <TranslationEntry Key="ConfigurationForm/capEndpointStatus/lblContent" Translation="Status" />
+    <TranslationEntry Key="ConfigurationForm/capExpressions/lblContent" Translation="Expressions" />
+    <TranslationEntry Key="ConfigurationForm/capFfxivLogging/lblContent" Translation="Logging" />
+    <TranslationEntry Key="ConfigurationForm/capFfxivPartyOrder/lblContent" Translation="Party list ordering" />
+    <TranslationEntry Key="ConfigurationForm/capImageFiles/lblContent" Translation="Image files" />
+    <TranslationEntry Key="ConfigurationForm/capJason/lblContent" Translation="JSON responses" />
+    <TranslationEntry Key="ConfigurationForm/capLogging/lblContent" Translation="Logging settings" />
+    <TranslationEntry Key="ConfigurationForm/capRepoBackups/lblContent" Translation="Repository backups" />
+    <TranslationEntry Key="ConfigurationForm/capScripting/lblContent" Translation="Scripting API access" />
+    <TranslationEntry Key="ConfigurationForm/capSoundFiles/lblContent" Translation="Sound files" />
+    <TranslationEntry Key="ConfigurationForm/capStartupOptions/lblContent" Translation="Startup options" />
+    <TranslationEntry Key="ConfigurationForm/capStartupTrigger/lblContent" Translation="Startup trigger/folder" />
+    <TranslationEntry Key="ConfigurationForm/capTemplate/lblContent" Translation="Templates" />
+    <TranslationEntry Key="ConfigurationForm/capUpdateChannel/lblContent" Translation="Update channel" />
     <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Player first, rest unordered (legacy)]" Translation="Player first, rest unordered (legacy)" />
     <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Player first, sort the rest by custom party order]" Translation="Player first, sort the rest by custom party order" />
     <TranslationEntry Key="ConfigurationForm/cbxFfxivJobMethod[Sort everyone by custom party order]" Translation="Sort everyone by custom party order" />
@@ -673,25 +709,17 @@
     <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Errors only]" Translation="Errors only" />
     <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Nothing]" Translation="Nothing" />
     <TranslationEntry Key="ConfigurationForm/cbxLoggingLevel[Verbose debug]" Translation="Verbose debug" />
-    <TranslationEntry Key="ConfigurationForm/cbxTriggerTemplate" Translation="Use template trigger for default values" />
-    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[ACT]" Translation="ACT" />
-    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Built-in (legacy)]" Translation="Built-in (legacy)" />
-    <TranslationEntry Key="ConfigurationForm/cbxTestIgnoreConditions" Translation="Ignore conditions as default when testing actions" />
-    <TranslationEntry Key="ConfigurationForm/cbxTestLive" Translation="Set testing with live values as the default action test method" />
-    <TranslationEntry Key="ConfigurationForm/chkActSoundFiles" Translation="Use ACT for playing sound files" />
-    <TranslationEntry Key="ConfigurationForm/chkActTts" Translation="Use ACT for text-to-speech" />
-    <TranslationEntry Key="ConfigurationForm/chkClipboard" Translation="Use operating system clipboard" />
-    <TranslationEntry Key="ConfigurationForm/chkEndpointLog" Translation="Log received data" />
-    <TranslationEntry Key="ConfigurationForm/chkEndpointStartup" Translation="Start endpoint on launch" />
-    <TranslationEntry Key="ConfigurationForm/chkFfxivLogNetwork" Translation="Log network events" />
-    <TranslationEntry Key="ConfigurationForm/chkLogNormalEvents" Translation="Log normal log lines" />
-    <TranslationEntry Key="ConfigurationForm/chkLogVariableExpansions" Translation="Log variable expansions" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutEnableTemplates" Translation="Enable shortcuts to input template expressions" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutUseAbbrevInTemplates" Translation="Use abbreviation expressions in template expressions" />
-    <TranslationEntry Key="ConfigurationForm/chkShortcutWrapTextWhenSelected" Translation="Wrap selected text in template expressions" />
-    <TranslationEntry Key="ConfigurationForm/chkUpdates" Translation="Check for updates on startup" />
-    <TranslationEntry Key="ConfigurationForm/chkWarnAdmin" Translation="Warn if not running as Administrator" />
-    <TranslationEntry Key="ConfigurationForm/chkWelcome" Translation="Show Welcome Screen on startup" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[External application]" Translation="External application" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[None (disabled)]" Translation="None (disabled)" />
+    <TranslationEntry Key="ConfigurationForm/cbxSoundMethod[Windows Media Player API]" Translation="Windows Media Player API" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[ACT]" Translation="ACT" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[External application]" Translation="External application" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[None (disabled)]" Translation="None (disabled)" />
+    <TranslationEntry Key="ConfigurationForm/cbxTtsMethod[Windows Speech API]" Translation="Windows Speech API" />
+    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Built-in Github check (legacy)]" Translation="Built-in Github check (legacy)" />
+    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[External third party]" Translation="External third party" />
+    <TranslationEntry Key="ConfigurationForm/cbxUpdateMethod[Official (recommended)]" Translation="Official (recommended)" />
     <TranslationEntry Key="ConfigurationForm/colScalarName" Translation="Name" />
     <TranslationEntry Key="ConfigurationForm/colScalarValue" Translation="Value" />
     <TranslationEntry Key="ConfigurationForm/Column1" Translation="Search for" />
@@ -707,29 +735,11 @@
     <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn1" Translation="Allow for local triggers" />
     <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn2" Translation="Allow for remote triggers" />
     <TranslationEntry Key="ConfigurationForm/dataGridViewCheckBoxColumn3" Translation="Allow if running as admin" />
-    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn1" Translation="Additional features" />
-    <TranslationEntry Key="ConfigurationForm/groupBox1" Translation=" Aura control " />
-    <TranslationEntry Key="ConfigurationForm/groupBox2" Translation=" Scripting API access " />
-    <TranslationEntry Key="ConfigurationForm/grpActHooks" Translation=" ACT hooks " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheFile" Translation=" File downloads " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheImage" Translation=" Image files " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheJSON" Translation=" JSON responses " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheRepo" Translation=" Repository backups " />
-    <TranslationEntry Key="ConfigurationForm/grpCacheSound" Translation=" Sound files " />
-    <TranslationEntry Key="ConfigurationForm/grpClipboard" Translation=" Clipboard " />
-    <TranslationEntry Key="ConfigurationForm/grpDefaultSettings" Translation=" Default Settings " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointHistory" Translation=" Endpoint history " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointSettings" Translation=" Endpoint settings " />
-    <TranslationEntry Key="ConfigurationForm/grpEndpointState" Translation=" Status " />
-    <TranslationEntry Key="ConfigurationForm/grpFfxivEventLogging" Translation=" Event logging " />
-    <TranslationEntry Key="ConfigurationForm/grpFutureProofing" Translation=" Future proofing " />
-    <TranslationEntry Key="ConfigurationForm/grpGeneral" Translation=" Logging " />
-    <TranslationEntry Key="ConfigurationForm/grpPartyListOrder" Translation=" Party list ordering " />
-    <TranslationEntry Key="ConfigurationForm/grpShortCutExpression" Translation=" Expressions " />
-    <TranslationEntry Key="ConfigurationForm/grpStartup" Translation=" Startup " />
-    <TranslationEntry Key="ConfigurationForm/grpStartupTrigger" Translation=" Startup trigger/folder " />
-    <TranslationEntry Key="ConfigurationForm/grpUserInterface" Translation=" User interface " />
-    <TranslationEntry Key="ConfigurationForm/grpVolAdjustment" Translation=" Global volume adjustment " />
+    <TranslationEntry Key="ConfigurationForm/dataGridViewTextBoxColumn4" Translation="Additional features" />
+    <TranslationEntry Key="ConfigurationForm/lblActionAsync" Translation="New actions asynchronous by default" />
+    <TranslationEntry Key="ConfigurationForm/lblActTtsWarn" Translation="Using ACT for text-to-speech will cause the rate and volume options on text-to-speech actions to be ignored." />
+    <TranslationEntry Key="ConfigurationForm/lblAutoComplete" Translation="Enable autocomplete on text fields" />
+    <TranslationEntry Key="ConfigurationForm/lblAutosaveConfig" Translation="Enable configuration auto-save" />
     <TranslationEntry Key="ConfigurationForm/lblAutosaveInterval" Translation="Autosaving time interval in minutes" />
     <TranslationEntry Key="ConfigurationForm/lblCacheFileCount" Translation="Current item count" />
     <TranslationEntry Key="ConfigurationForm/lblCacheFileExpiry" Translation="Expiration in minutes" />
@@ -746,20 +756,45 @@
     <TranslationEntry Key="ConfigurationForm/lblCacheSoundCount" Translation="Current item count" />
     <TranslationEntry Key="ConfigurationForm/lblCacheSoundExpiry" Translation="Expiration in minutes" />
     <TranslationEntry Key="ConfigurationForm/lblCacheSoundSize" Translation="Current disk size in bytes" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpoint" Translation="HTTP Endpoint" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointPassword" Translation="Password" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointPort" Translation="Port" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointStartup" Translation="Start endpoint on startup" />
-    <TranslationEntry Key="ConfigurationForm/lblEndpointState" Translation="Endpoint is not running." />
+    <TranslationEntry Key="ConfigurationForm/lblDevMode" Translation="Developer mode" />
+    <TranslationEntry Key="ConfigurationForm/lblEnableHwAccel" Translation="Enable overlay hardware acceleration" />
+    <TranslationEntry Key="ConfigurationForm/lblEndpoint" Translation="HTTP endpoint" />
+    <TranslationEntry Key="ConfigurationForm/lblEndpointLog" Translation="Log received data" />
+    <TranslationEntry Key="ConfigurationForm/lblEndpointStartup" Translation="Start endpoint on launch" />
+    <TranslationEntry Key="ConfigurationForm/lblExternalSoundWarn" Translation="This option will make Triggernometry launch an external application. Use this option with caution, and only if you understand what you are doing, as this may expose your system to risk of malware." />
+    <TranslationEntry Key="ConfigurationForm/lblExternalTtsWarn" Translation="This option will make Triggernometry launch an external application. Use this option with caution, and only if you understand what you are doing, as this may expose your system to risk of malware." />
+    <TranslationEntry Key="ConfigurationForm/lblExternalUpdateWarn" Translation="Please be aware that any alternative update channels are not managed or monitored officially, and using a malicious channel may expose you to risk of malware. Only use this feature if you really know what you are doing, and have a source you consider trustworthy!" />
     <TranslationEntry Key="ConfigurationForm/lblFfxivJobMethod" Translation="Ordering method" />
     <TranslationEntry Key="ConfigurationForm/lblFfxivJobOrder" Translation="Job order" />
+    <TranslationEntry Key="ConfigurationForm/lblFfxivLogNetwork" Translation="Log network events" />
     <TranslationEntry Key="ConfigurationForm/lblFolderReminder" Translation="Selecting a folder will fire all triggers inside the folder" />
     <TranslationEntry Key="ConfigurationForm/lblLoggingLevel" Translation="Logging filtering level" />
-    <TranslationEntry Key="ConfigurationForm/lblMonitorWindow" Translation="Monitor window for showing/hiding aura" />
-    <TranslationEntry Key="ConfigurationForm/lblSeparator" Translation="Event text separator" />
-    <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="Sound file playback" />
-    <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="Text-to-speech" />
-    <TranslationEntry Key="ConfigurationForm/lblUpdateMethod" Translation="Plugin update check method" />
+    <TranslationEntry Key="ConfigurationForm/lblLogNormalEvents" Translation="Log normal log lines" />
+    <TranslationEntry Key="ConfigurationForm/lblLogVariableExpansions" Translation="Log variable expansions" />
+    <TranslationEntry Key="ConfigurationForm/lblMonitorWindow" Translation="Monitor window for showing/hiding overlays" />
+    <TranslationEntry Key="ConfigurationForm/lblShortcutEnableTemplates" Translation="Enable shortcuts to input template expressions" />
+    <TranslationEntry Key="ConfigurationForm/lblShortcutUseAbbrevInTemplates" Translation="Use abbreviation expressions in template expressions" />
+    <TranslationEntry Key="ConfigurationForm/lblShortcutWrapTextWhenSelected" Translation="Wrap selected text in template expressions" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundMethod" Translation="Playback method" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundPath" Translation="Application path" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundPathArgs" Translation="Arguments" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundRepetition" Translation="Repetition cooldown" />
+    <TranslationEntry Key="ConfigurationForm/lblSoundVolume" Translation="Volume" />
+    <TranslationEntry Key="ConfigurationForm/lblTestIgnoreConditions" Translation="Ignore conditions as default when testing actions" />
+    <TranslationEntry Key="ConfigurationForm/lblTestLive" Translation="Set testing with live values as the default action test method" />
+    <TranslationEntry Key="ConfigurationForm/lblTriggerTemplate" Translation="Use template trigger for default values" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsMethod" Translation="Playback method" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsPath" Translation="Application path" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsPathArgs" Translation="Arguments" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsRepetition" Translation="Repetition cooldown" />
+    <TranslationEntry Key="ConfigurationForm/lblTtsVolume" Translation="Volume" />
+    <TranslationEntry Key="ConfigurationForm/lblUiFont" Translation="Custom font" />
+    <TranslationEntry Key="ConfigurationForm/lblUiFontDefault" Translation="Use default font" />
+    <TranslationEntry Key="ConfigurationForm/lblUpdateChannelUri" Translation="Channel URI" />
+    <TranslationEntry Key="ConfigurationForm/lblUpdateMethod" Translation="Update method" />
+    <TranslationEntry Key="ConfigurationForm/lblUpdates" Translation="Check for updates" />
+    <TranslationEntry Key="ConfigurationForm/lblWarnAdmin" Translation="Warn if not running as Administrator" />
+    <TranslationEntry Key="ConfigurationForm/lblWelcome" Translation="Show Welcome Screen" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Arcanist]" Translation="Arcanist" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Archer]" Translation="Archer" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Astrologian]" Translation="Astrologian" />
@@ -778,6 +813,7 @@
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Monk]" Translation="Monk" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Ninja]" Translation="Ninja" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Paladin]" Translation="Paladin" />
+    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Pictomancer]" Translation="Pictomancer" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Pugilist]" Translation="Pugilist" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Reaper]" Translation="Reaper" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Red Mage]" Translation="Red Mage" />
@@ -787,35 +823,14 @@
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Scholar]" Translation="Scholar" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Summoner]" Translation="Summoner" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Thaumaturge]" Translation="Thaumaturge" />
+    <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Viper]" Translation="Viper" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[Warrior]" Translation="Warrior" />
     <TranslationEntry Key="ConfigurationForm/lstFfxivJobOrder[White Mage]" Translation="White Mage" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheFileExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheImageExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheJsonExpiry" Translation="10800" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheRepoExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudCacheSoundExpiry" Translation="518400" />
-    <TranslationEntry Key="ConfigurationForm/nudEndpointPort" Translation="1" />
-    <TranslationEntry Key="ConfigurationForm/tabAudio" Translation="Audio" />
-    <TranslationEntry Key="ConfigurationForm/tabCaching" Translation="Caching" />
-    <TranslationEntry Key="ConfigurationForm/tabConsts" Translation="Constants" />
-    <TranslationEntry Key="ConfigurationForm/tabEndpoint" Translation="Endpoint" />
+    <TranslationEntry Key="ConfigurationForm/prettyCaption1/lblContent" Translation="Sound playback" />
+    <TranslationEntry Key="ConfigurationForm/prettyCaption2/lblContent" Translation="Text-to-speech" />
+    <TranslationEntry Key="ConfigurationForm/prettyCaption3/lblContent" Translation="History" />
     <TranslationEntry Key="ConfigurationForm/tabFFXIV" Translation="Final Fantasy XIV" />
-    <TranslationEntry Key="ConfigurationForm/tabGeneral" Translation="General" />
-    <TranslationEntry Key="ConfigurationForm/tabMisc" Translation="Miscellaneous" />
-    <TranslationEntry Key="ConfigurationForm/tabSecurity" Translation="Security" />
-    <TranslationEntry Key="ConfigurationForm/tabShortCuts" Translation="ShortCuts" />
-    <TranslationEntry Key="ConfigurationForm/tabSubstitutions" Translation="Substitutions" />
-    <TranslationEntry Key="ConfigurationForm/tslEndpointHistoryRecv" Translation="telegram(s) received" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheFileCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheFileSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheImageCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheImageSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheJsonCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheJsonSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheRepoCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheRepoSize" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheSoundCount" Translation="0" />
-    <TranslationEntry Key="ConfigurationForm/txtCacheSoundSize" Translation="0" />
+    <TranslationEntry Key="ConfigurationForm/tlsEndpointHistoryRecv" Translation="telegram(s) received" />
     <TranslationEntry Key="ExportForm" Translation="Export results" />
     <TranslationEntry Key="ExportForm/btnClose" Translation="Close" />
     <TranslationEntry Key="ExportForm/btnCopy" Translation="Copy" />
@@ -866,12 +881,14 @@
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Monk]" Translation="Job: Monk" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Ninja]" Translation="Job: Ninja" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Paladin]" Translation="Job: Paladin" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Pictomancer]" Translation="Job: Pictomancer" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Reaper]" Translation="Job: Reaper" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Red Mage]" Translation="Job: Red Mage" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Sage]" Translation="Job: Sage" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Samurai]" Translation="Job: Samurai" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Scholar]" Translation="Job: Scholar" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Summoner]" Translation="Job: Summoner" />
+    <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Viper]" Translation="Job: Viper" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: Warrior]" Translation="Job: Warrior" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilter[Job: White Mage]" Translation="Job: White Mage" />
     <TranslationEntry Key="FolderForm/chkFfxivClassFilterEnabled" Translation="Process events only if currently on one of the specified classes" />
@@ -1544,6 +1561,16 @@
     <TranslationEntry Key="internal/SearchForm/noresults" Translation="No results" />
     <TranslationEntry Key="internal/SearchForm/oneresult" Translation="One result" />
     <TranslationEntry Key="internal/SearchForm/xresults" Translation="{0} results" />
+    <TranslationEntry Key="internal/TestInputForm/debugcopied" Translation="Debug trigger has been copied to clipboard." />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay--" Translation="Significantly earlier than the previous line. Adjusted to the correct position based on time." />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay-" Translation="Slightly earlier than the previous line, might due to inaccurate log time. Adjusted to the previous line's time." />
+    <TranslationEntry Key="internal/TestInputForm/debugdelay++" Translation="Significantly later than the previous line." />
+    <TranslationEntry Key="internal/TestInputForm/debugfire" Translation="Debug trigger will be fired after clicking OK." />
+    <TranslationEntry Key="internal/TestInputForm/debugnotime" Translation="No logline time format detected, considered as no delay." />
+    <TranslationEntry Key="internal/TestInputForm/debugspeed" Translation="Enter a positive number for the speed." />
+    <TranslationEntry Key="internal/TestInputForm/debugspeedex" Translation="The given value is not a positive number." />
+    <TranslationEntry Key="internal/TestInputForm/debugwarning" Translation="Warning:" />
+    <TranslationEntry Key="internal/TestInputForm/debugwarningformat" Translation="Logline #{0}: {1}&#xD;&#xA;Data: {2}" />
     <TranslationEntry Key="internal/Trigger/beforelastfired" Translation="Current time is before last fired for trigger '{0}'" />
     <TranslationEntry Key="internal/Trigger/delayingrefire" Translation="Delaying trigger '{0}' refire to {1}" />
     <TranslationEntry Key="internal/Trigger/firingexception" Translation="Trigger '{0}' didn't fire due to exception: {1}" />
@@ -1942,9 +1969,10 @@
     <TranslationEntry Key="SubstitutionForm/lblSearchFor" Translation="Search for" />
     <TranslationEntry Key="TestInputForm" Translation="Test input" />
     <TranslationEntry Key="TestInputForm/btnCancel" Translation="Cancel" />
+    <TranslationEntry Key="TestInputForm/btnCopyDebugTrigger" Translation="Copy Debug Trigger" />
     <TranslationEntry Key="TestInputForm/btnGetCurZone" Translation="Retrieve current zone name" />
     <TranslationEntry Key="TestInputForm/btnOk" Translation="OK" />
-    <TranslationEntry Key="TestInputForm/cbxEventDestination[ACT Event]" Translation="ACT Event" />
+    <TranslationEntry Key="TestInputForm/cbxEventDestination[ACT event]" Translation="ACT Event" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[Endpoint]" Translation="Endpoint" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[FFXIV network event]" Translation="FFXIV network event" />
     <TranslationEntry Key="TestInputForm/cbxEventDestination[Normal log line]" Translation="Normal log line" />

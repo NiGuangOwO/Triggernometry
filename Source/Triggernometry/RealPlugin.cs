@@ -3045,7 +3045,7 @@ namespace Triggernometry
                     {
                         File.Copy(um.LanguageDownloadURI, localPath, true);
                     }
-                    string logt = I18n.Translate("internal/Plugin/exttranssuccess", "Translation updated, testart ACT for changes to take effect.");
+                    string logt = I18n.Translate("internal/Plugin/exttranssuccess", "Translation updated, restart ACT for changes to take effect.");
                     plug.FilteredAddToLog(DebugLevelEnum.Info, logt);
                 }
                 catch (Exception ex)

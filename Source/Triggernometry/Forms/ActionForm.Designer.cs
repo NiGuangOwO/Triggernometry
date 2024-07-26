@@ -6225,7 +6225,6 @@ namespace Triggernometry.Forms
             this.stsMouseHelp.Size = new System.Drawing.Size(650, 22);
             this.stsMouseHelp.SizingGrip = false;
             this.stsMouseHelp.TabIndex = 1;
-            this.stsMouseHelp.Text = "statusStrip1";
             this.stsMouseHelp.Visible = false;
             // 
             // tlsMouseLocation
