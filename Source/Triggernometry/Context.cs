@@ -465,6 +465,42 @@ namespace Triggernometry
             return result;
         }
 
+        private void ParseTernaryExpression(string input, out string condExpr, out string trueStr, out string falseStr)
+        {
+            falseStr = ExtractLastExpression(ref input, ':');
+            trueStr = ExtractLastExpression(ref input, '?');
+            condExpr = Trim(input);
+        }
+
+        private string ExtractLastExpression(ref string input, char sep)
+        {
+            input = TrimR(input);
+            int lastIndex = input.Length - 1;
+            char lastChar = input[lastIndex];
+
+            int? sepIndex = null;
+            if (lastChar == '\'' || lastChar == '\"')
+            {
+                int quoteIndex = input.LastIndexOf(lastChar, lastIndex - 1);
+                if (quoteIndex != -1)
+                {
+                    sepIndex = input.LastIndexOf(sep, quoteIndex - 1);
+                }
+            }
+            sepIndex = sepIndex ?? input.LastIndexOf(sep);
+            if (sepIndex == -1) return null;
+
+            string afterSep = TrimL(input.Substring(sepIndex.Value + 1));
+            int length = afterSep.Length;
+            if (length >= 2 && afterSep[0] == afterSep[length - 1] && (afterSep[0] == '\"' || afterSep[0] == '\''))
+            {
+                afterSep = afterSep.Substring(1, length - 2);  // "..." / '...' => ...
+            }
+
+            input = input.Substring(0, sepIndex.Value);
+            return afterSep;
+        }
+
         public static string ToFullWidth(string input)
         {
             char[] array = input.ToCharArray();
@@ -1696,6 +1732,20 @@ namespace Triggernometry
                         {
                             string strexpr = (x.StartsWith("string:")) ? x.Substring(7) : x.Substring(2);
                             val = EvaluateStringExpression(logger, o, strexpr);
+                            found = true;
+                        }
+                        else if (x.StartsWith("if:"))
+                        {
+                            string ternaryExpr = x.Substring(3);
+                            ParseTernaryExpression(ternaryExpr, out string condExpr, out string trueStr, out string falseStr);
+                            if (trueStr == null || falseStr == null)
+                            {
+                                throw new Exception(I18n.Translate("internal/Context/ternaryexpressionerror",
+                                    "Ternary expression ({0}) could not be parsed: \r\nCondition: ({1}); \r\nTrueExpr: ({2}); \r\nFalseExpr: ({3})",
+                                    ternaryExpr, condExpr, trueStr ?? "null", falseStr ?? "null"));
+                            }
+                            bool cond = !MathParser.IsZero(MathParser.Parse(condExpr));
+                            val = cond ? trueStr : falseStr;
                             found = true;
                         }
                         else if (x.StartsWith("func:") || x.StartsWith("f:"))

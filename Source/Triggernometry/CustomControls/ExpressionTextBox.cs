@@ -55,7 +55,7 @@ namespace Triggernometry.CustomControls
 
         public static List<string> prefixes = new List<string>() // right after "${"
         {
-            "numeric:", "n:", "string:", "s:", "func:", "f:",
+            "numeric:", "n:", "string:", "s:", "func:", "f:", "if:",
             "var:", "pvar:", "evar:", "epvar:", "v:", "pv:", "ev:", "epv:",
             "lvar:", "plvar:", "elvar:", "eplvar:", "l:", "pl:", "el:", "epl:",
             "tvar:", "ptvar:", "etvar:", "eptvar:", "t:", "pt:", "et:", "ept:",
@@ -1024,7 +1024,7 @@ namespace Triggernometry.CustomControls
                                 + currentExpr.Substring(currentExpr.LastIndexOf('}') + 1);
                 }
                 // match numeric:
-                if (currentExpr.StartsWith("n:") || currentExpr.StartsWith("numeric:"))
+                if (currentExpr.StartsWith("n:") || currentExpr.StartsWith("numeric:") || currentExpr.StartsWith("if:"))
                 {
                     m = rexMath.Match(currentExpr);
                     if (m.Success)
