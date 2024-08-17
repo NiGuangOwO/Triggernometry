@@ -1096,8 +1096,7 @@
     <TranslationEntry Key="internal/Action/desctts" Translation="say ({0}) at volume ({1}) %, using speed ({2})" />
     <TranslationEntry Key="internal/Action/descunknown" Translation="unknown action type" />
     <TranslationEntry Key="internal/Action/descwindowtargetall" Translation="all windows whose titles match ({0})" />
-    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process id ({0}) whose titles match ({1})" />
-    <TranslationEntry Key="internal/Action/descwindowtargetnone" Translation="(unspecified window name)" />
+    <TranslationEntry Key="internal/Action/descwindowtargetid" Translation="windows in the process with id ({0}) whose titles match ({1})" />
     <TranslationEntry Key="internal/Action/descwindowtargetsingle" Translation="the first window whose title match ({0})" />
     <TranslationEntry Key="internal/Action/descwmsg" Translation="send message ({0}) wparam ({1}) lparam ({2}) to {3}" />
     <TranslationEntry Key="internal/Action/dictbuild" Translation="{1}Dictionary ({0}) built from expression ({2}) splitted by ({3}) ({4})" />
@@ -1297,6 +1296,7 @@
     <TranslationEntry Key="internal/Context/infiniteRepeatError" Translation="In the repeat function, new string ({0}) cannot contain old string ({1}) in loop mode. Expr: ({2})" />
     <TranslationEntry Key="internal/Context/invalidValueError" Translation="In ({0}), {1} ({2}) is invalid. Expr: ({3})" />
     <TranslationEntry Key="internal/Context/parseTypeError" Translation="{0} ({1}) could not be parsed into {2}. Expr: ({3})" />
+    <TranslationEntry Key="internal/Context/ternaryexpressionerror" Translation="Ternary expression ({0}) could not be parsed: &#xD;&#xA;Condition: ({1}); &#xD;&#xA;TrueExpr: ({2}); &#xD;&#xA;FalseExpr: ({3})" />
     <TranslationEntry Key="internal/ExportForm/exception" Translation="Exception" />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric1" Translation="This field supports numeric expressions; references to named regular expression groups will be expanded, after which the result will be evaluated as a mathematic expression." />
     <TranslationEntry Key="internal/ExpressionTextBox/numeric2" Translation="The color of the field will also change depending on whether the numeric expression appears to be valid (green) or not (red)." />

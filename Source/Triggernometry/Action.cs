@@ -505,21 +505,24 @@ namespace Triggernometry
         private string GetTargetWindowsDescription(string procid, string titleRegex)
         {
             procid = procid.Trim();
-            if (titleRegex.Trim().Length == 0) // the same condition check as in WindowsUtils.FindWindows
+            if (string.IsNullOrWhiteSpace(titleRegex))
             {
-                return I18n.Translate("internal/Action/descwindowtargetnone", "(unspecified window name)");
+                titleRegex = ".*";
             }
-            if (procid == "" || procid == "0")
+            int parsedProcId = 1;
+            try { parsedProcId = (int)MathParser.Parse(procid); } 
+            catch { }
+            if (parsedProcId == 0)
             {
                 return I18n.Translate("internal/Action/descwindowtargetsingle", "the first window whose title match ({0})", titleRegex);
             }
-            else if (procid == "-1")
+            else if (parsedProcId < 0)
             {
                 return I18n.Translate("internal/Action/descwindowtargetall", "all windows whose titles match ({0})", titleRegex);
             }
             else
             {
-                return I18n.Translate("internal/Action/descwindowtargetid", "windows in the process id ({0}) whose titles match ({1})", procid, titleRegex);
+                return I18n.Translate("internal/Action/descwindowtargetid", "windows in the process with id ({0}) whose titles match ({1})", procid, titleRegex);
             }
         }
 
@@ -2347,20 +2350,19 @@ namespace Triggernometry
                                     break;
                                 case KeypressTypeEnum.WindowMessage:
                                     {
-                                        string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressProcId);
+                                        int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressProcId);
                                         string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
                                         int keycode = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressCode);
-                                        WindowsUtils.SendKeycodes(procid, window, (ushort)keycode);
+                                        WindowsUtils.SendKeycode(procid, window, keycode);
                                     }
                                     break;
                                 case KeypressTypeEnum.WindowMessageCombo:
                                     {
-                                        string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressProcId);
+                                        int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _KeyPressProcId);
                                         string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressWindow);
-                                        string[] keycodes = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressCode).Split(",".ToCharArray());
-                                        List<int> kc = new List<int>();
-                                        kc.AddRange(from kx in keycodes select Convert.ToInt32(kx.Trim()));
-                                        WindowsUtils.SendKeycodes(procid, window, kc.ToArray());
+                                        int[] keycodes = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _KeyPressCode)
+                                            .Split(',').Select(kx => Convert.ToInt32(kx.Trim())).ToArray();
+                                        WindowsUtils.SendKeycodes(procid, window, keycodes);
                                     }
                                     break;
                             }
@@ -3992,11 +3994,11 @@ namespace Triggernometry
                     #region Implementation - Window message
                     case ActionTypeEnum.WindowMessage:
                         {
-                            string procid = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WmsgProcId);
+                            int procid = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgProcId);
                             string window = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _WmsgTitle);
                             int code = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgCode);
-                            int wparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgWparam);
-                            int lparam = (int)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgLparam);
+                            IntPtr wparam = (IntPtr)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgWparam);
+                            IntPtr lparam = (IntPtr)ctx.EvaluateNumericExpression(ActionContextLogger, ctx, _WmsgLparam);
                             WindowsUtils.SendMessageToWindow(procid, window, (ushort)code, wparam, lparam);
                         }
                         break;
