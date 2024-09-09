@@ -286,15 +286,15 @@ namespace Triggernometry.CustomControls
                 if (_currentRegexGroupsAndPrefixes == null)
                 {
                     List<string> groups;
-                try
-                {
-                    Regex regex = new Regex(_currentTriggerRegexStr);
+                    try
+                    {
+                        Regex regex = new Regex(_currentTriggerRegexStr);
                         groups = regex.GetGroupNames().ToList();
                         groups.AddRange(prefixes);
-                }
-                catch
-                {
-                    _currentTriggerRegexStr = "";
+                    }
+                    catch
+                    {
+                        _currentTriggerRegexStr = "";
                         groups = prefixes;
                     }
                     _currentRegexGroupsAndPrefixes = new HashSet<string>(groups);
@@ -1781,6 +1781,13 @@ namespace Triggernometry.CustomControls
                             Paste(useAbbrev ? "${_me.id}" : "${_ffxiventity[${_ffxivplayer}].id}");
                             SelectionStart -= 3;
                             SelectionLength = 2; // select "id"
+                            break;
+                        // Ctrl + Shift + I: ${if: ? : }
+                        case Keys.I:
+                            if (shouldWrap)
+                                InsertStringOnBothSides("${if: " + SelectedText.Trim() + " ? ", " :  }");
+                            else
+                                InsertStringOnBothSides("${if: ", " ?  :  }");
                             break;
                         // Ctrl + Shift + A: Select the next outer layer of brackets
                         case Keys.A:

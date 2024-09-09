@@ -1166,6 +1166,7 @@ namespace Triggernometry.Forms
                 "Ctrl + Shift + P, V/L/T/D: ${pv/pl/pt/pd:}\n" +
                 "Ctrl + Shift + N: ${n:}\n" +
                 "Ctrl + Shift + F: ${f::}\n" +
+                "Ctrl + Shift + I: ${if: ? : }\n" +
                 "Ctrl + Shift + E: ${_entity[].}\n" +
                 "Ctrl + Shift + M: ${_me.id}\n" +
                 "Ctrl + Shift + A: " + I18n.Translate("internal/ConfigurationForm/tipShortcutCtrlShiftA", "Select the next outer layer of brackets"));
