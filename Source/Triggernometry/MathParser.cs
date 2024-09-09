@@ -660,7 +660,7 @@ namespace Triggernometry
 
             // delete all spaces to avoid the splitting error of +/- when parsing strings like "1 + -1".
             // ignore all \r and \n to support multi-line input when writing long expressions
-            expr = expr.Replace(" ", "").Replace("\r", "").Replace("\n", "");
+            expr = expr.Replace(" ", "").Replace("\r", "").Replace("\n", "").Replace(Context.LINEBREAK_PLACEHOLDER.ToString(), "");
 
             // degree → rad
             expr = expr.Replace("°", "*0.01745329251994329576923690768488612");
