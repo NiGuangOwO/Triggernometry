@@ -840,8 +840,9 @@ namespace Triggernometry.CustomControls
                     type = AutofillTypeEnum.None;
                 }
 
-                List<string> varNames = GetExistingAutofillNameList(type, isPersist);
-                varNames.AddRange(GetDynamicAutofillNameList(type, isPersist) ?? new List<string>());
+                // combine the existing and dynamic variable names
+                HashSet<string> varNames = new HashSet<string>(GetExistingAutofillNameList(type, isPersist));
+                varNames.UnionWith(GetDynamicAutofillNameList(type, isPersist) ?? Enumerable.Empty<string>());
 
                 matchedStrings = GetAutocompleteSuggestions(varNames, m.Groups["name"].Value);
                 if (matchedStrings.Count() > 0)
@@ -1409,7 +1410,7 @@ namespace Triggernometry.CustomControls
             if (!existingNames.Contains(name))
             {
                 dynamicNames.Add(name);
-                if (dynamicNames.Count > 20)
+                if (dynamicNames.Count > 30)
                 {
                     dynamicNames.RemoveAt(0);
                 }
