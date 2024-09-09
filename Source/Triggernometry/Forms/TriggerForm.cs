@@ -148,6 +148,10 @@ namespace Triggernometry.Forms
             _isInitializing = false;
             initialDescriptions = GetAllDescriptionsStr();
             SetTriggerDescription();
+
+            txtRegexp.TextChanged += (s, e) => ExpressionTextBox.CurrentTriggerRegexStr = txtRegexp.Text;
+            Shown += (s, e) => ExpressionTextBox.CurrentTriggerRegexStr = txtRegexp.Text;
+            Closed += (s, e) => ExpressionTextBox.CurrentTriggerRegexStr = "";
         }
 
         private void CloseTree(TreeNode tn)

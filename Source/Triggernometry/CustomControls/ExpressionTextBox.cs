@@ -264,31 +264,45 @@ namespace Triggernometry.CustomControls
         internal Context ctx;
         private Context fakectx;
 
+        // record all the capture groups and combine with prefixes
+        // when entering a trigger or editing the trigger regex
+
         private static string _currentTriggerRegexStr = "";
         internal static string CurrentTriggerRegexStr
         {
-            get { return _currentTriggerRegexStr; }
+            get => _currentTriggerRegexStr;
             set
-            {   // record all the capture groups and combine with prefixes
-                // when entering a trigger or exiting the regex textbox
+            {   
                 _currentTriggerRegexStr = value;
+                _currentRegexGroupsAndPrefixes = null;
+            }
+        }
+
+        private static HashSet<string> _currentRegexGroupsAndPrefixes = null;
+        private static HashSet<string> CurrentRegexGroupsAndPrefixes
+        {
+            get // lazy loading
+            {
+                if (_currentRegexGroupsAndPrefixes == null)
+                {
+                    List<string> groups;
                 try
                 {
                     Regex regex = new Regex(_currentTriggerRegexStr);
-                    CurrentRegexGroupsAndPrefixes = regex.GetGroupNames().ToList();
-                    CurrentRegexGroupsAndPrefixes.AddRange(prefixes);
+                        groups = regex.GetGroupNames().ToList();
+                        groups.AddRange(prefixes);
                 }
                 catch
                 {
                     _currentTriggerRegexStr = "";
-                    CurrentRegexGroupsAndPrefixes = prefixes;
+                        groups = prefixes;
+                    }
+                    _currentRegexGroupsAndPrefixes = new HashSet<string>(groups);
                 }
-                CurrentRegexGroupsAndPrefixesHashset = new HashSet<string>(CurrentRegexGroupsAndPrefixes);
+                return _currentRegexGroupsAndPrefixes;
             }
         }
 
-        private static List<string> CurrentRegexGroupsAndPrefixes = new List<string>();
-        private static HashSet<string> CurrentRegexGroupsAndPrefixesHashset = new HashSet<string>();
         private string suffix = "";  // to do
 
         public delegate void EnterDelegate();
@@ -371,10 +385,6 @@ namespace Triggernometry.CustomControls
 
         private void ExpressionTextBox_Leave(object sender, EventArgs e)
         {
-            if (Name == "txtRegexp") // record the editted trigger regex
-            {
-                CurrentTriggerRegexStr = textBox1.Text;
-            }
             HideAutocomplete();
         }
 
@@ -657,7 +667,7 @@ namespace Triggernometry.CustomControls
         {
             var matches = reCaptureGroups.Matches(expression);
             return matches.Cast<Match>().All(
-                m => CurrentRegexGroupsAndPrefixesHashset.Contains(m.Groups["capture"].Value)
+                m => CurrentRegexGroupsAndPrefixes.Contains(m.Groups["capture"].Value)
                 );
         }
 

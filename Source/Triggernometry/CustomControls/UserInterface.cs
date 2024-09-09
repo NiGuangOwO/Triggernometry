@@ -635,7 +635,6 @@ namespace Triggernometry.CustomControls
                 using (Forms.TriggerForm tf = new Forms.TriggerForm(t, readOnly, readMe))
                 {
                     Trigger.TriggerSourceEnum oldSource = t._Source;
-                    ExpressionTextBox.CurrentTriggerRegexStr = t.RegularExpression;
                     tf.imgs = imageList1;
                     tf.trv = treeView1;
                     tf.Text = readMe 

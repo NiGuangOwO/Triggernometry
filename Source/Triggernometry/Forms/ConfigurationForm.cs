@@ -909,7 +909,6 @@ namespace Triggernometry.Forms
             using (TriggerForm tf = new TriggerForm(template))
             {
                 Trigger.TriggerSourceEnum oldSource = template._Source;
-                ExpressionTextBox.CurrentTriggerRegexStr = template.RegularExpression;
                 tf.imgs = plug.ui.imageList1;
                 tf.trv = plug.ui.treeView1;
                 tf.Text = I18n.Translate("internal/UserInterface/edittemplatetrigger", "Edit template trigger");
