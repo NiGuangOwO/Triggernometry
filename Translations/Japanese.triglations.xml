@@ -1180,6 +1180,7 @@
     <TranslationEntry Key="internal/Action/scripterrorsare" Translation="エラー内容:" />
     <TranslationEntry Key="internal/Action/scripterrorsingular" Translation="スクリプトのコンパイル中にエラーが発生しました。" />
     <TranslationEntry Key="internal/Action/scriptexecerror" Translation="スクリプト実行時エラー" />
+    <TranslationEntry Key="internal/Action/scriptinifailed" Translation="Action #{0} on trigger '{1}' not fired, scripting not available" />
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0}, {1}行目" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="The sorting key functions ({0}) could not be parsed." />
     <TranslationEntry Key="internal/Action/tableappend" Translation="{2}Table ({0}) appended to {3}table ({1})" />
@@ -1437,7 +1438,7 @@
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="determining filename" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="loading languages" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="Ready" />
-    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="setting up scripting - try changing the plugin load order in ACT" />
+    <TranslationEntry Key="internal/Plugin/iniscripterror" Translation="Error when initializing scripting - try changing plugin load order: {0}" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="Initialized" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="Initializing" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="setting up toasts" />

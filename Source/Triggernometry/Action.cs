@@ -2164,7 +2164,7 @@ namespace Triggernometry
                             {
                                 Thread.Sleep(10);
                             }
-                            if (plug.scripting != null)
+                            if (plug.scripting != null && plug.scripting.Ready)
                             {
                                 plug.scripting.Evaluate(scp, assy, ctx);
                             }

@@ -334,6 +334,7 @@ namespace Triggernometry
 
         }
 
+        internal bool Ready = false;
         public Interpreter()
         {
             _so = ScriptOptions.Default;
@@ -343,7 +344,20 @@ namespace Triggernometry
                 _so = _so.AddMetadataReferenceFromAssembly(asm);
             }
             _so = _so.AddImports("System");
-            Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
+            
+            Task.Run(() =>
+            {
+                try
+                {
+                    Evaluate("int whee;", null, new Context() { plug = RealPlugin.plug });
+                    Ready = true;
+                }
+                catch (Exception ex)
+                {
+                    RealPlugin.plug.FilteredAddToLog(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Plugin/iniscripterror", "Error when initializing scripting - try changing plugin load order: {0}", ex.Message));
+                }
+                RealPlugin.plug.scriptingInited = true;
+            });
         }
 
         public bool GetUnsafeUsage(Context ctx)

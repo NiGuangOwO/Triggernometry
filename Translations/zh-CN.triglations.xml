@@ -1180,6 +1180,7 @@
     <TranslationEntry Key="internal/Action/scripterrorsare" Translation="错误为：" />
     <TranslationEntry Key="internal/Action/scripterrorsingular" Translation="编译脚本代码时发生错误。" />
     <TranslationEntry Key="internal/Action/scriptexecerror" Translation="脚本代码执行错误" />
+    <TranslationEntry Key="internal/Action/scriptinifailed" Translation="因脚本环境未成功初始化，触发器 {1} 的动作 #{0} 未执行。请检查前面的报错信息。" />
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0} @ 行 {1}" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="排序关键字函数表达式 ({0}) 无法解析。" />
     <TranslationEntry Key="internal/Action/tableappend" Translation="已将{2}表格 ({0}) 追加至{3}表格 ({1}) 后" />
@@ -1437,7 +1438,7 @@
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="确定文件名" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="读取翻译文件时" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="已成功启动" />
-    <TranslationEntry Key="internal/Plugin/iniscripting" Translation="初始化脚本环境时出错。&#xD;&#xA;添加或更新插件后需要重启 ACT。如果仍有问题，将触发器插件调整至 FFXIV_ACT_Plugin 和 OverlayPlugin 后面再重启。" />
+    <TranslationEntry Key="internal/Plugin/iniscripterror" Translation="【请阅读后面的完整内容】&#xD;&#xA;初始化脚本环境时出错。&#xD;&#xA;&#xD;&#xA;检查 ACT 插件列表（或 插件中心-高级管理），&#xD;&#xA;将 Triggernometry 向上调整至 FFXIV_ACT_Plugin 后面、&#xD;&#xA;Cafe.Matcha（抹茶，如果有的话）前面，再重启 ACT。&#xD;&#xA;&#xD;&#xA;添加或更新插件后也需要重启 ACT。&#xD;&#xA;&#xD;&#xA;错误信息：{0}" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="初始化结束" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="初始化中" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="设置气泡提示时" />
@@ -1687,7 +1688,7 @@
     <TranslationEntry Key="LogForm/chkVerbose" Translation="详细" />
     <TranslationEntry Key="LogForm/chkWarning" Translation="警告" />
     <TranslationEntry Key="LogForm/colLevel" Translation="级别" />
-    <TranslationEntry Key="LogForm/colMessage" Translation="信息" />
+    <TranslationEntry Key="LogForm/colMessage" Translation="信息（如果显示不完整，可以鼠标悬停或右键复制。反馈错误请带上完整信息）" />
     <TranslationEntry Key="LogForm/colTimestamp" Translation="时间" />
     <TranslationEntry Key="LogForm/ctxCopy" Translation="复制" />
     <TranslationEntry Key="LogForm/ctxEverythingToClipboard" Translation="复制所有到剪贴板" />
