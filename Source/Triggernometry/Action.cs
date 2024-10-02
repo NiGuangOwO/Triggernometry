@@ -1705,10 +1705,10 @@ namespace Triggernometry
                                     plug.SetCombatStateHook(_ActOpBoolParam);
                                     break;
                                 case ActInteractionTypeEnum.LogAllNetwork:
-                                    plug.LogAllNetworkHook(_ActOpBoolParam);
+                                    PluginBridges.BridgeFFXIV.LogAllNetwork(_ActOpBoolParam);
                                     break;
                                 case ActInteractionTypeEnum.UseDeucalion:
-                                    plug.UseDeucalionHook(_ActOpBoolParam);
+                                    PluginBridges.BridgeFFXIV.UseDeucalion(_ActOpBoolParam);
                                     break;
                             }
                         }
