@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -74,8 +75,11 @@ namespace Triggernometry
             }
         }
 
+        private static bool IsObsRunning() => Process.GetProcessesByName("obs64").Any() || Process.GetProcessesByName("obs32").Any();
+
         internal void Connect(string endpoint, string password)
         {
+            if (!IsObsRunning()) return;
             lock (lockobj)
             {
                 try
