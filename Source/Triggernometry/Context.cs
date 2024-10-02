@@ -730,6 +730,21 @@ namespace Triggernometry
                             val = PluginBridges.BridgeFFXIV.GetProcessName();
                             found = true;
                         }
+                        else if (x == "_ffxivlanguage")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetLanguage();
+                            found = true;
+                        }
+                        else if (x == "_ffxivversion")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetGameVersion();
+                            found = true;
+                        }
+                        else if (x == "_ffxivisglobal")
+                        {
+                            val = PluginBridges.BridgeFFXIV.GetMyself().GetValue("name").ToString().Contains(" ") ? "1" : "0";
+                            found = true;
+                        }
                         else if (x == "_incombat")
                         {
                             val = plug != null && plug.InCombatHook() ? "1" : "0";
