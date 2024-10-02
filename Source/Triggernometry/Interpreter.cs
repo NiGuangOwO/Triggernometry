@@ -19,6 +19,21 @@ namespace Triggernometry
     public class Interpreter
     {
 
+        internal readonly static List<string> SecurityAPIs = new List<string>
+        {
+            "Microsoft.CodeAnalysis",
+            "Microsoft.Win32",
+            "System.CodeDom.Compiler",
+            "System.Diagnostics",
+            "System.IO",
+            "System.Net",
+            "System.Reflection",
+            "System.Runtime",
+            "System.Security",
+            "System.Web",
+            "Triggernometry.Utilities"
+        };
+
         private class Validator
         {
 
@@ -201,7 +216,6 @@ namespace Triggernometry
             }
 
         }
-
 
         public static class StaticHelpers
         {
