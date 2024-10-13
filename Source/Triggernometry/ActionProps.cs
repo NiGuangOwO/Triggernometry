@@ -2130,11 +2130,16 @@ namespace Triggernometry
             }
         }
 
+        internal Configuration.AudioRoutingMethodEnum _SoundRouting = Configuration.AudioRoutingMethodEnum.None;
         [XmlAttribute]
-        public Configuration.AudioRoutingMethodEnum SoundRouting { get; set; } = Configuration.AudioRoutingMethodEnum.None;
-                
+        public string SoundRouting
+        {
+            get => _SoundRouting != Configuration.AudioRoutingMethodEnum.None ? _SoundRouting.ToString() : null;
+            set => _SoundRouting = (Configuration.AudioRoutingMethodEnum)Enum.Parse(typeof(Configuration.AudioRoutingMethodEnum), value);
+        }
+
         [XmlAttribute]
-        public string PlaySoundMyself
+        public string PlaySoundMyself // old version compatibility
         {
             get
             {
@@ -2144,7 +2149,7 @@ namespace Triggernometry
             {
                 if (Boolean.Parse(value))
                 {
-                    SoundRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                    _SoundRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
                 }
             }
         }
@@ -2152,8 +2157,16 @@ namespace Triggernometry
         #endregion
         #region Action specific properties - Play speech
         
+        internal Configuration.AudioRoutingMethodEnum _TTSRouting = Configuration.AudioRoutingMethodEnum.None;
         [XmlAttribute]
-        public string PlaySpeechMyself
+        public string TTSRouting
+        {
+            get => _TTSRouting != Configuration.AudioRoutingMethodEnum.None ? _TTSRouting.ToString() : null;
+            set => _TTSRouting = (Configuration.AudioRoutingMethodEnum)Enum.Parse(typeof(Configuration.AudioRoutingMethodEnum), value);
+        }
+
+        [XmlAttribute]
+        public string PlaySpeechMyself // old version compatibility
         {
             get
             {
@@ -2163,13 +2176,10 @@ namespace Triggernometry
             {
                 if (Boolean.Parse(value))
                 {
-                    TTSRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                    _TTSRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
                 }
             }
         }
-
-        [XmlAttribute]
-        public Configuration.AudioRoutingMethodEnum TTSRouting { get; set; } = Configuration.AudioRoutingMethodEnum.None;
 
         internal string _UseTTSTextExpression = "";
         [XmlAttribute]

@@ -756,7 +756,7 @@ namespace Triggernometry.CustomControls
                 case "ctxTestAction":
                     ctx.testByPlaceholder = RealPlugin.plug.cfg.TestLiveByDefault == false;
                     if (plug.cfg.TestIgnoreConditionsByDefault)
-                        a.Condition = new ConditionGroup();
+                        a._Condition = new ConditionGroup();
                     ctxAction.Close();
                     break;
                 case "ctxTestPlaceholder":
@@ -768,7 +768,7 @@ namespace Triggernometry.CustomControls
                 case "ctxTestLiveIgnoreCnd":
                     ctx.testByPlaceholder = false;
                     if (plug.cfg.TestIgnoreConditionsByDefault)
-                        a.Condition = new ConditionGroup();
+                        a._Condition = new ConditionGroup();
                     break;
             }
             
@@ -777,7 +777,7 @@ namespace Triggernometry.CustomControls
 
         private void ctxEditPropCopyCnd_Click(object sender, EventArgs e)
         {
-            ActionViewer.copiedCondition = (ConditionGroup)SelectedActions().FirstOrDefault()?.Condition.Duplicate();
+            ActionViewer.copiedCondition = (ConditionGroup)SelectedActions().FirstOrDefault()?._Condition.Duplicate();
         }
 
         private void ctxEditPropPasteCnd_Click(object sender, EventArgs e)
@@ -786,7 +786,7 @@ namespace Triggernometry.CustomControls
                 return;
             foreach (Action a in SelectedActions())
             {
-                a.Condition = (ConditionGroup)ActionViewer.copiedCondition.Duplicate();
+                a._Condition = (ConditionGroup)ActionViewer.copiedCondition.Duplicate();
             }
             dgvActions.Refresh();
             OnActionsUpdated();
@@ -796,8 +796,8 @@ namespace Triggernometry.CustomControls
         {
             foreach (Action a in SelectedActions())
             {
-                a.Condition = new ConditionGroup();
-                a.Condition.Enabled = false;
+                a._Condition = new ConditionGroup();
+                a._Condition.Enabled = false;
             }
             dgvActions.Refresh();
             OnActionsUpdated();
@@ -909,12 +909,12 @@ namespace Triggernometry.CustomControls
         {
             foreach (Action a in SelectedActions())
             {
-                if (a.Condition == null) 
+                if (a._Condition == null) 
                 { 
-                    a.Condition = new ConditionGroup();
-                    a.Condition.Enabled = false;
+                    a._Condition = new ConditionGroup();
+                    a._Condition.Enabled = false;
                 }
-                a.Condition.Grouping = cndGroupingType;
+                a._Condition.Grouping = cndGroupingType;
             }
             dgvActions.Refresh();
             OnActionsUpdated();

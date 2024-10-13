@@ -451,15 +451,15 @@ namespace Triggernometry.CustomControls
                 tx.Parent = parentfolder;
                 parentnode.Nodes.Add(tn);
                 plug.AddTrigger(tx, tx.Parent.ParentsEnabled());
-                if (tx.Condition != null)
+                if (tx._Condition != null)
                 {
-                    ConditionGroup.RebuildParentage(tx.Condition);
+                    ConditionGroup.RebuildParentage(tx._Condition);
                 }
                 foreach (Action a in tx.Actions)
                 {
-                    if (a.Condition != null)
+                    if (a._Condition != null)
                     {
-                        ConditionGroup.RebuildParentage(a.Condition);
+                        ConditionGroup.RebuildParentage(a._Condition);
                     }
                 }
             }

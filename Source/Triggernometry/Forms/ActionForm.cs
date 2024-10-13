@@ -714,9 +714,9 @@ namespace Triggernometry.Forms
                 expTextBackColor.Text = a._TextAuraBackgroundClInt;
                 UpdateFontDescription();
                 ConditionGroup cx;
-                if (a.Condition != null)
+                if (a._Condition != null)
                 {
-                    cx = (ConditionGroup)a.Condition.Duplicate();
+                    cx = (ConditionGroup)a._Condition.Duplicate();
                 }
                 else
                 {
@@ -819,8 +819,8 @@ namespace Triggernometry.Forms
                 cbxRepositoryOp.SelectedIndex = (int)a._RepositoryOp;
                 cbxTriggerZoneType.SelectedIndex = (int)a._TriggerZoneType;
                 expJsonVariable.Expression = a._JsonResultVariable;
-                cbxSoundMethod.SelectedIndex = (int)a.SoundRouting;
-                cbxTtsMethod.SelectedIndex = (int)a.TTSRouting;
+                cbxSoundMethod.SelectedIndex = (int)a._SoundRouting;
+                cbxTtsMethod.SelectedIndex = (int)a._TTSRouting;
             }
             chkProcessLog_CheckedChanged(null, null);
         }
@@ -1013,7 +1013,7 @@ namespace Triggernometry.Forms
             a._TextAuraForegroundClInt = expTextForeColor.Text;
             a._TextAuraBackgroundClInt = expTextBackColor.Text;
             a._TextAuraOutlineClInt = expTextOutlineColor.Text;
-            a.Condition = cndCondition.ConditionToEdit;
+            a._Condition = cndCondition.ConditionToEdit;
             a._KeypressType = (Action.KeypressTypeEnum)cbxKeypressMethod.SelectedIndex;
             a._KeyPressCode = expKeypress.Expression;
             a._KeyPressProcId = expKeypressProcId.Expression;
@@ -1083,15 +1083,15 @@ namespace Triggernometry.Forms
             a._RepositoryOp = (Action.RepositoryOpEnum)cbxRepositoryOp.SelectedIndex;
             a._TriggerZoneType = (Action.TriggerZoneTypeEnum)cbxTriggerZoneType.SelectedIndex;
             a._JsonResultVariable = expJsonVariable.Expression;
-            a.SoundRouting = (Configuration.AudioRoutingMethodEnum)cbxSoundMethod.SelectedIndex;
-            a.TTSRouting = (Configuration.AudioRoutingMethodEnum)cbxTtsMethod.SelectedIndex;
+            a._SoundRouting = (Configuration.AudioRoutingMethodEnum)cbxSoundMethod.SelectedIndex;
+            a._TTSRouting = (Configuration.AudioRoutingMethodEnum)cbxTtsMethod.SelectedIndex;
         }
 
         private void TestAction(bool liveValues, bool ignoreConditions = false)
         {
             Action a = new Action();
             SettingsToAction(a);
-            if (ignoreConditions) a.Condition = new ConditionGroup();
+            if (ignoreConditions) a._Condition = new ConditionGroup();
 
             Context ctx = new Context();
             ctx.plug = plug;

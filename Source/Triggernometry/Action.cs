@@ -264,7 +264,12 @@ namespace Triggernometry
             }
         }
 
-        public ConditionGroup Condition { get; set; }
+        internal ConditionGroup _Condition = new ConditionGroup { Enabled = false };
+        public ConditionGroup Condition
+        {
+            get => _Condition.Children.Count == 0 && !_Condition.Enabled ? null : _Condition;
+            set => _Condition = value;
+        }
 
         #endregion
 
@@ -293,14 +298,14 @@ namespace Triggernometry
 
         private void _Conditions_ItemAdded(object sender, EventListArgs<Condition> e)
         {
-            if (Condition == null)
+            if (_Condition == null)
             {
-                Condition = new ConditionGroup();
-                Condition.Grouping = ConditionGroup.CndGroupingEnum.And;
-                Condition.Enabled = true;
+                _Condition = new ConditionGroup();
+                _Condition.Grouping = ConditionGroup.CndGroupingEnum.And;
+                _Condition.Enabled = true;
             }
             Condition cx = e.Item;
-            Condition.AddChild(cx.ConvertToConditionSingle());
+            _Condition.AddChild(cx.ConvertToConditionSingle());
             _Conditions.Remove(e.Item);
         }
 
@@ -540,7 +545,7 @@ namespace Triggernometry
                     ? _ExecutionDelayExpression : $"({_ExecutionDelayExpression})";
                 temp += I18n.Translate("internal/Action/descafterdelay", "after {0} ms, ", delay);  // included comma in translations (comma symbols are language-dependent)
             }
-            if (Condition != null && Condition.Enabled == true)
+            if (_Condition != null && _Condition.Enabled == true)
             {
                 temp += I18n.Translate("internal/Action/descassumingcondition", "assuming condition is met, ");
             }
@@ -1681,9 +1686,9 @@ namespace Triggernometry
             {
                 if ((ctx.force & Action.TriggerForceTypeEnum.SkipConditions) == 0 && ctx.testByPlaceholder == false)
                 {
-                    if (Condition != null && Condition.Enabled == true)
+                    if (_Condition != null && _Condition.Enabled == true)
                     {
-                        if (Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
+                        if (_Condition.CheckCondition(ctx, ActionContextLogger, ctx) == false)
                         {
                             AddToLog(ctx, RealPlugin.DebugLevelEnum.Verbose, I18n.Translate("internal/Action/actionnotfired", "Action #{0} on trigger '{1}' not fired, condition not met", OrderNumber, ctx.trig?.LogName ?? "(null)"));
                             ctx.PushActionResult(0);
@@ -4321,7 +4326,7 @@ namespace Triggernometry
             a._JsonHeaderExpression = _JsonHeaderExpression;
             a._JsonFiringExpression = _JsonFiringExpression;
             a._JsonPayloadExpression = _JsonPayloadExpression;
-            a.Condition = (ConditionGroup)(Condition != null ? ((ConditionGroup)Condition).Duplicate() : null);
+            a._Condition = (ConditionGroup)(_Condition != null ? ((ConditionGroup)_Condition).Duplicate() : null);
             a._KeyPressExpression = _KeyPressExpression;
             a._KeypressType = _KeypressType;
             a._KeyPressCode = _KeyPressCode;
@@ -4396,8 +4401,8 @@ namespace Triggernometry
             a._JsonResultVariable = _JsonResultVariable;
             a._JsonResultVariablePersist = _JsonResultVariablePersist;
             a._TriggerZoneType = _TriggerZoneType;
-            a.SoundRouting = SoundRouting;
-            a.TTSRouting = TTSRouting;
+            a._SoundRouting = _SoundRouting;
+            a._TTSRouting = _TTSRouting;
         }
 
         private Tuple<int, string> SendJson(Context ctx, Action.HTTPMethodEnum method, string url, string json, IEnumerable<string> headers, bool expectNoContent)

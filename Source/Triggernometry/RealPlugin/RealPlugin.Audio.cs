@@ -239,7 +239,7 @@ namespace Triggernometry
 
         internal void TtsPlaybackSmart(Context ctx, Action a)
         {
-            switch (a.TTSRouting)
+            switch (a._TTSRouting)
             {
                 case Configuration.AudioRoutingMethodEnum.None:
                     if (cfg.TtsMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)
@@ -299,7 +299,7 @@ namespace Triggernometry
                     }
                 }
             }
-            switch (a.SoundRouting)
+            switch (a._SoundRouting)
             {
                 case Configuration.AudioRoutingMethodEnum.None:
                     if (cfg.SoundMethod == Configuration.AudioRoutingMethodEnum.ExternalApplication)

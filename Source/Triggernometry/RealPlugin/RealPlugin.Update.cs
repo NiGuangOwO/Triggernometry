@@ -547,8 +547,8 @@ namespace Triggernometry
                     {
                         foreach (Action a in t.Actions)
                         {
-                            a.SoundRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
-                            a.TTSRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                            a._SoundRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
+                            a._TTSRouting = Configuration.AudioRoutingMethodEnum.Triggernometry;
                         }
                     }
                     break;

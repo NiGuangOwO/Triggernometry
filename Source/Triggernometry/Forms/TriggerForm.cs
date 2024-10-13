@@ -220,7 +220,7 @@ namespace Triggernometry.Forms
                 action.CopySettingsTo(newAction);
                 Actions.Add(newAction);
             }
-            cndCondition.ConditionToEdit = (ConditionGroup)t.Condition?.Duplicate() ?? new ConditionGroup
+            cndCondition.ConditionToEdit = (ConditionGroup)t._Condition?.Duplicate() ?? new ConditionGroup
             {
                 Grouping = CndGroupingEnum.Or,
                 Enabled = false
@@ -246,7 +246,7 @@ namespace Triggernometry.Forms
             t._RefirePeriodExpression = expRefirePeriod.Expression;
             t._DebugLevel = (RealPlugin.DebugLevelEnum)cbxLoggingLevel.SelectedIndex;
             t.Actions = Actions.OrderBy(tx => tx.OrderNumber).ToList();
-            t.Condition = cndCondition.ConditionToEdit;
+            t._Condition = cndCondition.ConditionToEdit;
             t._MutexToCapture = expMutexName.Expression;
             t._IsReadme = chkReadmeTrigger.Checked;
         }
