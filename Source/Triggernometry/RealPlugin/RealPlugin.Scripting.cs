@@ -22,19 +22,14 @@ namespace Triggernometry
 
         private void InitScripting()
         {
-            Task t = new Task(() =>
+            try
             {
-                try
-                {
-                    scripting = new Interpreter();
-                }
-                catch (Exception ex)
-                {
-                    FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/iniscripterror", "Error when initializing scripting - try changing plugin load order: {0}", ex.Message));
-                }
-                scriptingInited = true;
-            });
-            t.Start();
+                scripting = new Interpreter();
+            }
+            catch (Exception ex)
+            {
+                FilteredAddToLog(DebugLevelEnum.Error, I18n.Translate("internal/Plugin/iniscripterror", "Error when initializing scripting - try changing plugin load order: {0}", ex.Message));
+            }
         }
 
         internal List<Configuration.APIUsage> GetDefaultAPIUsages()

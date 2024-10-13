@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -320,9 +321,13 @@ namespace Triggernometry
                 }
             }
 
-            public static string Serialize(object o, bool indent = true) => JsonSerializer.Serialize(o, new JsonSerializerOptions { WriteIndented = indent });
+            public static string Serialize(object o, bool indent = true) 
+                => JsonSerializer.Serialize(o, new JsonSerializerOptions { WriteIndented = indent });
             public static T Deserialize<T>(string s) => JsonSerializer.Deserialize<T>(s);
 
+            public static Process XivProcess => Triggernometry.Utilities.Memory.XivProc;
+            public static void RegisterXivProcessUpdatedAction(string key, System.Action action) 
+                => Triggernometry.Utilities.Memory.RegisterXivProcUpdatedAction(key, action);
         }
 
         public ScriptOptions _so { get; set; }
