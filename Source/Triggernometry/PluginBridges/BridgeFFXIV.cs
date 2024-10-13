@@ -14,8 +14,8 @@ namespace Triggernometry.PluginBridges
     public static class BridgeFFXIV
     {
 
-        private static string ActPluginName = "FFXIV_ACT_Plugin.dll";
-        private static string ActPluginType = "FFXIV_ACT_Plugin.FFXIV_ACT_Plugin";
+        private const string ActPluginName = "FFXIV_ACT_Plugin.dll";
+        private const string ActPluginType = "FFXIV_ACT_Plugin.FFXIV_ACT_Plugin";
         public static Configuration cfg = RealPlugin.plug.cfg;
 
         internal delegate void LoggingDelegate(RealPlugin.DebugLevelEnum level, string text);
