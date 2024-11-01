@@ -22,6 +22,7 @@ namespace Triggernometry.Forms
             MinimumSize = new Size(300, 0);
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            TopMost = true;
 
             expEditedValue = new ExpressionTextBox
             {
@@ -58,6 +59,8 @@ namespace Triggernometry.Forms
             table.Controls.Add(okButton, 0, 1);
 
             Controls.Add(table);
+
+            Shown += (_, __) => BringToFront();
         }
 
         public string GetInput() => ShowDialog() == DialogResult.OK ? expEditedValue.Text : null;
