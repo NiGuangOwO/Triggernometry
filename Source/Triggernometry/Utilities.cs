@@ -155,19 +155,15 @@ namespace Triggernometry.Utilities
             }
             else if (procid == 0) // first window
             {
-                return new List<IntPtr> { wins[0] };
+                return wins.Count > 0 ? new List<IntPtr> { wins[0] } : new List<IntPtr>();
             }
             else
             {
-                foreach (IntPtr win in wins)
+                return wins.Where(win =>
                 {
                     GetWindowThreadProcessId(win, out uint windowProcId);
-                    if (windowProcId == procid)
-                    {
-                        return new List<IntPtr> { win };
-                    }
-                }
-                return new List<IntPtr>();
+                    return windowProcId == procid;
+                }).ToList();
             }
         }
 
