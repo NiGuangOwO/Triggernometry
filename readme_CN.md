@@ -10,6 +10,54 @@
 
 # 新增内容
 
+## 2024/11/10
+
+### 字符串三元表达式
+  
+![image](https://github.com/user-attachments/assets/58e4e003-8087-472e-8359-59980d7e3d15)
+
+快捷键：`Ctrl+Shift+I`
+
+语法简化。if 后面的部分会自动解析为一个数学表达式，并根据是否非 0 判断真假。
+
+`${if: ${condition} ? trueVal : falseVal}` 按照旧方法只能写作更冗长的表达式，如：  
+`${func:ifequal(0, falseVal, trueVal):${numeric:${condition}}}`
+
+### 生成 Debug 触发器
+
+  根据给定的日志行，生成调试日志触发器。
+
+![image](https://github.com/user-attachments/assets/17f2bd46-efc6-4986-94b3-f7112cb44092)
+
+![image](https://github.com/user-attachments/assets/64fb856c-f6b9-4b0b-b8f9-3d6b4dbc1b4f)
+
+### OverlayPlugin 交互模块
+
+可使用原本查询实体的语法查询新的属性，如：
+
+`${_entity[xxx].WeaponId}`
+
+也可使用脚本代码获取：
+
+```csharp
+using Triggernometry.PluginBridges;
+public static List<BridgeOverlay.OpCombatants> BridgeOverlay.GetCombatants(bool queryStatus)
+```
+
+用例：
+
+```csharp
+using System.Windows.Forms;
+using System.Linq;
+using Triggernometry.PluginBridges;
+
+var combatants = BridgeOverlay.GetCombatants(false);
+
+// 例：只能在 OverlayPlugin 中获取的属性:
+OpCombatants combatant = combatants.FirstOrDefault(c => c.WeaponId == 4 && c.PosX > 100);
+MessageBox.Show(combatant.ID.ToString("X8"));
+```
+
 ## 2024/5/27
 
 ### 表达式
