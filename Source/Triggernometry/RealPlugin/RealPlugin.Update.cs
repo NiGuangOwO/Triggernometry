@@ -285,106 +285,103 @@ namespace Triggernometry
             ui.ClearRepository(r);
         }
 
-        internal void RepositoryUpdate(Repository r, bool singleUpdate, bool isStartup)
+        internal async Task RepositoryUpdate(Repository r, bool singleUpdate, bool isStartup)
         {
-            Task.Run(async () =>
-           {
-               r.LastUpdatedTrig = DateTime.Now;
-               ClearRepository(r);
-               r.ClearLog();
-               string trans;
-               bool useBackup = isStartup && r.UpdatePolicy != Repository.UpdatePolicyEnum.Startup;
-               // update the repo
-               if (!useBackup)
-               {
-                   try
-                   {
-                       if (singleUpdate == true)
-                       {
-                           trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
-                           FilteredAddToLog(DebugLevelEnum.Verbose, trans);
-                           r.AddToLog(trans);
-                           ShowProgress(-1, trans);
-                       }
-                       long localsize = 0;
-                       (DateTime remdate, long remsize) = await FetchRepositoryMetadata(r);
-                       DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
-                       bool cacheExpired = false;
-                       if (r.KeepLocalBackup == true)
-                       {
-                           string repofn = GetRepositoryBackupFilename(r);
-                           if (File.Exists(repofn) == true)
-                           {
-                               FileInfo fi = new FileInfo(repofn);
-                               localsize = fi.Length;
-                               cacheExpired = (fi.LastWriteTime < cacheExpiry);
-                           }
-                       }
-                       // nothing has changed: try to load local backup
-                       if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
-                       {
-                           trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
-                           FilteredAddToLog(DebugLevelEnum.Info, trans);
-                           r.AddToLog(trans);
-                           if (LoadLocalBackupForRepository(r) == true) // success
-                           {
-                               if (singleUpdate)
-                                   CompleteSingleUpdate(r);
-                               return;
-                           }
-                       }
-                       else
-                       {
-                           trans = I18n.Translate("internal/Plugin/repofetching", "Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version", r.Name, r.LastUpdated, remdate, localsize, remsize);
-                           FilteredAddToLog(DebugLevelEnum.Verbose, trans);
-                           r.LastUpdated = remdate;
-                       }
-                       string data;
-                       trans = I18n.Translate("internal/Plugin/repodownloading", "Downloading repository {0} from {1}", r.Name, r.Address);
-                       FilteredAddToLog(DebugLevelEnum.Info, trans);
-                       using (HttpClient httpClient = new HttpClient())
-                       {
-                           httpClient.Timeout = TimeSpan.FromSeconds(10);
-                           httpClient.DefaultRequestHeaders.Add("User-Agent", "Triggernometry Repository Updater");
-                           byte[] rawdata = await httpClient.GetByteArrayAsync(r.Address);
-                           data = Encoding.UTF8.GetString(rawdata);
-                       }
-                       TriggernometryExport exp = TriggernometryExport.Unserialize(data);
-                       if (!exp.Corrupted)
-                       {
-                           r.ContentSize = data.Length;
-                           AddContentToRepository(exp, r);
-                           if (r.KeepLocalBackup == true)
-                           {
-                               SaveLocalBackupForRepository(r, data);
-                           }
-                       }
-                       else
-                       {
-                           trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
-                           FilteredAddToLog(DebugLevelEnum.Error, trans);
-                           r.AddToLog(trans);
-                       }
-                   }
-                   catch (Exception ex)
-                   {
-                       trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.ToString());
-                       r.AddToLog(trans);
-                       FilteredAddToLog(DebugLevelEnum.Error, trans);
-                       useBackup = true; // use local backup if the update failed
-                   }
-               }
-               // load local backup
-               if (useBackup && r.KeepLocalBackup)
-               {
-                   trans = I18n.Translate("internal/Plugin/repousinglocal", "Loading local backup of repository {0}", r.Name);
-                   FilteredAddToLog(DebugLevelEnum.Info, trans);
-                   r.AddToLog(trans);
-                   LoadLocalBackupForRepository(r);
-               }
-               if (singleUpdate)
-                   CompleteSingleUpdate(r);
-           });
+            r.LastUpdatedTrig = DateTime.Now;
+            ClearRepository(r);
+            r.ClearLog();
+            string trans;
+            bool useBackup = isStartup && r.UpdatePolicy != Repository.UpdatePolicyEnum.Startup;
+            // update the repo
+            if (!useBackup)
+            {
+                try
+                {
+                    if (singleUpdate == true)
+                    {
+                        trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
+                        FilteredAddToLog(DebugLevelEnum.Verbose, trans);
+                        r.AddToLog(trans);
+                        ShowProgress(-1, trans);
+                    }
+                    long localsize = 0;
+                    (DateTime remdate, long remsize) = await FetchRepositoryMetadata(r);
+                    DateTime cacheExpiry = DateTime.Now.AddMinutes(0 - cfg.CacheRepoExpiry);
+                    bool cacheExpired = false;
+                    if (r.KeepLocalBackup == true)
+                    {
+                        string repofn = GetRepositoryBackupFilename(r);
+                        if (File.Exists(repofn) == true)
+                        {
+                            FileInfo fi = new FileInfo(repofn);
+                            localsize = fi.Length;
+                            cacheExpired = (fi.LastWriteTime < cacheExpiry);
+                        }
+                    }
+                    // nothing has changed: try to load local backup
+                    if (remdate == r.LastUpdated && remsize == localsize && localsize > 0 && r.KeepLocalBackup == true && cacheExpired == false)
+                    {
+                        trans = I18n.Translate("internal/Plugin/repousingbackup", "Repository {0} hasn't changed since {1}, and size hasn't changed from {2}, using local backup", r.Name, remdate, localsize);
+                        FilteredAddToLog(DebugLevelEnum.Info, trans);
+                        r.AddToLog(trans);
+                        if (LoadLocalBackupForRepository(r) == true) // success
+                        {
+                            if (singleUpdate)
+                                CompleteSingleUpdate(r);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        trans = I18n.Translate("internal/Plugin/repofetching", "Repository {0} has changed since {1} (new timestamp {2}), or size has changed from {3} (new size {4}), fetching new version", r.Name, r.LastUpdated, remdate, localsize, remsize);
+                        FilteredAddToLog(DebugLevelEnum.Verbose, trans);
+                        r.LastUpdated = remdate;
+                    }
+                    string data;
+                    trans = I18n.Translate("internal/Plugin/repodownloading", "Downloading repository {0} from {1}", r.Name, r.Address);
+                    FilteredAddToLog(DebugLevelEnum.Info, trans);
+                    using (HttpClient httpClient = new HttpClient())
+                    {
+                        httpClient.Timeout = TimeSpan.FromSeconds(10);
+                        httpClient.DefaultRequestHeaders.Add("User-Agent", "Triggernometry Repository Updater");
+                        byte[] rawdata = await httpClient.GetByteArrayAsync(r.Address);
+                        data = Encoding.UTF8.GetString(rawdata);
+                    }
+                    TriggernometryExport exp = TriggernometryExport.Unserialize(data);
+                    if (!exp.Corrupted)
+                    {
+                        r.ContentSize = data.Length;
+                        AddContentToRepository(exp, r);
+                        if (r.KeepLocalBackup == true)
+                        {
+                            SaveLocalBackupForRepository(r, data);
+                        }
+                    }
+                    else
+                    {
+                        trans = I18n.Translate("internal/Plugin/repoexportnull", "Data for repository {0} could not be unserialized, make sure you are running the latest version of Triggernometry", r.Name);
+                        FilteredAddToLog(DebugLevelEnum.Error, trans);
+                        r.AddToLog(trans);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    trans = I18n.Translate("internal/Plugin/repoupdateexception", "Couldn't update repository {0} due to exception: {1}", r.Name, ex.ToString());
+                    r.AddToLog(trans);
+                    FilteredAddToLog(DebugLevelEnum.Error, trans);
+                    useBackup = true; // use local backup if the update failed
+                }
+            }
+            // load local backup
+            if (useBackup && r.KeepLocalBackup)
+            {
+                trans = I18n.Translate("internal/Plugin/repousinglocal", "Loading local backup of repository {0}", r.Name);
+                FilteredAddToLog(DebugLevelEnum.Info, trans);
+                r.AddToLog(trans);
+                LoadLocalBackupForRepository(r);
+            }
+            if (singleUpdate)
+                CompleteSingleUpdate(r);
         }
 
         private async Task<(DateTime remdate, long remsize)> FetchRepositoryMetadata(Repository r)
@@ -414,29 +411,35 @@ namespace Triggernometry
             RepositoryUpdates(lr, isStartup);
         }
 
-        internal void RepositoryUpdates(IEnumerable<Repository> lr, bool isStartup)
+        internal async void RepositoryUpdates(IEnumerable<Repository> lr, bool isStartup)
         {
-            if (lr.Count() == 0)
+            if (!lr.Any())
             {
                 return;
             }
             string trans = I18n.Translate("internal/Plugin/repoupdates", "Going to update {0} repositories", lr.Count());
             FilteredAddToLog(DebugLevelEnum.Info, trans);
             ShowProgress(-1, trans);
-            int done = -1, doing = lr.Count();
-            foreach (Repository r in lr)
+            int total = lr.Count();
+            int completed = 0;
+            object progressLock = new object();
+            var tasks = lr.Select(r => Task.Run(async () =>
             {
-                if (ExitEvent.WaitOne(0) == true)
+                if (ExitEvent.WaitOne(0))
                 {
                     return;
                 }
-                done++;
-                trans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
-                FilteredAddToLog(DebugLevelEnum.Verbose, trans);
-                r.AddToLog(trans);
-                ShowProgress((int)Math.Floor(100.0 * done / doing), trans);
-                RepositoryUpdate(r, false, isStartup);
-            }
+                string updateTrans = I18n.Translate("internal/Plugin/repoupdate", "Updating repository {0} at {1}", r.Name, r.Address);
+                FilteredAddToLog(DebugLevelEnum.Verbose, updateTrans);
+                r.AddToLog(updateTrans);
+                await RepositoryUpdate(r, false, isStartup);
+                lock (progressLock)
+                {
+                    completed++;
+                    ShowProgress((int)Math.Floor(100.0 * completed / total), $"正在更新仓库 {completed} / {total}");
+                }
+            }));
+            await Task.WhenAll(tasks);
             ShowProgressWhenComplete(I18n.Translate("internal/Plugin/repoupdatecomplete", "Repository update complete"));
         }
 
