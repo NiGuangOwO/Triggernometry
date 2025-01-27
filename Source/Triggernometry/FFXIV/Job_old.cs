@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Triggernometry
 {
-    public static class Entity
+    [Obsolete("Use Triggernometry.FFXIV.Job")]
+    public static class Entity // To-do: define a better structure for this class
     {
         /// <summary> 
         /// Convert jobid to any job properties: <br />

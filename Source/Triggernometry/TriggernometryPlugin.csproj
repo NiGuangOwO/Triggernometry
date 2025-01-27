@@ -181,6 +181,8 @@
     <Compile Include="CustomControls\ActionEditor.Designer.cs">
       <DependentUpon>ActionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FFXIV\JobList.cs" />
+    <Compile Include="FFXIV\Job.cs" />
     <Compile Include="Forms\SimpleInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -382,7 +384,7 @@
     <Compile Include="I18n.cs" />
     <Compile Include="InternalLog.cs" />
     <Compile Include="Interpreter.cs" />
-    <Compile Include="Entity.cs" />
+    <Compile Include="FFXIV\Job_old.cs" />
     <Compile Include="JsonPath\JsonPath.cs" />
     <Compile Include="JsonPath\Public.cs" />
     <Compile Include="Language.cs" />
