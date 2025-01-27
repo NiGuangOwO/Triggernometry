@@ -1153,17 +1153,17 @@
     <TranslationEntry Key="internal/Action/lscontrolexception" Translation="无法执行 LiveSplit 控制动作，发生异常：" />
     <TranslationEntry Key="internal/Action/mutexacquire" Translation="独占互斥锁 ({0})" />
     <TranslationEntry Key="internal/Action/mutexrelease" Translation="释放互斥锁 ({0})" />
-    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="没有找到带有 ID ({0}) 的分组" />
+    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="触发器分组动作失败：触发器 ({1}) 中，指定的分组 ID ({0}) 不存在。" />
     <TranslationEntry Key="internal/Action/notreenodefolderwithid" Translation="没有找到分组的树节点 ({0}) id 为 ({1})" />
     <TranslationEntry Key="internal/Action/notreenodetrigdisable" Translation="无法找到要修改的树节点以禁用触发器 {0}" />
     <TranslationEntry Key="internal/Action/notreenodetrigenable" Translation="无法找到要修改的树节点以启用触发器 {0}" />
-    <TranslationEntry Key="internal/Action/notrigiderror" Translation="没有触发器 ID，并且 op 不会取消所有操作，意外" />
+    <TranslationEntry Key="internal/Action/notriggerwithid" Translation="触发器动作失败：触发器 ({1}) 中，指定的触发器 ID ({0}) 不存在。" />
     <TranslationEntry Key="internal/Action/obsauthpassword" Translation="OBS 需要网络验证，你必须提供密码。" />
     <TranslationEntry Key="internal/Action/obsconnecterror" Translation="连接到 OBS 接口时出错：{0}" />
     <TranslationEntry Key="internal/Action/obsconnectok" Translation="OBS 接口连接成功" />
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="目前不支持当前 OBS 版本。" />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="由于错误，无法执行 OBS 控制操作" />
-    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="由于异常，无法执行 OBS 操作：" />
+    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="由于异常，无法执行 OBS 操作：{0}" />
     <TranslationEntry Key="internal/Action/repoupdateall" Translation="更新全部远程仓库" />
     <TranslationEntry Key="internal/Action/repoupdateself" Translation="更新所处于的远程仓库" />
     <TranslationEntry Key="internal/Action/repoupdatespecific" Translation="更新远程仓库 ({0})" />
@@ -1180,7 +1180,7 @@
     <TranslationEntry Key="internal/Action/scripterrorsare" Translation="错误为：" />
     <TranslationEntry Key="internal/Action/scripterrorsingular" Translation="编译脚本代码时发生错误。" />
     <TranslationEntry Key="internal/Action/scriptexecerror" Translation="脚本代码执行错误" />
-    <TranslationEntry Key="internal/Action/scriptinifailed" Translation="因脚本环境未成功初始化，触发器 {1} 的动作 #{0} 未执行。请检查前面的报错信息。" />
+    <TranslationEntry Key="internal/Action/scriptinifailed" Translation="因脚本环境未成功初始化，触发器 {1} 的动作 #{0} 未执行。&#xD;&#xA;&#xD;&#xA;检查 ACT 插件列表（或 插件中心-高级管理），&#xD;&#xA;将 Triggernometry 向上调整至 FFXIV_ACT_Plugin 后面、&#xD;&#xA;Cafe.Matcha（抹茶，如果有的话）前面，再重启 ACT。&#xD;&#xA;&#xD;&#xA;添加或更新插件后也需要重启 ACT。" />
     <TranslationEntry Key="internal/Action/shortscripterror" Translation="{0} @ 行 {1}" />
     <TranslationEntry Key="internal/Action/sortkeyexprerror" Translation="排序关键字函数表达式 ({0}) 无法解析。" />
     <TranslationEntry Key="internal/Action/tableappend" Translation="已将{2}表格 ({0}) 追加至{3}表格 ({1}) 后" />
@@ -1438,7 +1438,7 @@
     <TranslationEntry Key="internal/Plugin/inifilename" Translation="确定文件名" />
     <TranslationEntry Key="internal/Plugin/inilanguages" Translation="读取翻译文件时" />
     <TranslationEntry Key="internal/Plugin/iniready" Translation="已成功启动" />
-    <TranslationEntry Key="internal/Plugin/iniscripterror" Translation="【请阅读后面的完整内容】&#xD;&#xA;初始化脚本环境时出错。&#xD;&#xA;&#xD;&#xA;检查 ACT 插件列表（或 插件中心-高级管理），&#xD;&#xA;将 Triggernometry 向上调整至 FFXIV_ACT_Plugin 后面、&#xD;&#xA;Cafe.Matcha（抹茶，如果有的话）前面，再重启 ACT。&#xD;&#xA;&#xD;&#xA;添加或更新插件后也需要重启 ACT。&#xD;&#xA;&#xD;&#xA;错误信息：{0}" />
+    <TranslationEntry Key="internal/Plugin/iniscripterror" Translation="初始化脚本环境时出错。&#xD;&#xA;&#xD;&#xA;检查 ACT 插件列表（或 插件中心-高级管理），&#xD;&#xA;将 Triggernometry 向上调整至 FFXIV_ACT_Plugin 后面、&#xD;&#xA;Cafe.Matcha（抹茶，如果有的话）前面，再重启 ACT。&#xD;&#xA;&#xD;&#xA;添加或更新插件后也需要重启 ACT。&#xD;&#xA;&#xD;&#xA;错误信息：{0}" />
     <TranslationEntry Key="internal/Plugin/inited" Translation="初始化结束" />
     <TranslationEntry Key="internal/Plugin/initing" Translation="初始化中" />
     <TranslationEntry Key="internal/Plugin/initoasts" Translation="设置气泡提示时" />

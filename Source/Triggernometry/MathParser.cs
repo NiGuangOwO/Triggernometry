@@ -649,12 +649,12 @@ namespace Triggernometry
             return Lexer(mathExpression).AsReadOnly();
         }
 
-        private static Regex MultiplePlusMinus = new Regex(@"[-+]{2,}");
+        private static Regex MultiplePlusMinus = new Regex(@"[-+][-+ ]*[-+]");
 
         /// <summary> Tokenizes <paramref name="expr"/>. </summary>
         /// <param name="expr">The expression.</param>
         /// <returns>Tokens found <paramref name="expr"/>.</returns>
-        private static List<string> Lexer(string expr)
+        internal static List<string> Lexer(string expr)
         {
             var tokens = new List<string>();
 
@@ -718,11 +718,11 @@ namespace Triggernometry
             return tokens;
         }
 
-        private static Regex regexHexNumber = new Regex(@"^0x[0-9A-Fa-f]+$");
-        private static Regex regexBinNumber = new Regex(@"^0b[01]+$");
-        private static Regex regexOctNumber = new Regex(@"^0o[0-7]+$");
+        private static readonly Regex regexHexNumber = new Regex(@"^0x[0-9A-Fa-f]+$", RegexOptions.Compiled);
+        private static readonly Regex regexBinNumber = new Regex(@"^0b[01]+$", RegexOptions.Compiled);
+        private static readonly Regex regexOctNumber = new Regex(@"^0o[0-7]+$", RegexOptions.Compiled);
 
-        private static double MathParserLogic(List<string> tokens)
+        internal static double MathParserLogic(List<string> tokens)
         {
             // for error information
             var originalTokens = tokens.ToArray();

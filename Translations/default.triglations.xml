@@ -1153,17 +1153,17 @@
     <TranslationEntry Key="internal/Action/lscontrolexception" Translation="Can't execute LiveSplit control action due to exception: " />
     <TranslationEntry Key="internal/Action/mutexacquire" Translation="acquire mutex ({0})" />
     <TranslationEntry Key="internal/Action/mutexrelease" Translation="release mutex ({0})" />
-    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="Didn't find a folder with id ({0})" />
+    <TranslationEntry Key="internal/Action/nofolderwithid" Translation="Folder operation failed: In trigger {1}, the specified folder id ({0}) does not exist." />
     <TranslationEntry Key="internal/Action/notreenodefolderwithid" Translation="Didn't find a tree node for folder ({0}) with id ({1})" />
     <TranslationEntry Key="internal/Action/notreenodetrigdisable" Translation="Could not find tree node to modify for disabling trigger {0}" />
     <TranslationEntry Key="internal/Action/notreenodetrigenable" Translation="Could not find tree node to modify for enabling trigger {0}" />
-    <TranslationEntry Key="internal/Action/notrigiderror" Translation="No trigger id, and op is not cancel all actions, unexpected" />
+    <TranslationEntry Key="internal/Action/notriggerwithid" Translation="Trigger operation failed: In trigger {1}, the specified trigger id ({0}) does not exist." />
     <TranslationEntry Key="internal/Action/obsauthpassword" Translation="OBS WebSocket authentication required, you must provide a password" />
     <TranslationEntry Key="internal/Action/obsconnecterror" Translation="Error connecting to OBS WebSocket: {0}" />
     <TranslationEntry Key="internal/Action/obsconnectok" Translation="OBS WebSocket connected successfully" />
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="Your version of OBS WebSocket is not currently supported." />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="Can't execute OBS control action due to error" />
-    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="Can't execute OBS control action due to exception: " />
+    <TranslationEntry Key="internal/Action/obscontrolexception" Translation="Can't execute OBS control action due to exception: {0}" />
     <TranslationEntry Key="internal/Action/repoupdateall" Translation="Update all repositories" />
     <TranslationEntry Key="internal/Action/repoupdateself" Translation="Update containing repository" />
     <TranslationEntry Key="internal/Action/repoupdatespecific" Translation="Update repository ({0})" />

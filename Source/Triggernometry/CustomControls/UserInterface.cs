@@ -784,11 +784,12 @@ namespace Triggernometry.CustomControls
             }
             else
             {
+                var folder = treeView1.SelectedNode.Tag as Folder;
                 ctxAdd.Visible = true;
                 ctxUpdate.Visible = true;
                 ctxEdit.Visible = true;
-                ctxDescendingSort.Visible = treeView1.SelectedNode.Tag is Folder;
-                ctxDescendingSort.Checked = treeView1.SelectedNode.Tag is Folder f && f._DescendingSort;
+                ctxDescendingSort.Visible = folder != null;
+                ctxDescendingSort.Checked = folder != null && folder._DescendingSort;
                 ctxFire.Visible = true;
                 ctxFireAllowCondition.Visible = true;
                 ctxCollapse.Visible = true;

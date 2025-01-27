@@ -114,7 +114,7 @@ namespace Triggernometry
         }
 
         [XmlAttribute]
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         internal string LogName
         {
@@ -401,7 +401,7 @@ namespace Triggernometry
         {
             get
             {
-                return _Conditions;
+                return (_Conditions?.Count ?? 0) == 0 ? null : _Conditions;
             }
             set
             {

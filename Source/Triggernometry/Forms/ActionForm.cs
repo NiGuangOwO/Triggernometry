@@ -183,7 +183,6 @@ namespace Triggernometry.Forms
             rtbCallbackHelper = new RichTextBoxHelper("rtbCallbackHelper", this, tableLayoutPanel24);
             rtbWmsgHelper = new RichTextBoxHelper("rtbWmsgHelper", this, tableLayoutPanel19);
             rtbJsonHelper = new RichTextBoxHelper("rtbJsonHelper", this, jsonTableLayout);
-            if (I18n.CurrentLanguage.LanguageName.Contains("CN")) { SetComboBoxFontCN(this); }
         }
 
         private void ActionForm_Disposed(object sender, EventArgs e)

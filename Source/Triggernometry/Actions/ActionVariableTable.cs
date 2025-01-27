@@ -344,7 +344,6 @@ namespace Triggernometry.Actions
                         }
                         return temp;
                     }
-                    break;
                 case OperationEnum.Unset:
                     return I18n.Translate(
                         "internal/Action/desctableunset",
@@ -474,7 +473,6 @@ namespace Triggernometry.Actions
                             _Name, sPersistT, lineType, index
                         );
                     }
-                    break;
                 case OperationEnum.SortLine:
                     {
                         bool isCol = !string.IsNullOrWhiteSpace(_X);
@@ -485,7 +483,6 @@ namespace Triggernometry.Actions
                             _Name, sPersistT, lineType, isCol ? _X : _Y
                         );
                     }
-                    break;
                 case OperationEnum.GetAllEntities:
                     return I18n.Translate(
                         "internal/Action/desctablegetallentities",

@@ -470,7 +470,7 @@ namespace Triggernometry.Forms
             }
 
             desc = desc.Trim(' ', ';', '；', ',', '，', '、', '　'); // Common I18n separators
-            desc += Environment.NewLine + Environment.NewLine;       // will be trimmed next time if the first line is empty
+            desc += Environment.NewLine;                             // will be trimmed next time if the first line is empty
 
             // Line 2:
             // [Network Event]

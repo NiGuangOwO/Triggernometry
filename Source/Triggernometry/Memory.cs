@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Triggernometry;
 using static Triggernometry.RealPlugin;
 
@@ -348,6 +347,8 @@ namespace Triggernometry.Utilities
 
         #endregion
 
+        #region MarkingController
+
         private static int _offset1B;
         private static readonly SemaphoreSlim _semaphoreSlim1B = new SemaphoreSlim(1, 1);
 
@@ -389,9 +390,11 @@ namespace Triggernometry.Utilities
             finally { _semaphoreSlim1B.Release(); }
         }
 
-        private static int? _headMarkerOffsetRelAddress3;
+        //private static int? _headMarkerOffsetRelAddress3;
         private static int GetHeadMarkerOffset()
         {
+            return 0; // SE was not using this offset since 7.0
+            /*
             try
             {   // 6.x
                 byte[] moduleData = ReadModuleData(XivProc);
@@ -411,11 +414,11 @@ namespace Triggernometry.Utilities
 
                 return Math.Min(param1 - param2 + param3, 0);
             }
-            catch // to-do
+            catch
             {
                 _headMarkerOffsetRelAddress3 = 0;
-                return 0; 
             }
+            */
         }
 
         private static int _targetMarkerRelAddress = 0;
