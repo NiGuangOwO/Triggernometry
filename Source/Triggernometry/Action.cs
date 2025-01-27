@@ -2240,7 +2240,8 @@ namespace Triggernometry
                             }
                             else
                             {
-                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/nofolderwithid", "Didn't find a folder with id ({0})", _FolderId));
+                                AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/nofolderwithid",
+                                    "Folder operation failed: In trigger ({1}), the specified folder id ({0}) does not exist.", _FolderId, ParentTrigger?.FullPath ?? "null"));
                             }
                         }
                         break;
@@ -3990,7 +3991,8 @@ namespace Triggernometry
                                 }
                                 else
                                 {
-                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/notrigiderror", "No trigger id, and op is not cancel all actions, unexpected"));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/notriggerwithid", 
+                                        "Trigger operation failed: In trigger ({1}), the specified trigger id ({0}) does not exist.", _TriggerId, ParentTrigger?.FullPath ?? "null"));
                                 }
                             }
                         }
