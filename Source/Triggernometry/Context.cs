@@ -951,6 +951,17 @@ namespace Triggernometry
                             }
                             found = true;
                         }
+                        else if (x.StartsWith("_wm[") || x.StartsWith("_waymark["))
+                        {
+                            mx = rexListMethod.Match(x);
+                            if (mx.Success)
+                            {
+                                string rawType = Trim(mx.Groups["index"].Value);
+                                string rawProp = Trim(mx.Groups["prop"].Value);
+                                val = Memory.Waymark.QueryWaymark(rawType, rawProp);
+                            }
+                            found = true;
+                        }
                         else if (x.StartsWith("_storage["))
                         {
                             mx = rexListIdx.Match(x);
