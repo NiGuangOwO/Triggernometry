@@ -83,7 +83,7 @@ namespace Triggernometry.CustomControls
 
         public static List<string> funcs = new List<string>()
         {
-            "toupper", "tolower", "tofullwidth", "tohalfwidth", "toxivchar(combineDigits=false)", "length",
+            "toupper", "tolower", "tofullwidth", "tohalfwidth", "toblackchar(combineDigits=false)", "towhitechar", "length",
             "dec2hex", "dec2hex2", "dec2hex4", "dec2hex8", "float2hex", "double2hex",
             "hex2dec", "hex2float", "hex2double", "parsedmg",
             "substring(index)", "substring(index, len)", "slice(slices)", "pick(index, separator=',')",

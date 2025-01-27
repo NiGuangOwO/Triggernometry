@@ -537,7 +537,7 @@ namespace Triggernometry
 
         /// <summary> Convert the letters and numbers in a string to the XIV-defined black box character.</summary>
         /// <param name="combineDigits">True if you want the numbers 10-31 in the string to be combined as a single XIV character.</param>
-        public static string ToXIVChar(string input, bool combineDigits)
+        public static string ToXivBlackChar(string input, bool combineDigits)
         {
             StringBuilder result = new StringBuilder();
             char[] array = input.ToCharArray();
@@ -569,6 +569,27 @@ namespace Triggernometry
                     }
                     // Convert digits to special XIV capital characters 0-9
                     result.Append((char)(array[i] + 57439));
+                }
+                else
+                {
+                    result.Append(array[i]);
+                }
+            }
+            return result.ToString();
+        }
+
+        /// <summary> Convert the 0-9 numbers in a string to the XIV-defined white box character.</summary>
+        public static string ToXivWhiteChar(string input)
+        {
+            StringBuilder result = new StringBuilder();
+            char[] array = input.ToCharArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i] >= '0' && array[i] <= '9')
+                {
+                    // U+E0E0 - E0E9
+                    result.Append((char)(array[i] + 57520));
                 }
                 else
                 {
