@@ -222,7 +222,15 @@ namespace Triggernometry
 
         public void GenericExceptionHandler(string msg, Exception ex)
         {
-            MessageBox.Show(ui, msg + ": " + Environment.NewLine + Environment.NewLine + ex.Message + " " + ex.StackTrace, I18n.Translate("internal/Plugin/exception", "Exception"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string text = msg + ": " + Environment.NewLine + Environment.NewLine + ex.Message + " " + ex.StackTrace;
+            var inner = ex.InnerException;
+            while (inner != null)
+            {
+                text += "\n---------\nInner: " + inner.Message;
+                text += "\n " + inner.StackTrace;
+                inner = inner.InnerException;
+        }
+            MessageBox.Show(ui, text, I18n.Translate("internal/Plugin/exception", "Exception"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void FixDuplicateFolderReferences(Dictionary<Guid, List<Folder>> references, Configuration c, Folder f)
