@@ -1164,6 +1164,7 @@
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="Your version of OBS WebSocket is not currently supported." />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="Can't execute OBS control action due to error" />
     <TranslationEntry Key="internal/Action/obscontrolexception" Translation="Can't execute OBS control action due to exception: {0}" />
+    <TranslationEntry Key="internal/Action/obsnotrunning" Translation="OBS is not running and the OBS action cannot be performed." />
     <TranslationEntry Key="internal/Action/repoupdateall" Translation="Update all repositories" />
     <TranslationEntry Key="internal/Action/repoupdateself" Translation="Update containing repository" />
     <TranslationEntry Key="internal/Action/repoupdatespecific" Translation="Update repository ({0})" />

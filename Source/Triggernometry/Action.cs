@@ -463,7 +463,12 @@ namespace Triggernometry
             }
         }
 
-        internal bool ObsConnector(Context ctx, string endpoint, string password)
+        /// <returns>
+        /// <c>true</c> : connected <br /> 
+        /// <c>false</c>: failed <br /> 
+        /// <c>null</c> : not running
+        /// </returns>
+        internal bool? ObsConnector(Context ctx, string endpoint, string password)
         {
             lock (plug._obs)
             {
@@ -471,15 +476,28 @@ namespace Triggernometry
                 {
                     return true;
                 }
+                switch (plug._obs.CheckRunningState())
+                {
+                    case ObsController.ObsRunningState.NotRunningFirstlyFound:
+                        AddToLog(ctx, DebugLevelEnum.Warning, I18n.Translate("internal/Action/obsnotrunning",
+                            "OBS is not running and the OBS action cannot be performed."));
+                        return null;
+                    case ObsController.ObsRunningState.NotRunning:
+                        return null;
+                    case ObsController.ObsRunningState.Running:
+                        break;
+                }
                 try
                 {
                     plug._obs.Connect(endpoint, password);
-                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", "OBS WebSocket connected successfully"));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Info, I18n.Translate("internal/Action/obsconnectok", 
+                        "OBS WebSocket connected successfully"));
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obsconnecterror", "Error connecting to OBS WebSocket: {0}", ex.Message));
+                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obsconnecterror", 
+                        "Error connecting to OBS WebSocket: {0}", ex.Message));
                 }
             }
             return false;
@@ -2966,8 +2984,8 @@ namespace Triggernometry
                             string password = ctx.EvaluateStringExpression(ActionContextLogger, ctx, _OBSPassword);
                             lock (obsController)
                             {
-                                if (ObsConnector(ctx, endpoint, password) == true)
-                                {
+                                if (ObsConnector(ctx, endpoint, password) != true)
+                                    return; // already complaint about errors
                                     try
                                     {
                                         switch (_OBSControlType)
@@ -3047,15 +3065,10 @@ namespace Triggernometry
                                     }
                                     catch (Exception ex)
                                     {
-                                        AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obscontrolexception", "Can't execute OBS control action due to exception: " + ex.Message));
+                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/Action/obscontrolexception", "Can't execute OBS control action due to exception: {0}" + ex.Message));
                                     }
                                 }
-                                else
-                                {
-                                    AddToLog(ctx, RealPlugin.DebugLevelEnum.Warning, I18n.Translate("internal/Action/obscontrolerror", "Can't execute OBS control action due to error"));
                                 }
-                            }
-                        }
                         break;
                     #endregion
                     #region Implementation - LiveSplit

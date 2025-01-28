@@ -1164,6 +1164,7 @@
     <TranslationEntry Key="internal/Action/obsconnectversionerror" Translation="目前不支持当前 OBS 版本。" />
     <TranslationEntry Key="internal/Action/obscontrolerror" Translation="由于错误，无法执行 OBS 控制操作" />
     <TranslationEntry Key="internal/Action/obscontrolexception" Translation="由于异常，无法执行 OBS 操作：{0}" />
+    <TranslationEntry Key="internal/Action/obsnotrunning" Translation="OBS 未启动，无法执行 OBS 操作。" />
     <TranslationEntry Key="internal/Action/repoupdateall" Translation="更新全部远程仓库" />
     <TranslationEntry Key="internal/Action/repoupdateself" Translation="更新所处于的远程仓库" />
     <TranslationEntry Key="internal/Action/repoupdatespecific" Translation="更新远程仓库 ({0})" />
