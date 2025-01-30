@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Triggernometry.Variables;
+using Triggernometry.FFXIV;
 
 namespace Triggernometry.PluginBridges
 {
@@ -89,26 +90,6 @@ namespace Triggernometry.PluginBridges
 
         public static string GetProcessName() => GetProcess()?.ProcessName ?? "";
 
-        public static string GetLanguage()
-        {
-            try
-            {
-                object plug = GetInstance();
-                object dataRepositoryInstance = GetDataRepositoryInstance(plug);
-                if (dataRepositoryInstance == null)
-                {
-                    return null;
-                }
-                var languageResult = dataRepositoryInstance.GetType().GetMethod("GetSelectedLanguageID")?.Invoke(dataRepositoryInstance, null);
-                return languageResult?.ToString() ?? "";
-            }
-            catch (Exception ex)
-            {
-                LogMessage(RealPlugin.DebugLevelEnum.Error, ex.ToString());
-                return "";
-            }
-        }
-
         public static string GetGameVersion()
         {
             try
@@ -119,8 +100,8 @@ namespace Triggernometry.PluginBridges
                 {
                     return null;
                 }
-                var languageResult = dataRepositoryInstance.GetType().GetMethod("GetGameVersion")?.Invoke(dataRepositoryInstance, null);
-                return languageResult?.ToString() ?? "";
+                var result = dataRepositoryInstance.GetType().GetMethod("GetGameVersion")?.Invoke(dataRepositoryInstance, null);
+                return result?.ToString() ?? "";
             }
             catch (Exception ex)
             {
@@ -129,44 +110,16 @@ namespace Triggernometry.PluginBridges
             }
         }
 
-        public static string GetPropertiesAndValues(object obj)
-        {
-            if (obj == null) return "Object is null";
-
-            StringBuilder result = new StringBuilder();
-
-            Type type = obj.GetType();
-            PropertyInfo[] properties = type.GetProperties();
-
-            foreach (PropertyInfo property in properties)
-            {
-                object value = property.GetValue(obj);
-                string typeName = property.PropertyType.Name;
-                result.AppendLine($"{property.Name}: ({typeName}){value}");
-            }
-
-            return result.ToString();
-        }
-
         public static void SubscribeToZoneChanged(RealPlugin p)
         {
             try
             {
-                object plug = GetInstance();
-                if (plug == null)
-                {
-                    throw new ArgumentException("No plugin instance available");
-                }
-                PropertyInfo pi = plug.GetType().GetProperty("DataSubscription", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (pi == null)
-                {
-                    throw new ArgumentException("No DataSubscription found");
-                }
-                dynamic subs = pi.GetValue(plug);
-                if (subs == null)
-                {
-                    throw new ArgumentException("DataSubscription not initialized");
-                }
+                object plug = GetInstance() 
+                    ?? throw new ArgumentException("No plugin instance available");
+                PropertyInfo pi = plug.GetType().GetProperty("DataSubscription", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    ?? throw new ArgumentException("No DataSubscription found");
+                object subs = pi.GetValue(plug) 
+                    ?? throw new ArgumentException("DataSubscription not initialized");
                 EventInfo ei = subs.GetType().GetEvent("ZoneChanged", BindingFlags.GetField | BindingFlags.Public | BindingFlags.Instance);
                 if (ei != null)
                 {
@@ -308,11 +261,6 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("maxgp", "");
             vc.SetValue("maxcp", "");
             vc.SetValue("level", "");
-            vc.SetValue("jobid", "");
-            foreach (var kvp in Entity.jobs["-1"])
-            {
-                vc.SetValue(kvp.Key, kvp.Value);  // role, job, etc.
-            }
             vc.SetValue("x", "");
             vc.SetValue("y", "");
             vc.SetValue("z", "");
@@ -338,6 +286,10 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("maxcasttime", "");
             vc.SetValue("partytype", "");
             vc.SetValue("address", "");
+            foreach (var propName in Job.LegalJobPropNames)
+            {
+                vc.SetValue(propName.ToLower(), Job.EmptyJob.QueryProperty(propName));  // role, job, jobid, etc.
+            }
         }
 
         public static void SetupNullCombatant()
@@ -364,7 +316,7 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("y", cmx.PosY);
             vc.SetValue("z", cmx.PosZ);
             vc.SetValue("id", ConvertToHex(cmx.ID));
-            vc.SetValue("inparty", inParty);
+            vc.SetValue("inparty", inParty); 
             vc.SetValue("inalliance", inAlliance);
             vc.SetValue("order", orderNum);
             vc.SetValue("casttargetid", (cmx.IsCasting) ? ConvertToHex(cmx.CastTargetID) : 0);
@@ -384,18 +336,13 @@ namespace Triggernometry.PluginBridges
             vc.SetValue("ownerid", (cmx.OwnerID > 0) ? ConvertToHex(cmx.OwnerID) : 0);
             vc.SetValue("bnpcnameid", cmx.BNpcNameID);
             vc.SetValue("bnpcid", cmx.BNpcID);
-            vc.SetValue("partytype", cmx.PartyType.ToString());
+            vc.SetValue("partytype", cmx.PartyType.ToString()); 
             vc.SetValue("address", $"{cmx.Address}"); // IntPtr
-            string jobid = cmx.Job.ToString();
-            vc.SetValue("jobid", jobid);
-            if (Entity.jobs.ContainsKey(jobid))
+            Job job = Job.GetJob(cmx.Job); 
+            foreach (var propName in Job.LegalJobPropNames)
             {
-                foreach (var kvp in Entity.jobs[jobid])
-                {
-                    vc.SetValue(kvp.Key, kvp.Value);  // role, job, etc.
-                }
+                vc.SetValue(propName.ToLower(), job.QueryProperty(propName));  // role, job, jobid, etc.
             }
-            //vc.SetValue("all", GetPropertiesAndValues(cmx));
         }
 
         private class CombatantData
@@ -737,6 +684,185 @@ namespace Triggernometry.PluginBridges
             return allEntities;
         }
 
+        public class XivEntity : FFXIV.Entity
+        {
+            private readonly dynamic _entity; // the original combatant object from FFXIV_ACT_Plugin, properties change over time
+            public override PluginSource PluginSource { get; set; } = PluginSource.XivPlugin;
+            public override IntPtr Address => _entity.Address;
+            public override string Name => _entity.Name;
+            public override uint ID => _entity.ID;
+            public override uint BNpcID => _entity.BNpcID;
+            public override uint OwnerID => _entity.OwnerID;
+            public override EntityType Type => (EntityType)_entity.type; // actually only 1 (PC) or 2 (BattleNpc)
+            public override byte EffectiveDistance => _entity.EffectiveDistance;
+            public override float PosX => _entity.PosX;
+            public override float PosY => _entity.PosY;
+            public override float PosZ => _entity.PosZ;
+            public override float Heading => _entity.Heading;
+            public override uint CurrentHP => _entity.CurrentHP;
+            public override uint MaxHP => _entity.MaxHP;
+            public override uint CurrentMP => _entity.CurrentMP;
+            public override uint MaxMP => _entity.MaxMP;
+            public override ushort CurrentCP => (ushort)_entity.CurrentCP; // uint
+            public override ushort MaxCP => (ushort)_entity.MaxCP; // uint
+            public override ushort CurrentGP => (ushort)_entity.CurrentGP; // uint
+            public override ushort MaxGP => (ushort)_entity.MaxGP; // uint
+            public override Job Job => FFXIV.Job.TryGetJob(_entity.Job/*int*/, out Job result) ? result : FFXIV.Job.GetJob(0);
+            public override byte Level => (byte)_entity.Level; // int
+            //public override bool InCombat { get; set; }
+            public override bool InParty => (int)_entity.PartyType == 1;
+            public override bool InAlliance => (int)_entity.PartyType == 2;
+            public override uint TargetID => _entity.TargetID;
+            public override uint BNpcNameID => _entity.BNpcNameID;
+            public override ushort CurrentWorldID => (ushort)_entity.CurrentWorldID; // uint
+            public override ushort WorldID => (ushort)_entity.WorldID; // uint
+            public override List<Status> Statuses
+            {
+                get
+                {
+                    var statuses = new List<Status>();
+                    if (_entity.NetworkBuffs is Array networkBuffs) // NetworkBuff[30]
+                    {
+                        foreach (Status status in networkBuffs.Cast<dynamic>().Select(e => (Status)new XivStatus(e, this)))
+                        {
+                            if (status.StatusID != 0)
+                            {
+                                statuses.Add(status);
+                            }
+                            else break;
+                        }
+                    }
+                    return statuses;
+                }
+            }
+            public override bool IsCasting => _entity.IsCasting;
+            public override uint CastID => _entity.CastBuffID;
+            public override uint CastTargetID => _entity.CastTargetID;
+            public override float CastTime => _entity.CastDurationCurrent;
+            public override float MaxCastTime => _entity.CastDurationMax;
+
+            internal XivEntity() { }
+            internal XivEntity(object xivEntity)
+            {
+                _entity = xivEntity;
+            }
+
+            internal new static FFXIV.Entity NullEntity() => new FFXIV.Entity()
+            {
+                Exist = false,
+                PluginSource = PluginSource.XivPlugin,
+            };
+
+            /* example:
+            class Combatant
+            Fields:
+              NetworkBuffs : NetworkBuff[] = FFXIV_ACT_Plugin.Common.Models.NetworkBuff[];
+            Properties:
+              ID : UInt32 = 1073743259;
+              OwnerID : UInt32 = 0;
+              type : Byte = 2;
+              Job : Int32 = 0;
+              Level : Int32 = 80;
+              Name : String = Striking Dummy;
+              CurrentHP : UInt32 = 2134350;
+              MaxHP : UInt32 = 2134350;
+              CurrentMP : UInt32 = 0;
+              MaxMP : UInt32 = 10000;
+              CurrentCP : UInt32 = 0;
+              MaxCP : UInt32 = 0;
+              CurrentGP : UInt32 = 0;
+              MaxGP : UInt32 = 0;
+              IsCasting : Boolean = False;
+              CastBuffID : UInt32 = 0;
+              CastTargetID : UInt32 = 3758096384;
+              CastDurationCurrent : Single = 0;
+              CastDurationMax : Single = 0;
+              PosX : Single = 510.3607;
+              PosY : Single = -392.0923;
+              PosZ : Single = 167.9883;
+              Heading : Single = -2.460303;
+              CurrentWorldID : UInt32 = 0;
+              WorldID : UInt32 = 0;
+              WorldName : String = ;
+              BNpcNameID : UInt32 = 541;
+              BNpcID : UInt32 = 13728;
+              TargetID : UInt32 = 0;
+              EffectiveDistance : Byte = 81;
+              PartyType : PartyType = None;
+              Address : IntPtr = 2079081754992;
+              Order : Int32 = 10;
+             */
+        }
+
+        public class XivStatus : Status
+        {
+            public override PluginSource PluginSource { get; set; } = PluginSource.XivPlugin;
+
+            private readonly dynamic _networkBuff;
+            public override ushort StatusID => _networkBuff.BuffID;
+            public override ushort Stack => _networkBuff.BuffExtra;
+            private DateTime Timestamp => _networkBuff.Timestamp;
+            private float Duration => _networkBuff.Duration;
+            public override float Timer => Duration - (float)(DateTime.Now - Timestamp).TotalSeconds;
+            public override uint SourceID => _networkBuff.ActorID;
+
+            private readonly FFXIV.Entity _target;
+            public override FFXIV.Entity Target => _target;
+            public XivStatus(dynamic networkBuff, FFXIV.Entity target)
+            {
+                _networkBuff = networkBuff;
+                _target = target;
+            }
+
+            /* example:
+            class NetworkBuff
+            Properties:
+              BuffID : ushort = 1191;
+              BuffExtra : ushort = 0;
+              Timestamp : DateTime = 2024/12/26 16:40:36;
+              Duration : float = 20;
+              ActorID : uint = 277654321;
+              ActorName : string = My Name;
+              TargetID : uint = 277654321;
+              TargetName : String = My Name;
+              RefreshPending : Boolean = False;
+             */
+        }
+
+        internal static IEnumerable<FFXIV.Entity> InternalGetEntities()
+        {
+            try
+            {
+                object plug = null;
+                plug = GetInstance();
+                if (plug != null)
+                {
+                    PropertyInfo pi = GetDataRepository(plug);
+                    CombatantData cd = GetCombatants(plug, pi);
+                    var combatants = cd.Combatants as IEnumerable<dynamic>;
+                    return combatants.Select(c => (FFXIV.Entity)new XivEntity(c));
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage(RealPlugin.DebugLevelEnum.Error, I18n.Translate("internal/ffxiv/allentitiesexception", 
+                    "Exception in FFXIV all entities retrieve: {0}", ex.Message));
+            }
+            return Enumerable.Empty<FFXIV.Entity>();
+        }
+
+        /// <returns>XivEntity.NullEntity() if not found.</returns>
+        internal static FFXIV.Entity InternalGetEntityByID(uint id)
+        {
+            return InternalGetEntities().FirstOrDefault(entity => entity.ID == id) ?? XivEntity.NullEntity();
+        }
+
+        /// <returns>XivEntity.NullEntity() if not found.</returns>
+        internal static FFXIV.Entity InternalGetMyself()
+        {
+            return InternalGetEntities().FirstOrDefault() ?? XivEntity.NullEntity();
+        }
+
         public static VariableDictionary GetPartyMember(int index)
         {
             UpdateState();
@@ -750,7 +876,7 @@ namespace Triggernometry.PluginBridges
         public static VariableDictionary GetMyself()
         {
             UpdateState();
-            return Myself;
+            return Myself ?? NullCombatant;
         }
 
         public static VariableDictionary GetNamedPartyMember(string name)

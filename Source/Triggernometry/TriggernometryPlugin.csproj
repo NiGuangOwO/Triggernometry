@@ -27,6 +27,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</StartProgram>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -181,6 +182,8 @@
     <Compile Include="CustomControls\ActionEditor.Designer.cs">
       <DependentUpon>ActionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FFXIV\Status.cs" />
+    <Compile Include="FFXIV\Entity.cs" />
     <Compile Include="FFXIV\JobList.cs" />
     <Compile Include="FFXIV\Job.cs" />
     <Compile Include="Forms\SimpleInputForm.cs">
@@ -397,6 +400,9 @@
     <Compile Include="ObsController.cs" />
     <Compile Include="LiveSplitController.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="PluginBridges\BridgeOverlay\ModuleInCombat.cs" />
+    <Compile Include="PluginBridges\BridgeOverlay\ModuleCombatants.cs" />
+    <Compile Include="PluginBridges\BridgeOverlay\BridgeOverlay.cs" />
     <Compile Include="RealPlugin\RealPlugin.Helper.cs" />
     <Compile Include="RealPlugin\RealPlugin.Config.cs" />
     <Compile Include="RealPlugin\RealPlugin.Scripting.cs" />

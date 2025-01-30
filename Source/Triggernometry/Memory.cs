@@ -442,10 +442,10 @@ namespace Triggernometry.Utilities
 
         public enum TargetMarkerEnum
         {
+            None = -1,
             Attack1 = 0, Attack2 = 1, Attack3 = 2, Attack4 = 3, Attack5 = 4,
             Bind1 = 5, Bind2 = 6, Bind3 = 7,
             Stop1 = 8, Stop2 = 9,
-            Ignore1 = 8, Ignore2 = 9,
             Square = 10, Circle = 11, Cross = 12, Triangle = 13,
             Attack6 = 14, Attack7 = 15, Attack8 = 16,
         }
@@ -466,7 +466,7 @@ namespace Triggernometry.Utilities
             return Read<uint>(XivProcHandle, TargetMarkersPtr + 8 * (int)type);
         }
 
-        public static TargetMarkerEnum? TargetMarkerOnEntity(uint entityId)
+        public static TargetMarkerEnum TargetMarkerOnEntity(uint entityId)
         {
             byte[] mem = ReadBytes(XivProcHandle, TargetMarkersPtr, 8 * 28);
             for (int i = 0; i < 28; i++)
@@ -477,7 +477,7 @@ namespace Triggernometry.Utilities
                     return (TargetMarkerEnum)i;
                 }
             }
-            return null;
+            return TargetMarkerEnum.None;
         }
 
         public enum WaymarkEnum

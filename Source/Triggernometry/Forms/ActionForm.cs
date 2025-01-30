@@ -2430,8 +2430,8 @@ namespace Triggernometry.Forms
                     expTvarName.Enabled = true;
                     cbxTvarExpType.Enabled = false;
                     expTvarValue.Enabled = false;
-                    expTvarColumn.Enabled = false;
-                    expTvarRow.Enabled = false;
+                    expTvarColumn.Enabled = true;
+                    expTvarRow.Enabled = true;
                     expTvarTarget.Enabled = false;
                     expTvarName.AutofillType = ExpressionTextBox.AutofillTypeEnum.Table;
                     break;
@@ -2456,7 +2456,8 @@ namespace Triggernometry.Forms
                     break;
             }
             expTvarColumn.ExpressionType = (cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.SortLine
-                                         || cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.SlicesSetAll)
+                                         || cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.SlicesSetAll
+                                         || cbxTvarOpType.SelectedIndex == (int)TableVariableOpEnum.GetAllEntities)
                                          ? ExpressionTextBox.SupportedExpressionTypeEnum.String
                                          : ExpressionTextBox.SupportedExpressionTypeEnum.Numeric;
             expTvarRow.ExpressionType = expTvarColumn.ExpressionType;
@@ -2627,14 +2628,14 @@ namespace Triggernometry.Forms
                     expDictName.AutofillType = ExpressionTextBox.AutofillTypeEnum.Dict;
                     expDictTarget.AutofillType = ExpressionTextBox.AutofillTypeEnum.Dict;
                     break;
-                case (int)DictVariableOpEnum.GetEntityByName:
-                case (int)DictVariableOpEnum.GetEntityById:
+                case (int)DictVariableOpEnum.GetEntity:
                     expDictName.ExpressionType = ExpressionTextBox.SupportedExpressionTypeEnum.String;
                     expDictName.Enabled = true;
                     prsDictSource.Enabled = true;
                     expDictLength.Enabled = false;
                     cbxDictKeyType.Enabled = false;
-                    expDictKey.Enabled = false;
+                    expDictKey.Enabled = true;
+                    cbxDictKeyType.SelectedIndex = 0; // string
                     cbxDictValueType.Enabled = false;
                     cbxDictValueType.SelectedIndex = 0; // string
                     expDictValue.Enabled = true;

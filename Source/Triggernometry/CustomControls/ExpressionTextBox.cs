@@ -62,11 +62,11 @@ namespace Triggernometry.CustomControls
             "dvar:", "pdvar:", "edvar:", "epdvar:", "d:", "pd:", "ed:", "epd:",
             "tvarcl:", "ptvarcl:", "tvarrl:", "ptvarrl:", "tvardl:", "ptvardl:",
             "?l:", "?lvar:", "?t:", "?tvar:", "?d:", "?dvar:",
-            "etext:", "eimage:", "ecallback:", "estorage:", 
+            "etext:", "eimage:", "ecallback:", "estorage:",
             "env:",
 
             // special variables
-            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginversion", 
+            "_incombat", "_lastencounter", "_activeencounter", "_configpath", "_pluginpath", "_pluginversion",
             "_duration", "_event", "_since", "_sincems", "_triggerid", "_triggername", "_triggerpath", "_zone",
             "_response", "_responsecode", "_jsonresponse[x]",
             "_timestamp", "_timestampms", "_systemtime", "_systemtimems", "_clipboard",
@@ -75,7 +75,7 @@ namespace Triggernometry.CustomControls
             "_ffxivparty[x]", "_party[x]", "_ffxiventity[x]", "_entity[x]", "_ffxivplayer", "_me", "_me.id",
             "_job[jobid/jobName/jobAbbrev]", "_tm2id[markType]", "_targetmarker2id[markType]", "_wm[markType]", "_waymark[markType]",
             "_ffxivtime", "_ET", "_ETprecise", "_ffxivpartyorder", "_ffxivprocid", "_ffxivprocname", "_ffxivzoneid",
-            "_ffxivversion", "_ffxivlanguage", "_ffxivisglobal",
+            "_ffxivversion", "_ffxivincombat", "_ffxivisglobal",
             "_env[x]", "_const[x]", "_config[x]", "_storage[x]", "_actionhistory[i/previous]",
             "_this", "_idx", "_col", "_row", "_col[i]", "_row[i]", "_colrl[...]", "_rowcl[...]", "_key", "_val",
             "_loopiterator", "_i",
@@ -145,21 +145,13 @@ namespace Triggernometry.CustomControls
             "x", "y", "w", "h", "opacity"
         };
 
-        public static List<string> ffxivProps = new List<string>()
-        {
-            "name", "job", "jobid", "role", "subrole", "roleid", "id", "ownerid", "bnpcid", "bnpcnameid", "type", "partytype", "address",
-            "currenthp", "currentmp", "currentcp", "currentgp", "maxhp", "maxmp", "maxcp", "maxgp", "level",
-            "x", "y", "z", "heading", "h", "distance", "iscasting", "casttime", "maxcasttime", "castid",
-            "inparty", "order", "worldid", "worldname", "currentworldid", "targetid", "casttargetid",
-            "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1",
-        };
-
-        public static List<string> jobProps = new List<string>()
-        {
-            "role", "job", "jobid", "isT", "isH", "isD", "isM", "isR", "isC", "isG", "isTH", "isCG", "isTM", "isHR",
-            "jobCN", "jobDE", "jobEN", "jobFR", "jobJP", "jobKR", "jobCN1", "jobCN2", "jobEN3", "jobJP1"
-        };
+        // Name, X, Job, Role, etc.
+        public static List<string> XivEntityProps = new List<string> { 
+            "HasStatus(statusId)", "StatusTimer(statusId)", "StatusStack(statusId)",
+        }.Concat(FFXIV.Entity.LegalEntityPropNames).Concat(FFXIV.Job.LegalJobPropNames).ToList();
+        
+        // Job, Role, etc.
+        public static List<string> XivJobProps = FFXIV.Job.LegalJobPropNames.ToList();
 
         public static List<string> configurations = new List<string>()
         {
@@ -342,7 +334,6 @@ namespace Triggernometry.CustomControls
         private Timer acfDebounceTimer = new Timer();
 
         public Forms.AutoCompleteForm acf = null;
-        private static readonly object EventText;
 
         // unhide TextChanged on base class
         private EventHandler _TextChanged;
@@ -1082,7 +1073,7 @@ namespace Triggernometry.CustomControls
                 m = rexMeProp.Match(currentExpr);
                 if (m.Success)
                 {
-                    matchedStrings = GetAutocompleteSuggestions(ffxivProps, m.Groups["prop"].Value);
+                    matchedStrings = GetAutocompleteSuggestions(XivEntityProps, m.Groups["prop"].Value);
                     if (matchedStrings != null && matchedStrings.Count() > 0)
                     {
                         CurrentMatch = m.Groups["prop"].Value;
@@ -1105,7 +1096,7 @@ namespace Triggernometry.CustomControls
                         case "ffxiventity":
                         case "party":
                         case "entity":
-                            matchedStrings = GetAutocompleteSuggestions(ffxivProps, m.Groups["prop"].Value);
+                            matchedStrings = GetAutocompleteSuggestions(XivEntityProps, m.Groups["prop"].Value);
                             break;
                         case "textaura":
                             matchedStrings = GetAutocompleteSuggestions(textAuraProps, m.Groups["prop"].Value);
@@ -1114,7 +1105,7 @@ namespace Triggernometry.CustomControls
                             matchedStrings = GetAutocompleteSuggestions(imageAuraProps, m.Groups["prop"].Value);
                             break;
                         case "job":
-                            matchedStrings = GetAutocompleteSuggestions(jobProps, m.Groups["prop"].Value);
+                            matchedStrings = GetAutocompleteSuggestions(XivJobProps, m.Groups["prop"].Value);
                             break;
                     }
                     if (matchedStrings != null && matchedStrings.Count() > 0)

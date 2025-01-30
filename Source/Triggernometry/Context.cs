@@ -8,13 +8,14 @@ using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using Triggernometry.Variables;
 using System.Windows.Forms;
-using System.Reflection;
+using Triggernometry.FFXIV;
 using Triggernometry.Utilities;
+using Triggernometry.PluginBridges;
 
 namespace Triggernometry
 {
 
-    public class Context
+    public partial class Context
     {
 
         internal Guid id = Guid.NewGuid();
@@ -26,28 +27,41 @@ namespace Triggernometry
         internal RealPlugin.ActionExecutionHook soundhook;
         internal RealPlugin.ActionExecutionHook ttshook;
 
-        internal static Regex rex               // ${...}
-            = new Regex(@"\$\{(?<id>[^${}]*)\}");        
-        internal static Regex rox               // ¤{...}
-            = new Regex(@"¤\{[^${}]*\}");        
-        internal static Regex rexnum            // $1 $2
-            = new Regex(@"\$(?<id>[0-9]+)");        
-        internal static Regex rexListIdx        // name[index]
-            = new Regex(@"^(?<name>[^[]+)\[(?<index>[^[\]]*?)\]");        
-        internal static Regex rexTableIdx       // name[col][row]
-            = new Regex(@"^(?<name>[^[]+)\[(?<column>[^[\]]*?)\]\[(?<row>[^[\]]*?)\] *$");        
-        internal static Regex rexFunc           // name(arg)?:val
-            = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))?:(?<val>.*)$");        
-        internal static Regex rexProp           // name.prop(arg)?
-            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexListProp       // name?[index].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexTableProp      // name?[index1][index2].prop(arg)?
-            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$");
-        internal static Regex rexExistVar       // evar: / epvar: / elvar: ...
-            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?:(?<name>.*)$");
+        /// <summary> Regex matching: ${id} </summary>
+        internal static Regex rex
+            = new Regex(@"\$\{(?<id>[^${}]*)\}", RegexOptions.Compiled);
+        /// <summary> Regex matching: ¤{id} </summary>
+        internal static Regex rox
+            = new Regex(@"¤\{[^${}]*\}", RegexOptions.Compiled);
+        /// <summary> Regex matching: $num (e.g. $1, $20) </summary>
+        internal static Regex rexNum
+            = new Regex(@"\$(?<id>[0-9]+)", RegexOptions.Compiled);
+        /// <summary> Regex matching: name[index] </summary>
+        internal static Regex rexListIdx
+            = new Regex(@"^(?<name>[^[]+)\[(?<index>[^[\]]*?)\]", RegexOptions.Compiled);
+        /// <summary> Regex matching: name[column][row] </summary>
+        internal static Regex rexTableIdx
+            = new Regex(@"^(?<name>[^[]+)\[(?<column>[^[\]]*?)\]\[(?<row>[^[\]]*?)\] *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name(arg)?:val </summary>
+        internal static Regex rexFunc           
+            = new Regex(@"^(?<name>[^(:]+)(?:\((?<arg>[^)]*)\))? *:(?<val>.*)$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name.prop(arg)? </summary>
+        internal static Regex rexMethod
+            = new Regex(@"^(?<name>.+?)\.(?<prop>[^([.]+?)(?:\((?<arg>[^)]*)\))? *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name?[index].prop </summary>
+        internal static Regex rexListProp
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>.+)$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name?[index].prop(arg)? </summary>
+        internal static Regex rexListMethod
+            = new Regex(@"^(?<name>[^[]*)\[(?<index>[^[\]]*?)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: name?[index1][index2].prop(arg)? </summary>
+        internal static Regex rexTableMethod
+            = new Regex(@"^(?<name>[^[]*)\[(?<column>[^[\]]*)\]\[(?<row>[^[\]]*)\]\.(?<prop>[^([]+?)(?:\((?<arg>[^)]*)\))? *$", RegexOptions.Compiled);
+        /// <summary> Regex matching: evar: / epvar: / elvar: / ecallback: / ... </summary>
+        internal static Regex rexExistVar
+            = new Regex(@"^e(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?:(?<name>.*)$", RegexOptions.Compiled);
 
-        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$");
+        internal static Regex reHex8 = new Regex("^[0-9A-Fa-f]{1,8}$", RegexOptions.Compiled);
 
         internal Dictionary<string, string> namedgroups;
         internal List<string> numgroups;
@@ -640,7 +654,7 @@ namespace Triggernometry
                 m = rex.Match(newexpr);
                 if (m.Success == false)
                 {
-                    m = rexnum.Match(newexpr);
+                    m = rexNum.Match(newexpr);
                     if (m.Success == false)
                     {
                         break;
@@ -751,11 +765,6 @@ namespace Triggernometry
                             val = PluginBridges.BridgeFFXIV.GetProcessName();
                             found = true;
                         }
-                        else if (x == "_ffxivlanguage")
-                        {
-                            val = PluginBridges.BridgeFFXIV.GetLanguage();
-                            found = true;
-                        }
                         else if (x == "_ffxivversion")
                         {
                             val = PluginBridges.BridgeFFXIV.GetGameVersion();
@@ -766,7 +775,12 @@ namespace Triggernometry
                             val = PluginBridges.BridgeFFXIV.GetMyself().GetValue("name").ToString().Contains(" ") ? "1" : "0";
                             found = true;
                         }
-                        else if (x == "_incombat")
+                        else if (x == "_ffxivincombat") // game status
+                        {
+                            val = ModuleInCombat.GetInCombat() ? "1" : "0";
+                            found = true;
+                        }
+                        else if (x == "_incombat") // ACT status
                         {
                             val = plug != null && plug.InCombatHook() ? "1" : "0";
                             found = true;
@@ -986,17 +1000,12 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_job[")) // ${_job[jobid].prop} or ${_job[Name].prop}
                         {
-                            mx = rexListProp.Match(x);
+                            mx = rexListMethod.Match(x);
                             if (mx.Success)
                             {
                                 string rawJob = Trim(mx.Groups["index"].Value);
-                                if (!Entity.jobNameToIdMap.ContainsKey(rawJob.ToLower()))
-                                {
-                                    throw InvalidValueError("_job", "key", rawJob, x);
-                                }
-                                string jobid = Entity.jobNameToIdMap[rawJob.ToLower()];
                                 string prop = mx.Groups["prop"].Value;
-                                val = Entity.jobs[jobid][prop];
+                                val = Job.GetJob(rawJob).QueryProperty(prop);
                             }
                             found = true;
                         }
@@ -1133,7 +1142,7 @@ namespace Triggernometry
                             VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
                                                 : x.StartsWith("l") ? plug.sessionvars : new VariableStore();
                             string varname = x.Substring(x.IndexOf(":") + 1);
-                            mx = rexProp.Match(varname);
+                            mx = rexMethod.Match(varname);
                             if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
@@ -1304,7 +1313,7 @@ namespace Triggernometry
                                                 : x.StartsWith("d") ? plug.sessionvars : new VariableStore();
                             string varname = x.Substring(x.IndexOf(":") + 1);
 
-                            mx = rexProp.Match(varname);
+                            mx = rexMethod.Match(varname);
                             if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
@@ -1464,7 +1473,7 @@ namespace Triggernometry
                             VariableStore store = x.StartsWith("p") ? plug.cfg.PersistentVariables
                                                 : x.StartsWith("t") ? plug.sessionvars : new VariableStore();
                             string varname = x.Substring(x.IndexOf(":") + 1);
-                            mx = rexProp.Match(varname);
+                            mx = rexMethod.Match(varname);
                             if (mx.Success)
                             {
                                 string gname = mx.Groups["name"].Value;
@@ -1814,15 +1823,17 @@ namespace Triggernometry
                                     case "tolower": val = funcval.ToLower(); break;
                                     case "tofullwidth": val = ToFullWidth(funcval); break;
                                     case "tohalfwidth": val = ToHalfWidth(funcval); break;
-                                    case "toxivchar":
+                                    case "toxivchar": // old name
+                                    case "toblackchar":
                                         {
                                             if (!bool.TryParse(GetArgument(args, 0, "false"), out bool combineDigits))
                                             {
                                                 throw ParseTypeError(I18n.TranslateWord("string"), args[0], I18n.TranslateWord("bool"), x);
                                             }
-                                            val = ToXIVChar(funcval, combineDigits);
+                                            val = ToXivBlackChar(funcval, combineDigits);
                                         }
                                         break;
+                                    case "towhitechar": val = ToXivWhiteChar(funcval); break;
                                     case "length": val = funcval.Length.ToString(); break;
                                     case "hex2dec":    // hex2dec()
                                     case "hex2float":  // hex2float()
@@ -2238,64 +2249,55 @@ namespace Triggernometry
                             mx = rexListProp.Match(x);
                             if (mx.Success)
                             {
-                                bool isParty = x.Contains("party[");
+                                bool isParty = x.StartsWith("_ffxivparty[") || x.StartsWith("_party[");
                                 string key = Trim(mx.Groups["index"].Value);
                                 string prop = Trim(mx.Groups["prop"].Value);
-                                VariableDictionary entity = new VariableDictionary();
+                                FFXIV.Entity entity;
 
-                                if (isParty && key.Length == 1 && char.IsDigit(key[0]))
+                                if (isParty && int.TryParse(key, out int partyIdx) && partyIdx >= 1 && partyIdx <= 8)
                                 {   // ffxivparty[n]
-                                    entity = PluginBridges.BridgeFFXIV.GetPartyMember(int.Parse(key));
+                                    string hexID = PluginBridges.BridgeFFXIV.GetPartyMember(partyIdx).GetValue("id").ToString();
+                                    entity = FFXIV.Entity.GetEntityByID(hexID);
                                 }
                                 else
                                 {
-                                    int idx = key.IndexOf("=");
-                                    string key2 = null;
-                                    if (!isParty && idx > 0)
+                                    var entities = FFXIV.Entity.GetFilteredEntities(key);
+                                    if (isParty)
                                     {
-                                        key2 = Trim(key.Substring(0, idx));
+                                        entities = entities.Where(e => e.InParty);
                                     }
-
-                                    if (key2 != null && PluginBridges.BridgeFFXIV._nullCombatant.ContainsKey(key2))
-                                    {   // _entity[bnpcid=13681]
-                                        string value2 = Trim(key.Substring(idx + 1));
-                                        var entities = PluginBridges.BridgeFFXIV.GetAllEntities();
-                                        entity = entities.FirstOrDefault(vd => vd.GetValue(key2).ToString() == value2) 
-                                            ?? PluginBridges.BridgeFFXIV._nullCombatant;
+                                    entity = entities.FirstOrDefault();
                                     }
-                                    else if (reHex8.Match(key).Success)
-                                    {   // [10ABCDEF]
-                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetIdPartyMember(key)
-                                                         : PluginBridges.BridgeFFXIV.GetIdEntity(key);
-                                    }
-                                    if (entity.GetValue("id").ToString() == "")
-                                    {   // [name]
-                                        entity = isParty ? PluginBridges.BridgeFFXIV.GetNamedPartyMember(key)
-                                                         : PluginBridges.BridgeFFXIV.GetNamedEntity(key);
-                                    }
+                                if (entity == null)
+                                {
+                                    RealPlugin.plug.UnfilteredAddToLog(RealPlugin.DebugLevelEnum.Warning, I18n.Translate(
+                                        "internal/Context/noEntity",
+                                        "Failed to find entity: {0}. Trigger: ({1})",
+                                        x, trig?.FullPath ?? "null"));
                                 }
-
-                                val = entity.GetValue(prop).ToString();
+                                else val = string.Join(", ", entity.QueryProperties(prop));
                             }
                             found = true;
                         }
                         else if (x.StartsWith("_me.")) // ${_me.prop}
                         {
                             string prop = Trim(x.Substring(4));
-                            if (PluginBridges.BridgeFFXIV.PlayerHexId == "")
+                            if (prop.ToLower() == "id")
                             {
-                                PluginBridges.BridgeFFXIV.UpdateState();
-                            }
-                            if (prop == "id")
-                            {
-                                val = PluginBridges.BridgeFFXIV.PlayerHexId;
+                                val = BridgeFFXIV.PlayerHexId;
                             }
                             else
                             {
-                                VariableDictionary me = PluginBridges.BridgeFFXIV.GetIdEntity(PluginBridges.BridgeFFXIV.PlayerHexId);
-                                val = me.GetValue(prop).ToString();
+                                val = string.Join(", ", FFXIV.Entity.GetMyself().QueryProperties(prop));
                             }
-                            found = true;
+                            }
+                        else if (x.StartsWith("_tgt.")) // ${_tgt.prop}
+                        {   // just for simplifying the expression ${_entity[${_me.targetid}].prop}
+                            string prop = Trim(x.Substring(5));
+                            var targetID = FFXIV.Entity.GetMyself().TargetID;
+                            FFXIV.Entity tgt = FFXIV.Entity.GetEntityByID(targetID)
+                                ?? FFXIV.Entity.NullEntity(); 
+                            val = string.Join(", ", tgt.QueryProperties(prop));
                         }
                         else if (x == "_clipboard")
                         {
@@ -2331,7 +2333,7 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_textaura"))
                         {
-                            mx = rexListProp.Match(x);
+                            mx = rexListMethod.Match(x);
                             if (mx.Success)
                             {
                                 string gindex = mx.Groups["index"].Value;
@@ -2408,7 +2410,7 @@ namespace Triggernometry
                         }
                         else if (x.StartsWith("_imageaura"))
                         {
-                            mx = rexListProp.Match(x);
+                            mx = rexListMethod.Match(x);
                             if (mx.Success)
                             {
                                 string gindex = mx.Groups["index"].Value;

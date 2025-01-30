@@ -100,10 +100,11 @@ namespace Triggernometry
             Filter,
             Merge,
             MergeHard,
-            GetEntityByName,
-            GetEntityById,
+            GetEntity,
             UnsetAll,
             UnsetRegex,
+            [Obsolete] GetEntityByName, // => GetEntity
+            [Obsolete] GetEntityById, // => GetEntity
         }
 
         public enum DictVariableExpTypeEnum
@@ -422,6 +423,13 @@ namespace Triggernometry
             set
             {
                 _DictVariableOp = (DictVariableOpEnum)Enum.Parse(typeof(DictVariableOpEnum), value);
+#pragma warning disable CS0612 // obsolete
+                if (_DictVariableOp == DictVariableOpEnum.GetEntityByName || 
+                    _DictVariableOp == DictVariableOpEnum.GetEntityById)
+#pragma warning restore CS0612
+                {
+                    _DictVariableOp = DictVariableOpEnum.GetEntity;
+                }
             }
         }
 
