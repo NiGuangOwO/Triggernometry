@@ -247,12 +247,12 @@ namespace Triggernometry
         /// <summary>Trim all whitespace characters and the linebreak placeholders from the right side of the string.</summary>
         public static string TrimR(string s) => reTrimR.Match(s).Groups["string"].Value;
 
-        internal static Regex reSplitArgComma = BuildSplitArgRegex(",");
-        internal static Regex reSplitArgEqual = BuildSplitArgRegex("=");
-        internal static Regex reSplitArgPipe = BuildSplitArgRegex("|");
-        internal static Regex reTrim = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$");
-        internal static Regex reTrimL = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)$");
-        internal static Regex reTrimR = new Regex($"^(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$");
+        internal static Regex reSplitArgComma = BuildSplitArgRegex(",", true);
+        internal static Regex reSplitArgEqual = BuildSplitArgRegex("=", true);
+        internal static Regex reSplitArgPipe = BuildSplitArgRegex("|", true);
+        internal static Regex reTrim = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$", RegexOptions.Compiled);
+        internal static Regex reTrimL = new Regex($"^[\\s{LINEBREAK_PLACEHOLDER}]*(?<string>.*?)$", RegexOptions.Compiled);
+        internal static Regex reTrimR = new Regex($"^(?<string>.*?)[\\s{LINEBREAK_PLACEHOLDER}]*$", RegexOptions.Compiled);
 
         /// <summary> 
         /// Split an expression with commas or other specified separators to a list of arguments. <br />
