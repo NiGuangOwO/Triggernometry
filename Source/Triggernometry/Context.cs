@@ -225,18 +225,19 @@ namespace Triggernometry
             return vd;
         }
 
-        internal static Regex BuildSplitArgRegex(string separator)
+        internal static Regex BuildSplitArgRegex(string separator, bool isCompiled = false)
         {
             string s = Regex.Escape(separator);
             char lb = LINEBREAK_PLACEHOLDER;
             return new Regex(
-                $"(?<=^|{s})((?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*|(?:\\s|{lb})*'[^']*'(?:\\s|{lb})*|[^{s}]*)(?=$|{s})");
             //    (?<=^|{s}): after a separator or start-of-line
             //               (?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*: spaces? + " + text? + " + spaces?
             //                                                    (?:\\s|{lb})*'[^']*'(?:\\s|{lb})*: spaces? + ' + text? + ' + spaces?
             //                                                                                      [^{s}]*: any unquoted text
             //                                                                                              (?=$|{s}): before a separator or end-of-line
-
+                $"(?<=^|{s})((?:\\s|{lb})*\"[^\"]*\"(?:\\s|{lb})*|(?:\\s|{lb})*'[^']*'(?:\\s|{lb})*|[^{s}]*)(?=$|{s})",
+                isCompiled ? RegexOptions.Compiled : RegexOptions.None
+            );
         }
 
         /// <summary>Trim all whitespace characters and the linebreak placeholders from both sides of the string.</summary>

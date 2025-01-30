@@ -304,31 +304,31 @@ namespace Triggernometry.CustomControls
         public IButtonControl CancelButton;
 
         public static readonly Regex rexPrefix
-            = new Regex(@"[$¤]\{(?<prefix>[^[$}:.]*)$");
+            = new Regex(@"[$¤]\{(?<prefix>[^[$}:.]*)$", RegexOptions.Compiled);
         public static readonly Regex rexFunc
-            = new Regex(@"[$¤]\{f(?:unc)?:(?<funcid>[^(:]*)$");
+            = new Regex(@"[$¤]\{f(?:unc)?:(?<funcid>[^(:]*)$", RegexOptions.Compiled);
         public static readonly Regex rexVarName
-            = new Regex(@"[$¤]\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$");
+            = new Regex(@"[$¤]\{(?<e>e?)(?<persist>p?)(?<type>[vltd]|text|image|callback|storage)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[]*)$", RegexOptions.Compiled);
         public static readonly Regex rexColHeader
-            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?[cd]l:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         public static readonly Regex rexRowHeader
-            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?(?:rl:(?<name1>[^$¤[]+)|dl:(?<name2>[^$¤[]+)\[.*\])\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)t(?:var)?(?:rl:(?<name1>[^$¤[]+)|dl:(?<name2>[^$¤[]+)\[.*\])\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         public static readonly Regex rexDictKey
-            = new Regex(@"[$¤]\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{(?<persist>p?)d(?:var)?:(?<name>[^$¤[]+)\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         public static readonly Regex rexStructKey
-            = new Regex(@"[$¤]\{_(?<struct>const|textaura|imageaura|config|storage)\[(?<key>[^$¤\]]*)$");
+            = new Regex(@"[$¤]\{_(?<struct>const|textaura|imageaura|config|storage)\[(?<key>[^$¤\]]*)$", RegexOptions.Compiled);
         // The regexes "rex...Prop" and "rexMath" are matched after looking for the previous unclosed '{'
         public static readonly Regex rexVarProp
-            = new Regex(@"^[p?]?(?<type>[ltd])(?:var)?:.*\.(?<prop>[^.(]*)$");
+            = new Regex(@"^[p?]?(?<type>[ltd])(?:var)?:.*\.(?<prop>[^.(]*)$", RegexOptions.Compiled);
         public static readonly Regex rexMeProp
-            = new Regex(@"^_me\.(?<prop>.*)$");
+            = new Regex(@"^_me\.(?<prop>.*)$", RegexOptions.Compiled);
         public static readonly Regex rexStructProp
-            = new Regex(@"_(?<struct>[^[]+)\[.*\]\.(?<prop>[^.]*)$");
+            = new Regex(@"_(?<struct>[^[]+)\[.*\]\.(?<prop>[^.]*)$", RegexOptions.Compiled);
         public static readonly Regex rexMath
-            = new Regex(@"(?<![[$¤.])\b[\p{L}\w]+$");
+            = new Regex(@"(?<![[$¤.])\b[\p{L}\w]+$", RegexOptions.Compiled);
 
         private static readonly Regex rexDynamicNames // capture the names in the expressions and store into lists for autofill
-            = new Regex(@"[$¤]\{e?(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[{}\n]*)[^\${}]*\}");
+            = new Regex(@"[$¤]\{e?(?<persist>p?)(?<type>[vltd]|text|image)(?:v?ar)?(?:[cdr]l)?:(?<name>[^$¤.[{}\n]*)[^\${}]*\}", RegexOptions.Compiled);
 
         private string CurrentMatch;
         private Timer acfDebounceTimer = new Timer();
